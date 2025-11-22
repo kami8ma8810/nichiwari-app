@@ -1,4 +1,4 @@
-# にちわり！ - 減価償却計算で賢い買い物を
+# Nichiwari! - Smart Shopping with Daily Cost Calculator
 
 <div align="center">
 
@@ -7,176 +7,178 @@
   [![Nuxt](https://img.shields.io/badge/Nuxt-3.x-00DC82)](https://nuxt.com/)
   [![Vue](https://img.shields.io/badge/Vue-3.x-4FC08D)](https://vuejs.org/)
 
+  [🇯🇵 日本語版はこちら](./README.ja.md)
+
 </div>
 
-## 🎯 概要
+## 🎯 Overview
 
-「にちわり！」は、購入を検討している商品の**日割りコスト**を計算することで、本当に必要な買い物かどうかを判断できるWebアプリケーションです。
+**Nichiwari!** (にちわり) is a web application that helps you make smarter purchasing decisions by calculating the **daily cost** of items you're considering buying.
 
-減価償却の考え方を日常の買い物に応用し、「この商品は1日あたり◯◯円」という形で価値を可視化します。
+By applying the concept of depreciation to everyday shopping, it visualizes value in the form of "This item costs ¥XX per day."
 
-### ✨ 主な機能
+### ✨ Key Features
 
-- 📊 **減価償却計算** - 購入価格と使用年数から日割り・月割り・年割りコストを算出
-- 💡 **商品サジェスト** - 人気商品の平均価格と耐用年数を自動提案
-- 😊 **幸福度診断** - 科学的根拠に基づいたチェックリストで購入価値を評価
-- 📈 **トレンド分析** - よく検索される商品のランキング表示
-- 🌐 **オフライン対応** - インターネット接続なしでも基本機能が利用可能
+- 📊 **Depreciation Calculator** - Calculate daily, monthly, and yearly costs based on purchase price and usage period
+- 💡 **Product Suggestions** - Auto-suggest average prices and typical lifespan for popular items
+- 😊 **Happiness Score** - Evaluate purchase value with scientifically-backed checklists
+- 📈 **Trend Analysis** - View rankings of frequently searched products
+- 🌐 **Offline Support** - Core features work without internet connection
 
 ## 🚀 Quick Start
 
-### 必要な環境
+### Requirements
 
-- Node.js v20 LTS以上
-- pnpm 8.0以上
+- Node.js v20 LTS or higher
+- pnpm 8.0 or higher
 
-### インストール
+### Installation
 
 ```bash
-# リポジトリのクローン
+# Clone the repository
 git clone https://github.com/yourusername/nichiwari-app.git
 cd nichiwari-app
 
-# 依存関係のインストール
+# Install dependencies
 pnpm install
 
-# 環境変数の設定
+# Set up environment variables
 cp .env.example .env
-# .envファイルを編集してSupabase認証情報を設定
+# Edit .env file to configure Supabase credentials
 ```
 
-### 開発サーバーの起動
+### Development Server
 
 ```bash
-# 開発サーバー起動
+# Start development server
 pnpm dev
 
-# http://localhost:3000 でアクセス可能
+# Available at http://localhost:3000
 ```
 
-### その他のコマンド
+### Other Commands
 
 ```bash
-# プロダクションビルド
+# Production build
 pnpm build
 
-# プロダクションサーバー起動
+# Production server
 pnpm preview
 
-# テスト実行
-pnpm test           # 単体テスト
-pnpm test:e2e       # E2Eテスト
+# Run tests
+pnpm test           # Unit tests
+pnpm test:e2e       # E2E tests
 
-# コード品質チェック
+# Code quality checks
 pnpm lint           # ESLint
-pnpm type-check     # TypeScript型チェック
+pnpm type-check     # TypeScript type checking
 
-# Storybook起動
+# Start Storybook
 pnpm storybook
 ```
 
-## 📚 ドキュメント
+## 📚 Documentation
 
-プロジェクトの詳細なドキュメントは [`docs/`](./docs/) ディレクトリにあります。
+Detailed project documentation is available in the [`docs/`](./docs/) directory.
 
-### 開発者向けドキュメント
+### Developer Documentation
 
-- [📋 要件定義](./docs/01-requirements/) - 機能要件・非機能要件
-- [🏗️ アーキテクチャ](./docs/02-architecture/) - システム設計・技術選定
-- [💻 開発ガイド](./docs/03-development/) - セットアップ・コーディング規約
-- [🧪 テスト戦略](./docs/04-testing/) - TDD・E2Eテスト
-- [🔧 実装ガイド](./docs/05-implementation/) - フェーズ別実装手順
-- [☁️ インフラ・運用](./docs/06-infrastructure/) - デプロイ・監視
-- [📖 リファレンス](./docs/07-reference/) - API仕様・データ構造
+- [📋 Requirements](./docs/01-requirements/) - Functional & non-functional requirements
+- [🏗️ Architecture](./docs/02-architecture/) - System design & tech stack decisions
+- [💻 Development Guide](./docs/03-development/) - Setup & coding standards
+- [🧪 Testing Strategy](./docs/04-testing/) - TDD & E2E testing
+- [🔧 Implementation Guide](./docs/05-implementation/) - Phase-by-phase implementation
+- [☁️ Infrastructure & Operations](./docs/06-infrastructure/) - Deployment & monitoring
+- [📖 Reference](./docs/07-reference/) - API specs & data structures
 
-### はじめに読むべきドキュメント
+### Getting Started Docs
 
-1. [環境構築ガイド](./docs/03-development/setup.md)
-2. [アーキテクチャ概要](./docs/02-architecture/overview.md)
-3. [コーディング規約](./docs/03-development/coding-standards.md)
+1. [Setup Guide](./docs/03-development/setup.md)
+2. [Architecture Overview](./docs/02-architecture/overview.md)
+3. [Coding Standards](./docs/03-development/coding-standards.md)
 
-## 🛠️ 技術スタック
+## 🛠️ Tech Stack
 
-### フロントエンド
+### Frontend
 - **Framework**: Nuxt 3 (SSG)
 - **UI Library**: Volt (PrimeVue + Tailwind CSS)
 - **Language**: TypeScript (strict mode)
 - **State Management**: Pinia
 - **Validation**: Valibot
 
-### バックエンド
+### Backend
 - **Database**: Supabase (PostgreSQL)
 - **Real-time**: Supabase Realtime
 
-### 開発環境
+### Development Tools
 - **Package Manager**: pnpm
 - **Testing**: Vitest + Playwright
 - **Linting**: ESLint + Prettier
 - **CI/CD**: GitHub Actions
 - **Hosting**: Vercel
 
-## 🏗️ プロジェクト構造
+## 🏗️ Project Structure
 
 ```
 nichiwari-app/
-├── docs/                 # プロジェクトドキュメント
+├── docs/                 # Project documentation
 ├── src/
-│   ├── core/            # ビジネスロジック層
-│   │   ├── domain/      # ドメインモデル
-│   │   ├── usecases/    # ユースケース
-│   │   └── ports/       # インターフェース
-│   ├── infrastructure/  # 外部サービス層
-│   ├── presentation/    # プレゼンテーション層
-│   │   ├── components/  # UIコンポーネント
-│   │   ├── pages/       # ページコンポーネント
+│   ├── core/            # Business logic layer
+│   │   ├── domain/      # Domain models
+│   │   ├── usecases/    # Use cases
+│   │   └── ports/       # Interfaces
+│   ├── infrastructure/  # External services layer
+│   ├── presentation/    # Presentation layer
+│   │   ├── components/  # UI components
+│   │   ├── pages/       # Page components
 │   │   └── composables/ # Vue Composables
-│   └── shared/          # 共通機能
-├── tests/               # テストコード
-│   ├── unit/           # 単体テスト
-│   ├── integration/    # 統合テスト
-│   └── e2e/            # E2Eテスト
-└── public/             # 静的ファイル
+│   └── shared/          # Shared utilities
+├── tests/               # Test code
+│   ├── unit/           # Unit tests
+│   ├── integration/    # Integration tests
+│   └── e2e/            # E2E tests
+└── public/             # Static files
 ```
 
-## 🤝 コントリビューション
+## 🤝 Contributing
 
-プロジェクトへの貢献を歓迎します！
+Contributions are welcome!
 
-### 開発に参加する方法
+### How to Contribute
 
-1. このリポジトリをフォーク
-2. フィーチャーブランチを作成 (`git checkout -b feature/amazing-feature`)
-3. 変更をコミット (`git commit -m 'feat: add amazing feature'`)
-4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
-5. プルリクエストを作成
+1. Fork this repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-### コミット規約
+### Commit Convention
 
-[Conventional Commits](https://www.conventionalcommits.org/) に従ってください：
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
-- `feat:` 新機能
-- `fix:` バグ修正
-- `docs:` ドキュメント
-- `style:` コード整形
-- `refactor:` リファクタリング
-- `test:` テスト
-- `chore:` ビルド・ツール関連
+- `feat:` New feature
+- `fix:` Bug fix
+- `docs:` Documentation
+- `style:` Code formatting
+- `refactor:` Refactoring
+- `test:` Tests
+- `chore:` Build/tooling
 
-詳細は [Git ワークフロー](./docs/03-development/git-workflow.md) を参照してください。
+See [Git Workflow](./docs/03-development/git-workflow.md) for details.
 
-## 📝 ライセンス
+## 📝 License
 
-このプロジェクトは MIT License のもとで公開されています。
-詳細は [LICENSE](./LICENSE) ファイルを参照してください。
+This project is licensed under the MIT License.
+See the [LICENSE](./LICENSE) file for details.
 
-## 📮 お問い合わせ
+## 📮 Contact
 
 - Issues: [GitHub Issues](https://github.com/yourusername/nichiwari-app/issues)
 - Discussions: [GitHub Discussions](https://github.com/yourusername/nichiwari-app/discussions)
 
-## 🙏 謝辞
+## 🙏 Acknowledgments
 
-このプロジェクトは以下の素晴らしいオープンソースプロジェクトを利用しています：
+This project uses the following amazing open-source projects:
 
 - [Nuxt](https://nuxt.com/)
 - [Vue.js](https://vuejs.org/)
