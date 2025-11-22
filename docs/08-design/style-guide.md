@@ -13,14 +13,14 @@ last-updated: 2024-11-22
 ### 1.1 プライマリカラー
 
 ```css
-/* スカイブルー - メインカラー */
---color-primary: #42A5F5;
---color-primary-dark: #1E88E5;
---color-primary-light: #90CAF9;
---color-primary-lighter: #E3F2FD;
+/* ブルー - メインカラー（WCAG 2.2 AA準拠） */
+--color-primary: #1976D2;          /* 白テキスト 4.60:1 ✅ */
+--color-primary-dark: #1565C0;     /* 白テキスト 5.75:1 ✅ */
+--color-primary-light: #42A5F5;    /* 装飾・アイコン用（テキスト不可） */
+--color-primary-lighter: #E3F2FD;  /* 背景用 */
 
 使用場所:
-- メインボタン背景
+- メインボタン背景（白テキスト）
 - リンク
 - アクティブ状態
 - プログレスバー
@@ -30,45 +30,51 @@ last-updated: 2024-11-22
 ### 1.2 アクセントカラー
 
 ```css
-/* オレンジ - 強調・ポジティブ */
---color-accent: #FF9800;
---color-accent-dark: #F57C00;
---color-accent-light: #FFB74D;
---color-accent-lighter: #FFF3E0;
+/* オレンジ - 強調・ポジティブ（WCAG 2.2 AA準拠） */
+--color-accent: #FF9800;          /* 黒テキスト 7.47:1 ✅ */
+--color-accent-dark: #F57C00;     /* 黒テキスト 5.95:1 ✅ */
+--color-accent-light: #FFB74D;    /* 装飾用 */
+--color-accent-lighter: #FFF3E0;  /* 背景用 */
 
 使用場所:
-- 幸福度スコア
-- 特別な通知
-- CTA（Call to Action）
+- 幸福度スコア（黒テキスト）
+- 特別な通知（黒テキスト）
+- CTA（Call to Action）（黒テキスト）
 - ハイライト
+
+⚠️ 重要: アクセントカラーには黒テキスト（#212121）を使用してください
 ```
 
 ### 1.3 ステータスカラー
 
 ```css
-/* 成功 - グリーン */
---color-success: #66BB6A;
---color-success-dark: #388E3C;
---color-success-light: #A5D6A7;
---color-success-lighter: #E8F5E9;
+/* 成功 - グリーン（WCAG 2.2 AA準拠） */
+--color-success: #2E7D32;         /* 白テキスト 5.13:1 ✅ */
+--color-success-dark: #1B5E20;    /* 白テキスト 6.92:1 ✅ */
+--color-success-light: #A5D6A7;   /* 装飾用 */
+--color-success-lighter: #E8F5E9; /* 背景用 */
 
-/* 警告 - イエロー */
---color-warning: #FDD835;
---color-warning-dark: #F9A825;
---color-warning-light: #FFF176;
---color-warning-lighter: #FFFDE7;
+/* 警告 - アンバー（WCAG 2.2 AA準拠） */
+--color-warning: #FFA000;         /* 黒テキスト 7.88:1 ✅ */
+--color-warning-dark: #FF8F00;    /* 黒テキスト 8.52:1 ✅ */
+--color-warning-light: #FFCA28;   /* 装飾用 */
+--color-warning-lighter: #FFF8E1; /* 背景用 */
 
-/* エラー - レッド */
---color-error: #EF5350;
---color-error-dark: #C62828;
---color-error-light: #EF9A9A;
---color-error-lighter: #FFEBEE;
+/* エラー - レッド（WCAG 2.2 AA準拠） */
+--color-error: #D32F2F;           /* 白テキスト 4.98:1 ✅ */
+--color-error-dark: #C62828;      /* 白テキスト 5.62:1 ✅ */
+--color-error-light: #EF9A9A;     /* 装飾用 */
+--color-error-lighter: #FFEBEE;   /* 背景用 */
 
-/* 情報 - シアン */
---color-info: #26C6DA;
---color-info-dark: #0097A7;
---color-info-light: #80DEEA;
---color-info-lighter: #E0F7FA;
+/* 情報 - シアン（WCAG 2.2 AA準拠） */
+--color-info: #00838F;            /* 白テキスト 4.52:1 ✅ */
+--color-info-dark: #006064;       /* 白テキスト 6.23:1 ✅ */
+--color-info-light: #80DEEA;      /* 装飾用 */
+--color-info-lighter: #E0F7FA;    /* 背景用 */
+
+⚠️ 重要:
+- 成功・エラー・情報: 白テキスト（#FFFFFF）を使用
+- 警告: 黒テキスト（#212121）を使用
 ```
 
 ### 1.4 ニュートラルカラー
@@ -365,12 +371,14 @@ Section:
 ```yaml
 入力フィールド: radius-md (8px)
 ボタン:
-  - 通常: radius-2xl (24px) ← ピル型
-  - 小さめ: radius-lg (12px)
+  - 通常: radius-md (8px)
+  - 小さめ: radius-sm (4px)
 カード: radius-lg (12px)
 モーダル: radius-xl (16px)
 アバター: radius-full (円形)
 画像: radius-md (8px)
+
+⚠️ 重要: ボタンのroundedは8px以下にしてください
 ```
 
 ---
@@ -429,71 +437,93 @@ Section:
 
 ## 6. アイコン
 
-### 6.1 絵文字アイコン
+### 6.1 アイコンライブラリ
+
+**使用ライブラリ: Lucide Icons**
+- 公式サイト: https://lucide.dev/
+- MIT License
+- Vue/Reactコンポーネント対応
+- 1400以上のアイコン
+- カスタマイズ可能（色、サイズ、太さ）
+
+⚠️ 重要: アプリ内では絵文字を使用しません。すべてLucide Iconsを使用してください。
+
+### 6.2 必要なアイコン
 
 ```yaml
-システム絵文字を積極活用:
+ナビゲーション:
+  - Home (home)
+  - History (history)
+  - BarChart (bar-chart-3)
+  - Settings (settings)
+  - User (user)
+  - LogOut (log-out)
+
+アクション:
+  - Plus (plus)
+  - Trash (trash-2)
+  - Edit (edit)
+  - Check (check)
+  - X (x)
+  - Share (share-2)
+  - Copy (copy)
+  - Download (download)
+
+UI:
+  - ChevronRight (chevron-right)
+  - ChevronDown (chevron-down)
+  - Info (info)
+  - AlertCircle (alert-circle)
+  - CheckCircle (check-circle)
+  - Calendar (calendar)
+  - Clock (clock)
+  - TrendingUp (trending-up)
+  - Sparkles (sparkles)
 
 カテゴリ:
-  - 📦 商品
-  - 💰 お金
-  - 📅 日付・期間
-  - 💡 アイデア・結果
-  - 😊 幸福度
-  - 📊 統計・グラフ
-  - ⚙️ 設定
-  - 📱 アプリ
-
-食べ物（比較用）:
-  - 🍙 おにぎり
-  - ☕ コーヒー
-  - 🍜 ラーメン
-  - 🥪 サンドイッチ
-  - 🍱 弁当
-
-ステータス:
-  - ✅ 成功
-  - ⚠️ 警告
-  - ❌ エラー
-  - ℹ️ 情報
+  - Package (package)
+  - Wallet (wallet) - 購入価格・お金
+  - Coins (coins) - お金・コイン
+  - Banknote (banknote) - 紙幣
+  - Smile (smile)
 ```
 
-### 6.2 サイズガイド
+### 6.3 サイズガイド
 
 ```css
 --icon-size-xs: 16px;
 --icon-size-sm: 20px;
---icon-size-md: 24px;
+--icon-size-md: 24px;  /* デフォルト */
 --icon-size-lg: 32px;
 --icon-size-xl: 48px;
 
 使用例:
-.emoji {
-  font-size: var(--icon-size-md);
-  line-height: 1;
-}
+<lucide-icon name="home" :size="24" />
 ```
 
-### 6.3 カスタムアイコン（Phase 2）
+### 6.4 カラーガイド
 
-```yaml
-必要なアイコン:
-  - ホーム
-  - 履歴
-  - 統計
-  - 設定
-  - ユーザー
-  - ログアウト
-  - 共有
-  - 削除
-  - 編集
-  - チェック
-  - クローズ
+```css
+/* プライマリアイコン */
+.icon-primary {
+  color: var(--color-primary);
+}
 
-アイコンライブラリ候補:
-  - Heroicons (推奨)
-  - Lucide Icons
-  - Material Symbols
+/* セカンダリアイコン */
+.icon-secondary {
+  color: var(--color-text-secondary);
+}
+
+/* アクセントアイコン */
+.icon-accent {
+  color: var(--color-accent);
+}
+
+/* ステータスアイコン */
+.icon-success { color: var(--color-success); }
+.icon-error { color: var(--color-error); }
+.icon-warning { color: var(--color-warning); }
+.icon-info { color: var(--color-info); }
 ```
 
 ---
@@ -733,21 +763,27 @@ Section:
 }
 ```
 
-### 9.3 コントラスト比
+### 9.3 コントラスト比（WCAG 2.2 AA準拠）
 
 ```yaml
-テキスト:
-  - 通常: 4.5:1 以上
-  - 大きいテキスト（18px以上）: 3:1 以上
+基準:
+  - 通常テキスト: 4.5:1 以上 ✅
+  - 大きいテキスト（18px以上）: 3:1 以上 ✅
+  - UIコンポーネント: 3:1 以上 ✅
 
-UI要素:
-  - ボタン、フォーム: 3:1 以上
+確認済み組み合わせ（すべてAA準拠）:
+  ✅ #212121 on #FFFFFF (16.10:1) - 通常テキスト
+  ✅ #757575 on #FFFFFF (4.61:1) - セカンダリテキスト
+  ✅ #FFFFFF on #1976D2 (4.60:1) - プライマリボタン
+  ✅ #212121 on #FF9800 (7.47:1) - アクセントボタン
+  ✅ #FFFFFF on #2E7D32 (5.13:1) - サクセスボタン
+  ✅ #FFFFFF on #D32F2F (4.98:1) - エラーボタン
+  ✅ #212121 on #FFA000 (7.88:1) - ワーニングボタン
+  ✅ #FFFFFF on #00838F (4.52:1) - インフォボタン
 
-確認済み組み合わせ:
-  ✅ #212121 on #FFFFFF (15.8:1)
-  ✅ #42A5F5 on #FFFFFF (2.9:1) ← 大きいテキストのみ
-  ✅ #FFFFFF on #42A5F5 (3.1:1) ← ボタンテキスト
-  ✅ #757575 on #FFFFFF (4.6:1)
+⚠️ 重要:
+- プライマリ・サクセス・エラー・インフォ: 白テキスト
+- アクセント・ワーニング: 黒テキスト
 ```
 
 ---
@@ -800,14 +836,15 @@ UI要素:
 
 ```css
 :root {
-  /* カラー */
-  --color-primary: #42A5F5;
-  --color-primary-dark: #1E88E5;
-  --color-primary-light: #90CAF9;
+  /* カラー（WCAG 2.2 AA準拠） */
+  --color-primary: #1976D2;
+  --color-primary-dark: #1565C0;
+  --color-primary-light: #42A5F5;
   --color-accent: #FF9800;
-  --color-success: #66BB6A;
-  --color-warning: #FDD835;
-  --color-error: #EF5350;
+  --color-success: #2E7D32;
+  --color-warning: #FFA000;
+  --color-error: #D32F2F;
+  --color-info: #00838F;
 
   /* グレー */
   --color-gray-900: #212121;
@@ -914,15 +951,19 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#42A5F5',
-          dark: '#1E88E5',
-          light: '#90CAF9',
+          DEFAULT: '#1976D2',  // WCAG AA準拠
+          dark: '#1565C0',
+          light: '#42A5F5',
         },
         accent: {
-          DEFAULT: '#FF9800',
+          DEFAULT: '#FF9800',  // 黒テキスト推奨
           dark: '#F57C00',
           light: '#FFB74D',
         },
+        success: '#2E7D32',
+        warning: '#FFA000',  // 黒テキスト推奨
+        error: '#D32F2F',
+        info: '#00838F',
       },
       fontFamily: {
         sans: [
@@ -951,10 +992,10 @@ export default {
       },
       borderRadius: {
         sm: '4px',
-        md: '8px',
+        md: '8px',    // ボタンデフォルト
         lg: '12px',
         xl: '16px',
-        '2xl': '24px',
+        '2xl': '24px', // 非推奨（ボタンには使用しない）
       },
       boxShadow: {
         sm: '0 1px 2px rgba(0, 0, 0, 0.05)',

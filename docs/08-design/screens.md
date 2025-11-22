@@ -8,6 +8,18 @@ last-updated: 2024-11-22
 
 # 画面設計書
 
+⚠️ **重要**: このドキュメント内のワイヤーフレームでは視覚的な説明のため絵文字を使用していますが、**実装時は絵文字を使用せず、すべてLucide Iconsを使用してください**。
+
+アイコン対応表：
+- 📦 → `<lucide-icon name="package" />`
+- 💰 → `<lucide-icon name="wallet" />`（お財布・購入価格）
+- 📅 → `<lucide-icon name="calendar" />`
+- 💡 → `<lucide-icon name="lightbulb" />`
+- 📊 → `<lucide-icon name="bar-chart-3" />`
+- 😊 → `<lucide-icon name="smile" />`
+- ☰ → `<lucide-icon name="menu" />`
+- ← → `<lucide-icon name="chevron-left" />`
+
 ## 1. 画面一覧
 
 ### 1.1 画面構成（Phase別）
