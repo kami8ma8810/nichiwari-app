@@ -374,7 +374,7 @@ export default {
 export class Money {
   constructor(private readonly _value: number) {
     if (!Number.isInteger(_value)) {
-      throw new Error('金額は整数である必要があります')
+      throw new TypeError('金額は整数である必要があります')
     }
     if (_value < 0) {
       throw new Error('金額は0以上である必要があります')
@@ -442,10 +442,10 @@ export class Years {
 ### 5.2 エンティティ
 
 ```typescript
+import { DailyCost } from '../value-objects/DailyCost'
 // domain/entities/Product.ts
 import { Money } from '../value-objects/Money'
 import { Years } from '../value-objects/Years'
-import { DailyCost } from '../value-objects/DailyCost'
 
 export class Product {
   constructor(
@@ -486,10 +486,10 @@ export class Product {
 ### 6.1 Vitest設定
 
 ```typescript
+import { resolve } from 'node:path'
+import vue from '@vitejs/plugin-vue'
 // vitest.config.ts
 import { defineConfig } from 'vitest/config'
-import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [vue()],
@@ -517,9 +517,9 @@ export default defineConfig({
 ```
 
 ```typescript
+import { config } from '@vue/test-utils'
 // test/setup.ts
 import { vi } from 'vitest'
-import { config } from '@vue/test-utils'
 
 // Nuxt auto-imports モック
 vi.stubGlobal('defineNuxtPlugin', vi.fn())
@@ -541,7 +541,7 @@ config.global.mocks = {
 
 ```typescript
 // test/unit/domain/value-objects/Money.test.ts
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { Money } from '@/domain/value-objects/Money'
 
 describe('Money', () => {
@@ -588,7 +588,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
-          cache: 'pnpm'
+          cache: pnpm
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
@@ -605,7 +605,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
-          cache: 'pnpm'
+          cache: pnpm
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm test:unit
@@ -627,7 +627,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
-          cache: 'pnpm'
+          cache: pnpm
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm build

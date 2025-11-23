@@ -172,7 +172,8 @@ SSL: Vercel自動証明書
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
 
-  if (!config.public.gaId) return
+  if (!config.public.gaId)
+    return
 
   // Google Analytics スクリプト挿入
   useHead({
@@ -213,7 +214,8 @@ import * as Sentry from '@sentry/vue'
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
 
-  if (!config.public.sentryDsn) return
+  if (!config.public.sentryDsn)
+    return
 
   const { vueApp } = nuxtApp
 
@@ -251,6 +253,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 ### 🎉 初回リリース
 
 #### ✨ 機能
+
 - **計算機能**: 購入価格と使用年数から1日あたりの価値を計算
 - **比較表示**: コーヒーやペットボトルなど身近なものと比較
 - **履歴管理**: 計算結果を最大100件まで保存
@@ -259,11 +262,13 @@ export default defineNuxtPlugin((nuxtApp) => {
 - **PWA対応**: ホーム画面に追加してアプリとして利用可能
 
 #### 🎨 デザイン
+
 - レスポンシブデザイン対応
 - ダークモード対応（今後実装予定）
 - アクセシビリティ WCAG 2.1 AA準拠
 
 #### 🔧 技術仕様
+
 - Nuxt 3 + Vue 3
 - TypeScript
 - Tailwind CSS
@@ -271,6 +276,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 - Vercel ホスティング
 
 ### 今後の予定
+
 - 共有機能の強化
 - 商品カテゴリ別の分析
 - 月次レポート機能
@@ -313,28 +319,33 @@ useHead({
 # にちわり！プレスキット
 
 ## アプリ概要
+
 - **名称**: にちわり！
 - **キャッチコピー**: 買い物の価値を見える化
 - **URL**: https://nichiwari.app
 - **カテゴリ**: 生活・ユーティリティ
 
 ## 特徴
+
 1. シンプルな操作で1日あたりの価値を計算
 2. 身近なものと比較して価値を実感
 3. オフラインでも使える
 4. 完全無料・広告なし
 
 ## スクリーンショット
+
 - [ホーム画面](./assets/screenshots/home.png)
 - [計算結果](./assets/screenshots/result.png)
 - [履歴画面](./assets/screenshots/history.png)
 
 ## ロゴ素材
+
 - [ロゴ（カラー）](./assets/logo/logo-color.svg)
 - [ロゴ（モノクロ）](./assets/logo/logo-mono.svg)
 - [アイコン](./assets/logo/icon.png)
 
 ## お問い合わせ
+
 contact@nichiwari.app
 ```
 

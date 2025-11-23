@@ -5,6 +5,7 @@
 ## 📁 ドキュメント構成
 
 ### [01-requirements/](./01-requirements/) - 要件定義
+
 プロジェクトの要件を定義したドキュメント群
 
 - **[functional.md](./01-requirements/functional.md)** - 機能要件
@@ -24,6 +25,7 @@
   - リスク管理計画
 
 ### [02-architecture/](./02-architecture/) - アーキテクチャ
+
 システム設計と技術選定に関するドキュメント
 
 - **[overview.md](./02-architecture/overview.md)** - アーキテクチャ概要
@@ -47,6 +49,7 @@
   - プリセットデータ設計
 
 ### [03-development/](./03-development/) - 開発ガイド
+
 開発者向けのガイドラインとベストプラクティス
 
 - **[setup.md](./03-development/setup.md)** ⭐ **最初に読む**
@@ -75,6 +78,7 @@
   - PR作成ガイド
 
 ### [04-testing/](./04-testing/) - テスト戦略
+
 テストに関する詳細なドキュメント
 
 - **[unit-testing.md](./04-testing/unit-testing.md)** - 単体テスト
@@ -93,6 +97,7 @@
   - テスト環境の分離
 
 ### [05-implementation/](./05-implementation/) - 実装ガイド
+
 フェーズごとの具体的な実装手順
 
 - **[phase-1-setup.md](./05-implementation/phase-1-setup.md)** - Phase 1: 基盤構築
@@ -121,6 +126,7 @@
   - デプロイ設定
 
 ### [06-infrastructure/](./06-infrastructure/) - インフラ・運用
+
 インフラストラクチャと運用に関するドキュメント
 
 - **[deployment.md](./06-infrastructure/deployment.md)** - デプロイ設定
@@ -144,6 +150,7 @@
   - インシデント対応
 
 ### [07-reference/](./07-reference/) - リファレンス
+
 APIやデータ構造のリファレンス
 
 - **[api-spec.md](./07-reference/api-spec.md)** - API仕様書
@@ -171,27 +178,32 @@ APIやデータ構造のリファレンス
 ### 役割別の推奨読み順
 
 #### 🆕 新規開発者
+
 1. [setup.md](./03-development/setup.md) - 環境構築
 2. [overview.md](./02-architecture/overview.md) - アーキテクチャ理解
 3. [coding-standards.md](./03-development/coding-standards.md) - コーディング規約
 4. [git-workflow.md](./03-development/git-workflow.md) - Git運用
 
 #### 🎨 フロントエンド開発者
+
 1. [component-guide.md](./03-development/component-guide.md) - コンポーネント開発
 2. [unit-testing.md](./04-testing/unit-testing.md) - テスト作成
 3. [phase-2-core.md](./05-implementation/phase-2-core.md) - UI実装
 
 #### 🔧 バックエンド開発者
+
 1. [data-model.md](./02-architecture/data-model.md) - データ設計
 2. [supabase.md](./06-infrastructure/supabase.md) - Supabase運用
 3. [phase-3-data.md](./05-implementation/phase-3-data.md) - データ層実装
 
 #### 🧪 QAエンジニア
+
 1. [e2e-testing.md](./04-testing/e2e-testing.md) - E2Eテスト
 2. [test-data.md](./04-testing/test-data.md) - テストデータ
 3. [non-functional.md](./01-requirements/non-functional.md) - 品質要件
 
 #### 🚀 DevOpsエンジニア
+
 1. [deployment.md](./06-infrastructure/deployment.md) - デプロイ設定
 2. [monitoring.md](./06-infrastructure/monitoring.md) - 監視設定
 3. [security.md](./06-infrastructure/security.md) - セキュリティ

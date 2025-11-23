@@ -33,9 +33,9 @@ last-updated: 2024-11-22
 ### 2.1 クライアント初期化
 
 ```typescript
+import type { Database } from '@/types/database'
 // lib/supabase.ts
 import { createClient } from '@supabase/supabase-js'
-import type { Database } from '@/types/database'
 
 const supabaseUrl = process.env.NUXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NUXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -61,7 +61,7 @@ export const supabase = createClient<Database>(
 
 ```typescript
 // composables/useSupabase.ts
-export const useSupabase = () => {
+export function useSupabase() {
   const supabase = useNuxtData('supabase')
 
   if (!supabase.value) {
@@ -124,7 +124,8 @@ export abstract class BaseRepository<T> {
       .select('*')
       .order('created_at', { ascending: false })
 
-    if (error) this.handleError(error)
+    if (error)
+      this.handleError(error)
     return data || []
   }
 
@@ -136,7 +137,8 @@ export abstract class BaseRepository<T> {
       .single()
 
     if (error) {
-      if (error.code === 'PGRST116') return null
+      if (error.code === 'PGRST116')
+        return null
       this.handleError(error)
     }
     return data
@@ -149,7 +151,8 @@ export abstract class BaseRepository<T> {
       .select()
       .single()
 
-    if (error) this.handleError(error)
+    if (error)
+      this.handleError(error)
     return data!
   }
 
@@ -161,7 +164,8 @@ export abstract class BaseRepository<T> {
       .select()
       .single()
 
-    if (error) this.handleError(error)
+    if (error)
+      this.handleError(error)
     return data!
   }
 
@@ -171,7 +175,8 @@ export abstract class BaseRepository<T> {
       .delete()
       .eq('id', id)
 
-    if (error) this.handleError(error)
+    if (error)
+      this.handleError(error)
   }
 }
 ```
@@ -179,9 +184,9 @@ export abstract class BaseRepository<T> {
 ### 3.2 計算履歴リポジトリ
 
 ```typescript
+import type { Calculation, CalculationDTO } from '@/types'
 // infrastructure/repositories/CalculationRepository.ts
 import { BaseRepository } from './BaseRepository'
-import type { Calculation, CalculationDTO } from '@/types'
 
 export class CalculationRepository extends BaseRepository<CalculationDTO> {
   constructor(supabase: SupabaseClient) {
@@ -208,7 +213,8 @@ export class CalculationRepository extends BaseRepository<CalculationDTO> {
       .order('created_at', { ascending: false })
       .limit(limit)
 
-    if (error) this.handleError(error)
+    if (error)
+      this.handleError(error)
     return data || []
   }
 
@@ -219,7 +225,8 @@ export class CalculationRepository extends BaseRepository<CalculationDTO> {
       .order('created_at', { ascending: false })
       .limit(limit)
 
-    if (error) this.handleError(error)
+    if (error)
+      this.handleError(error)
     return data || []
   }
 
@@ -275,7 +282,8 @@ export class HappinessScoreRepository extends BaseRepository<HappinessScoreDTO> 
       .single()
 
     if (error) {
-      if (error.code === 'PGRST116') return null
+      if (error.code === 'PGRST116')
+        return null
       this.handleError(error)
     }
     return data
@@ -286,9 +294,11 @@ export class HappinessScoreRepository extends BaseRepository<HappinessScoreDTO> 
       .from(this.tableName)
       .select('score')
 
-    if (error) this.handleError(error)
+    if (error)
+      this.handleError(error)
 
-    if (!data || data.length === 0) return 0
+    if (!data || data.length === 0)
+      return 0
 
     const sum = data.reduce((acc, item) => acc + item.score, 0)
     return Math.round(sum / data.length)
@@ -343,7 +353,8 @@ export class SaveCalculationUseCase {
         success: true,
         calculationId: calculation.id
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to save calculation:', error)
 
       // オフライン時はローカルストレージのみ
@@ -367,18 +378,21 @@ export class SaveCalculationUseCase {
     }
 
     const score = Math.round(
-      factors.frequency * weights.frequency * 20 +
-      factors.satisfaction * weights.satisfaction * 20 +
-      factors.necessity * weights.necessity * 20
+      factors.frequency * weights.frequency * 20
+      + factors.satisfaction * weights.satisfaction * 20
+      + factors.necessity * weights.necessity * 20
     )
 
     return new HappinessScore(score)
   }
 
   private generateMessage(score: number): string {
-    if (score >= 80) return 'とても良い買い物です！'
-    if (score >= 60) return '満足度の高い買い物です'
-    if (score >= 40) return '適度に活用されています'
+    if (score >= 80)
+      return 'とても良い買い物です！'
+    if (score >= 60)
+      return '満足度の高い買い物です'
+    if (score >= 40)
+      return '適度に活用されています'
     return '使用頻度を上げると良いかも'
   }
 
@@ -440,8 +454,8 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
+          .filter(name => name !== CACHE_NAME)
+          .map(name => caches.delete(name))
       )
     })
   )
@@ -504,7 +518,8 @@ async function syncPendingCalculations() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(item)
         })
-      } catch (error) {
+      }
+      catch (error) {
         console.error('Sync failed:', error)
       }
     }
@@ -518,7 +533,7 @@ async function syncPendingCalculations() {
 
 ```typescript
 // composables/useOffline.ts
-export const useOffline = () => {
+export function useOffline() {
   const isOffline = ref(!navigator.onLine)
   const isPending = ref(false)
 
@@ -548,18 +563,21 @@ export const useOffline = () => {
       // Service Workerに同期をリクエスト
       if ('serviceWorker' in navigator && 'sync' in registration) {
         await registration.sync.register('sync-calculations')
-      } else {
+      }
+      else {
         // 手動同期
         await manualSync()
       }
-    } finally {
+    }
+    finally {
       isPending.value = false
     }
   }
 
   const manualSync = async () => {
     const pending = localStorage.getItem('pending-calculations')
-    if (!pending) return
+    if (!pending)
+      return
 
     const items = JSON.parse(pending)
     const { supabase } = useSupabase()
@@ -567,7 +585,8 @@ export const useOffline = () => {
     for (const item of items) {
       try {
         await supabase.from('calculations').insert(item)
-      } catch (error) {
+      }
+      catch (error) {
         console.error('Manual sync failed:', error)
       }
     }
@@ -620,7 +639,8 @@ export const useCalculatorStore = defineStore('calculator', () => {
         data: calculations.value,
         timestamp: lastFetched.value
       }))
-    } catch (err) {
+    }
+    catch (err) {
       error.value = 'データの取得に失敗しました'
 
       // オフライン時はローカルストレージから復元
@@ -629,7 +649,8 @@ export const useCalculatorStore = defineStore('calculator', () => {
         const { data } = JSON.parse(cached)
         calculations.value = data
       }
-    } finally {
+    }
+    finally {
       isLoading.value = false
     }
   }
@@ -638,7 +659,8 @@ export const useCalculatorStore = defineStore('calculator', () => {
   const subscription = repository.subscribeToChanges((payload) => {
     if (payload.eventType === 'INSERT') {
       calculations.value.unshift(toCalculationEntity(payload.new))
-    } else if (payload.eventType === 'DELETE') {
+    }
+    else if (payload.eventType === 'DELETE') {
       calculations.value = calculations.value.filter(
         c => c.id !== payload.old.id
       )
@@ -662,7 +684,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
 
 ```typescript
 // composables/useErrorHandler.ts
-export const useErrorHandler = () => {
+export function useErrorHandler() {
   const toast = useToast()
 
   const handleError = (error: any, context?: string) => {
@@ -677,10 +699,10 @@ export const useErrorHandler = () => {
     // Supabaseエラー
     if (error.code) {
       const messages: Record<string, string> = {
-        '23505': 'データが重複しています',
-        '23503': '関連データが見つかりません',
-        '42501': 'アクセス権限がありません',
-        'PGRST116': 'データが見つかりません'
+        23505: 'データが重複しています',
+        23503: '関連データが見つかりません',
+        42501: 'アクセス権限がありません',
+        PGRST116: 'データが見つかりません'
       }
 
       toast.error(messages[error.code] || 'エラーが発生しました')

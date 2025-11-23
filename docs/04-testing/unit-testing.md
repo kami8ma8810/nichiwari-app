@@ -58,10 +58,10 @@ last-updated: 2024-11-22
 ### 2.1 基本設定
 
 ```typescript
+import { fileURLToPath } from 'node:url'
+import vue from '@vitejs/plugin-vue'
 // vitest.config.ts
 import { defineConfig } from 'vitest/config'
-import vue from '@vitejs/plugin-vue'
-import { fileURLToPath } from 'node:url'
 
 export default defineConfig({
   plugins: [vue()],
@@ -163,7 +163,7 @@ vi.stubGlobal('localStorage', localStorageMock)
 
 ```typescript
 // domain/entities/Product.test.ts
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { Product } from '@/domain/entities/Product'
 import { Money } from '@/domain/value-objects/Money'
 import { Years } from '@/domain/value-objects/Years'
@@ -232,7 +232,7 @@ describe('Product', () => {
 
 ```typescript
 // domain/value-objects/Money.test.ts
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { Money } from '@/domain/value-objects/Money'
 
 describe('Money', () => {
@@ -319,7 +319,7 @@ describe('Money', () => {
 
 ```typescript
 // application/use-cases/CalculateDailyCostUseCase.test.ts
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { CalculateDailyCostUseCase } from '@/application/use-cases/CalculateDailyCostUseCase'
 import { CalculationRepository } from '@/domain/repositories/CalculationRepository'
 
@@ -360,7 +360,8 @@ describe('CalculateDailyCostUseCase', () => {
       }
 
       await expect(useCase.execute(input))
-        .rejects.toThrow('商品名は必須です')
+        .rejects
+        .toThrow('商品名は必須です')
 
       expect(mockRepository.save).not.toHaveBeenCalled()
     })
@@ -377,7 +378,8 @@ describe('CalculateDailyCostUseCase', () => {
       }
 
       await expect(useCase.execute(input))
-        .rejects.toThrow('Database error')
+        .rejects
+        .toThrow('Database error')
     })
   })
 })
@@ -387,7 +389,7 @@ describe('CalculateDailyCostUseCase', () => {
 
 ```typescript
 // application/services/ComparisonService.test.ts
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { ComparisonService } from '@/application/services/ComparisonService'
 import { DailyCost } from '@/domain/value-objects/DailyCost'
 
@@ -437,7 +439,7 @@ describe('ComparisonService', () => {
 
 ```typescript
 // composables/useCalculator.test.ts
-import { describe, it, expect, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { useCalculator } from '@/composables/useCalculator'
 
 describe('useCalculator', () => {
@@ -511,9 +513,9 @@ describe('useCalculator', () => {
 ### 5.2 コンポーネントテスト
 
 ```typescript
-// components/domain/Calculator/CalculatorInput.test.ts
-import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+// components/domain/Calculator/CalculatorInput.test.ts
+import { describe, expect, it, vi } from 'vitest'
 import CalculatorInput from '@/components/domain/Calculator/CalculatorInput.vue'
 
 describe('CalculatorInput', () => {
@@ -550,8 +552,8 @@ describe('CalculatorInput', () => {
     it('入力値が更新される', async () => {
       const wrapper = mount(CalculatorInput, {
         props: {
-          modelValue: '',
-          label: '購入価格',
+          'modelValue': '',
+          'label': '購入価格',
           'onUpdate:modelValue': vi.fn()
         }
       })
@@ -582,9 +584,9 @@ describe('CalculatorInput', () => {
     it('無効状態でインタラクションできない', async () => {
       const wrapper = mount(CalculatorInput, {
         props: {
-          modelValue: '',
-          label: '購入価格',
-          disabled: true,
+          'modelValue': '',
+          'label': '購入価格',
+          'disabled': true,
           'onUpdate:modelValue': vi.fn()
         }
       })
@@ -622,9 +624,9 @@ describe('CalculatorInput', () => {
 ### 6.1 Piniaストアテスト
 
 ```typescript
+import { createPinia, setActivePinia } from 'pinia'
 // stores/calculator.test.ts
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { setActivePinia, createPinia } from 'pinia'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useCalculatorStore } from '@/stores/calculator'
 
 describe('useCalculatorStore', () => {
@@ -771,7 +773,7 @@ import { Product } from '@/domain/entities/Product'
 import { Money } from '@/domain/value-objects/Money'
 import { Years } from '@/domain/value-objects/Years'
 
-export const createProduct = (overrides = {}) => {
+export function createProduct(overrides = {}) {
   return new Product(
     overrides.name || 'テスト商品',
     new Money(overrides.price || 100000),
@@ -779,7 +781,7 @@ export const createProduct = (overrides = {}) => {
   )
 }
 
-export const createCalculation = (overrides = {}) => {
+export function createCalculation(overrides = {}) {
   return {
     id: overrides.id || '1',
     product: createProduct(overrides.product),
@@ -797,10 +799,10 @@ import { expect } from 'vitest'
 
 expect.extend({
   toBeValidMoney(received) {
-    const isValid =
-      typeof received.value === 'number' &&
-      received.value >= 0 &&
-      Number.isInteger(received.value)
+    const isValid
+      = typeof received.value === 'number'
+        && received.value >= 0
+        && Number.isInteger(received.value)
 
     return {
       pass: isValid,
@@ -810,10 +812,10 @@ expect.extend({
   },
 
   toHaveValidationError(received, field) {
-    const hasError =
-      received.errors &&
-      received.errors[field] &&
-      received.errors[field].length > 0
+    const hasError
+      = received.errors
+        && received.errors[field]
+        && received.errors[field].length > 0
 
     return {
       pass: hasError,

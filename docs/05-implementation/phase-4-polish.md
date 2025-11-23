@@ -100,7 +100,7 @@ const AnalyticsPanel = isAnalyticsEnabled.value
 
 ```typescript
 // composables/useMemoryOptimized.ts
-export const useMemoryOptimized = () => {
+export function useMemoryOptimized() {
   // WeakMapでメモリリーク防止
   const cache = new WeakMap()
 
@@ -144,13 +144,21 @@ export const useMemoryOptimized = () => {
 
 ```vue
 <!-- components/common/LoadingState.vue -->
+<script setup lang="ts">
+defineProps<{
+  type?: 'skeleton' | 'progress' | 'spinner'
+  progress?: number
+  progressText?: string
+}>()
+</script>
+
 <template>
   <div class="loading-container">
     <!-- スケルトンスクリーン -->
     <div v-if="type === 'skeleton'" class="animate-pulse">
-      <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-      <div class="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
-      <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+      <div class="h-4 bg-gray-200 rounded w-3/4 mb-4" />
+      <div class="h-4 bg-gray-200 rounded w-1/2 mb-4" />
+      <div class="h-4 bg-gray-200 rounded w-5/6" />
     </div>
 
     <!-- プログレスバー -->
@@ -159,7 +167,7 @@ export const useMemoryOptimized = () => {
         <div
           class="bg-gradient-to-r from-orange-500 to-red-500 h-2 rounded-full transition-all"
           :style="{ width: `${progress}%` }"
-        ></div>
+        />
       </div>
       <p class="text-center mt-2 text-sm text-gray-600">
         {{ progressText }}
@@ -187,20 +195,29 @@ export const useMemoryOptimized = () => {
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-defineProps<{
-  type?: 'skeleton' | 'progress' | 'spinner'
-  progress?: number
-  progressText?: string
-}>()
-</script>
 ```
 
 ### 3.2 エラー処理UI
 
 ```vue
 <!-- components/common/ErrorBoundary.vue -->
+<script setup lang="ts">
+const error = ref<Error | null>(null)
+const errorMessage = computed(() =>
+  error.value?.message || '予期せぬエラーが発生しました'
+)
+
+function retry() {
+  error.value = null
+  window.location.reload()
+}
+
+onErrorCaptured((err) => {
+  error.value = err
+  return false
+})
+</script>
+
 <template>
   <div v-if="error" class="error-boundary">
     <div class="bg-red-50 border border-red-200 rounded-lg p-6">
@@ -225,8 +242,8 @@ defineProps<{
           </p>
           <div class="mt-4">
             <button
-              @click="retry"
               class="text-sm font-medium text-red-600 hover:text-red-500"
+              @click="retry"
             >
               再試行
             </button>
@@ -237,30 +254,13 @@ defineProps<{
   </div>
   <slot v-else />
 </template>
-
-<script setup lang="ts">
-const error = ref<Error | null>(null)
-const errorMessage = computed(() =>
-  error.value?.message || '予期せぬエラーが発生しました'
-)
-
-const retry = () => {
-  error.value = null
-  window.location.reload()
-}
-
-onErrorCaptured((err) => {
-  error.value = err
-  return false
-})
-</script>
 ```
 
 ### 3.3 トースト通知
 
 ```typescript
 // composables/useToast.ts
-export const useToast = () => {
+export function useToast() {
   const toasts = useState<Toast[]>('toasts', () => [])
 
   const show = (options: ToastOptions) => {
@@ -305,7 +305,7 @@ export const useToast = () => {
 
 ```typescript
 // composables/useFocusManagement.ts
-export const useFocusManagement = () => {
+export function useFocusManagement() {
   const focusTrap = ref<HTMLElement>()
   const lastFocusedElement = ref<HTMLElement>()
 
@@ -318,14 +318,16 @@ export const useFocusManagement = () => {
     const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return
+      if (e.key !== 'Tab')
+        return
 
       if (e.shiftKey) {
         if (document.activeElement === firstElement) {
           lastElement.focus()
           e.preventDefault()
         }
-      } else {
+      }
+      else {
         if (document.activeElement === lastElement) {
           firstElement.focus()
           e.preventDefault()
@@ -359,48 +361,6 @@ export const useFocusManagement = () => {
 
 ```vue
 <!-- components/common/AccessibleModal.vue -->
-<template>
-  <Teleport to="body">
-    <Transition name="modal">
-      <div
-        v-if="isOpen"
-        class="modal-overlay"
-        @click="handleOverlayClick"
-      >
-        <div
-          ref="modalRef"
-          role="dialog"
-          :aria-modal="true"
-          :aria-labelledby="titleId"
-          :aria-describedby="descriptionId"
-          class="modal-content"
-          @click.stop
-        >
-          <button
-            @click="close"
-            class="close-button"
-            :aria-label="closeLabel"
-          >
-            <span aria-hidden="true">×</span>
-          </button>
-
-          <h2 :id="titleId" class="modal-title">
-            <slot name="title" />
-          </h2>
-
-          <div :id="descriptionId" class="modal-body">
-            <slot />
-          </div>
-
-          <div class="modal-footer">
-            <slot name="footer" />
-          </div>
-        </div>
-      </div>
-    </Transition>
-  </Teleport>
-</template>
-
 <script setup lang="ts">
 const props = defineProps<{
   isOpen: boolean
@@ -425,12 +385,13 @@ watch(() => props.isOpen, (isOpen) => {
         trapFocus(modalRef.value)
       }
     })
-  } else {
+  }
+  else {
     restoreFocus()
   }
 })
 
-const handleOverlayClick = () => {
+function handleOverlayClick() {
   emit('close')
 }
 
@@ -447,6 +408,48 @@ onMounted(() => {
   })
 })
 </script>
+
+<template>
+  <Teleport to="body">
+    <Transition name="modal">
+      <div
+        v-if="isOpen"
+        class="modal-overlay"
+        @click="handleOverlayClick"
+      >
+        <div
+          ref="modalRef"
+          role="dialog"
+          :aria-modal="true"
+          :aria-labelledby="titleId"
+          :aria-describedby="descriptionId"
+          class="modal-content"
+          @click.stop
+        >
+          <button
+            class="close-button"
+            :aria-label="closeLabel"
+            @click="close"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+
+          <h2 :id="titleId" class="modal-title">
+            <slot name="title" />
+          </h2>
+
+          <div :id="descriptionId" class="modal-body">
+            <slot />
+          </div>
+
+          <div class="modal-footer">
+            <slot name="footer" />
+          </div>
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
+</template>
 ```
 
 ### 4.3 スクリーンリーダー対応
@@ -555,6 +558,50 @@ onMounted(() => {
 
 ```vue
 <!-- components/common/InstallPrompt.vue -->
+<script setup lang="ts">
+const showPrompt = ref(false)
+const deferredPrompt = ref<any>(null)
+
+onMounted(() => {
+  // インストール可能イベントをリッスン
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault()
+    deferredPrompt.value = e
+
+    // 既にインストール済みかチェック
+    if (!localStorage.getItem('install-dismissed')) {
+      showPrompt.value = true
+    }
+  })
+
+  // インストール成功
+  window.addEventListener('appinstalled', () => {
+    showPrompt.value = false
+    deferredPrompt.value = null
+  })
+})
+
+async function install() {
+  if (!deferredPrompt.value)
+    return
+
+  deferredPrompt.value.prompt()
+  const { outcome } = await deferredPrompt.value.userChoice
+
+  if (outcome === 'accepted') {
+    console.log('App installed')
+  }
+
+  deferredPrompt.value = null
+  showPrompt.value = false
+}
+
+function dismiss() {
+  localStorage.setItem('install-dismissed', 'true')
+  showPrompt.value = false
+}
+</script>
+
 <template>
   <Transition name="slide-up">
     <div
@@ -584,14 +631,14 @@ onMounted(() => {
           </p>
           <div class="mt-3 flex gap-2">
             <button
-              @click="install"
               class="text-sm font-medium text-white bg-orange-500 px-3 py-1.5 rounded-md hover:bg-orange-600"
+              @click="install"
             >
               インストール
             </button>
             <button
-              @click="dismiss"
               class="text-sm font-medium text-gray-700 px-3 py-1.5 rounded-md hover:bg-gray-100"
+              @click="dismiss"
             >
               後で
             </button>
@@ -601,49 +648,6 @@ onMounted(() => {
     </div>
   </Transition>
 </template>
-
-<script setup lang="ts">
-const showPrompt = ref(false)
-const deferredPrompt = ref<any>(null)
-
-onMounted(() => {
-  // インストール可能イベントをリッスン
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault()
-    deferredPrompt.value = e
-
-    // 既にインストール済みかチェック
-    if (!localStorage.getItem('install-dismissed')) {
-      showPrompt.value = true
-    }
-  })
-
-  // インストール成功
-  window.addEventListener('appinstalled', () => {
-    showPrompt.value = false
-    deferredPrompt.value = null
-  })
-})
-
-const install = async () => {
-  if (!deferredPrompt.value) return
-
-  deferredPrompt.value.prompt()
-  const { outcome } = await deferredPrompt.value.userChoice
-
-  if (outcome === 'accepted') {
-    console.log('App installed')
-  }
-
-  deferredPrompt.value = null
-  showPrompt.value = false
-}
-
-const dismiss = () => {
-  localStorage.setItem('install-dismissed', 'true')
-  showPrompt.value = false
-}
-</script>
 ```
 
 ## 6. セキュリティ強化
@@ -656,11 +660,11 @@ export default defineNuxtConfig({
   security: {
     headers: {
       contentSecurityPolicy: {
-        'img-src': ["'self'", 'data:', 'https:'],
-        'font-src': ["'self'", 'https:', 'data:'],
-        'script-src': ["'self'", "'unsafe-inline'"],
-        'style-src': ["'self'", "'unsafe-inline'"],
-        'connect-src': ["'self'", 'https://*.supabase.co']
+        'img-src': ['\'self\'', 'data:', 'https:'],
+        'font-src': ['\'self\'', 'https:', 'data:'],
+        'script-src': ['\'self\'', '\'unsafe-inline\''],
+        'style-src': ['\'self\'', '\'unsafe-inline\''],
+        'connect-src': ['\'self\'', 'https://*.supabase.co']
       },
       strictTransportSecurity: {
         maxAge: 31536000,
@@ -676,14 +680,14 @@ export default defineNuxtConfig({
 
 ```typescript
 // utils/sanitizer.ts
-export const sanitizeInput = (input: string): string => {
+export function sanitizeInput(input: string): string {
   return input
     .replace(/[<>]/g, '') // HTMLタグ削除
     .replace(/javascript:/gi, '') // JavaScript実行防止
     .trim()
 }
 
-export const sanitizeNumber = (input: any): number | null => {
+export function sanitizeNumber(input: any): number | null {
   const num = Number(input)
   if (isNaN(num) || !isFinite(num)) {
     return null

@@ -14,13 +14,13 @@ last-updated: 2024-11-22
 
 #### 選定理由
 
-| 要件 | Nuxt 3の利点 | 他の選択肢との比較 |
-|------|------------|-----------------|
-| **SSG対応** | 静的サイト生成が標準機能 | Next.js: 同等、Vite: 要追加設定 |
-| **Vue 3エコシステム** | Vue 3の全機能活用可能 | React: 学習コスト高、Svelte: エコシステム小 |
-| **開発効率** | Auto-imports、ファイルベースルーティング | 手動設定より効率的 |
-| **パフォーマンス** | Nitroエンジン、最適化済み | 高速なビルドと実行 |
-| **TypeScript** | ネイティブサポート | 型安全性の確保 |
+| 要件                  | Nuxt 3の利点                             | 他の選択肢との比較                          |
+| --------------------- | ---------------------------------------- | ------------------------------------------- |
+| **SSG対応**           | 静的サイト生成が標準機能                 | Next.js: 同等、Vite: 要追加設定             |
+| **Vue 3エコシステム** | Vue 3の全機能活用可能                    | React: 学習コスト高、Svelte: エコシステム小 |
+| **開発効率**          | Auto-imports、ファイルベースルーティング | 手動設定より効率的                          |
+| **パフォーマンス**    | Nitroエンジン、最適化済み                | 高速なビルドと実行                          |
+| **TypeScript**        | ネイティブサポート                       | 型安全性の確保                              |
 
 ```typescript
 // Nuxt 3の特徴的な機能例
@@ -29,12 +29,12 @@ export default defineNuxtConfig({
   imports: {
     dirs: ['stores', 'composables']
   }
-});
+})
 
 // Server API Routes
 export default defineEventHandler(async (event) => {
-  return await $fetch('/api/products');
-});
+  return await $fetch('/api/products')
+})
 ```
 
 ### 1.2 UIライブラリ: Volt (PrimeVue + Tailwind CSS)
@@ -53,12 +53,12 @@ Volt:
 
 #### 選定理由
 
-| 観点 | Volt | Vuetify | Element Plus | Ant Design Vue |
-|------|------|---------|--------------|----------------|
-| **アクセシビリティ** | ◎ WCAG AA | ○ 部分対応 | △ 最小限 | ○ 部分対応 |
-| **カスタマイズ性** | ◎ 完全制御 | △ 制限あり | ○ 中程度 | ○ 中程度 |
-| **バンドルサイズ** | ◎ 最小限 | × 大きい | △ 中程度 | △ 中程度 |
-| **学習コスト** | ○ Tailwind知識要 | ○ 独自API | ○ 標準的 | ○ 標準的 |
+| 観点                 | Volt             | Vuetify    | Element Plus | Ant Design Vue |
+| -------------------- | ---------------- | ---------- | ------------ | -------------- |
+| **アクセシビリティ** | ◎ WCAG AA        | ○ 部分対応 | △ 最小限     | ○ 部分対応     |
+| **カスタマイズ性**   | ◎ 完全制御       | △ 制限あり | ○ 中程度     | ○ 中程度       |
+| **バンドルサイズ**   | ◎ 最小限         | × 大きい   | △ 中程度     | △ 中程度       |
+| **学習コスト**       | ○ Tailwind知識要 | ○ 独自API  | ○ 標準的     | ○ 標準的       |
 
 ```vue
 <!-- Voltコンポーネントの例 -->
@@ -106,40 +106,40 @@ v4の新機能:
 
 #### 選定理由
 
-| 観点 | Pinia | Vuex 4 | 理由 |
-|------|-------|--------|------|
-| **TypeScript** | ◎ 完全対応 | ○ 部分対応 | 型推論が優秀 |
-| **DevTools** | ◎ 統合 | ○ 別途 | 開発効率向上 |
-| **シンプルさ** | ◎ 直感的 | △ 複雑 | 学習コスト低 |
-| **バンドルサイズ** | ◎ 2KB | △ 10KB | 軽量 |
+| 観点               | Pinia      | Vuex 4     | 理由         |
+| ------------------ | ---------- | ---------- | ------------ |
+| **TypeScript**     | ◎ 完全対応 | ○ 部分対応 | 型推論が優秀 |
+| **DevTools**       | ◎ 統合     | ○ 別途     | 開発効率向上 |
+| **シンプルさ**     | ◎ 直感的   | △ 複雑     | 学習コスト低 |
+| **バンドルサイズ** | ◎ 2KB      | △ 10KB     | 軽量         |
 
 ```typescript
 // Piniaストアの例
 export const useCalculatorStore = defineStore('calculator', () => {
   // State
-  const history = ref<Calculation[]>([]);
-  const isOffline = ref(false);
+  const history = ref<Calculation[]>([])
+  const isOffline = ref(false)
 
   // Getters
   const recentCalculations = computed(() =>
     history.value.slice(0, 10)
-  );
+  )
 
   // Actions
   const addCalculation = (calc: Calculation) => {
-    history.value.unshift(calc);
+    history.value.unshift(calc)
     if (history.value.length > 100) {
-      history.value.pop();
+      history.value.pop()
     }
-  };
+  }
 
   return {
     history: readonly(history),
     isOffline: readonly(isOffline),
     recentCalculations,
     addCalculation
-  };
-});
+  }
+})
 ```
 
 ### 1.5 バリデーション: Valibot
@@ -153,7 +153,10 @@ export const useCalculatorStore = defineStore('calculator', () => {
 // Yup: ~50KB
 
 // Valibotの実装例
-import * as v from 'valibot';
+import * as v from 'valibot'
+
+// Tree-shakable（必要な機能のみインポート）
+import { parse, safeParse } from 'valibot'
 
 export const ProductSchema = v.object({
   name: v.pipe(
@@ -172,10 +175,7 @@ export const ProductSchema = v.object({
     v.maxValue(100),
     v.multipleOf(0.5)
   )
-});
-
-// Tree-shakable（必要な機能のみインポート）
-import { parse, safeParse } from 'valibot';
+})
 ```
 
 ## 2. バックエンド技術選定
@@ -184,30 +184,30 @@ import { parse, safeParse } from 'valibot';
 
 #### 選定理由
 
-| 要件 | Supabase | Firebase | AWS Amplify |
-|------|----------|----------|-------------|
-| **PostgreSQL** | ◎ ネイティブ | × NoSQL | △ Aurora |
-| **リアルタイム** | ◎ 標準機能 | ◎ 標準機能 | △ 要設定 |
-| **無料枠** | ◎ 寛大 | ○ 制限あり | △ 少ない |
-| **オープンソース** | ◎ OSS | × プロプライエタリ | × プロプライエタリ |
-| **型安全性** | ◎ 自動生成 | △ 手動 | △ 手動 |
+| 要件               | Supabase     | Firebase           | AWS Amplify        |
+| ------------------ | ------------ | ------------------ | ------------------ |
+| **PostgreSQL**     | ◎ ネイティブ | × NoSQL            | △ Aurora           |
+| **リアルタイム**   | ◎ 標準機能   | ◎ 標準機能         | △ 要設定           |
+| **無料枠**         | ◎ 寛大       | ○ 制限あり         | △ 少ない           |
+| **オープンソース** | ◎ OSS        | × プロプライエタリ | × プロプライエタリ |
+| **型安全性**       | ◎ 自動生成   | △ 手動             | △ 手動             |
 
 ```typescript
+import type { Database } from './database.types'
 // Supabaseクライアントの型安全な実装
-import { createClient } from '@supabase/supabase-js';
-import type { Database } from './database.types';
+import { createClient } from '@supabase/supabase-js'
 
 export const supabase = createClient<Database>(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_ANON_KEY!
-);
+)
 
 // 型安全なクエリ
 const { data, error } = await supabase
   .from('products')
   .select('*')
   .eq('category', 'ガジェット')
-  .order('created_at', { ascending: false });
+  .order('created_at', { ascending: false })
 // data: Product[] | null （型推論される）
 ```
 
@@ -234,12 +234,12 @@ const { data, error } = await supabase
 
 #### 選定理由
 
-| 観点 | pnpm | npm | yarn | bun |
-|------|------|-----|------|-----|
+| 観点             | pnpm                 | npm    | yarn         | bun      |
+| ---------------- | -------------------- | ------ | ------------ | -------- |
 | **ディスク効率** | ◎ シンボリックリンク | × 重複 | △ キャッシュ | ○ 効率的 |
-| **速度** | ◎ 高速 | △ 遅い | ○ 普通 | ◎ 最速 |
-| **厳格性** | ◎ 厳格 | △ 緩い | ○ 中間 | △ 緩い |
-| **成熟度** | ◎ 安定 | ◎ 安定 | ◎ 安定 | △ 新しい |
+| **速度**         | ◎ 高速               | △ 遅い | ○ 普通       | ◎ 最速   |
+| **厳格性**       | ◎ 厳格               | △ 緩い | ○ 中間       | △ 緩い   |
+| **成熟度**       | ◎ 安定               | ◎ 安定 | ◎ 安定       | △ 新しい |
 
 ```yaml
 # pnpmの利点を活かした設定
@@ -259,19 +259,19 @@ auto-install-peers=true # peerDependencies自動インストール
 // 3. 高速な実行（ESBuildベース）
 // 4. ネイティブESM対応
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest'
 
 describe('CalculateDailyCost', () => {
   it('should calculate daily cost correctly', () => {
-    const result = calculateDailyCost(150000, 3);
-    expect(result).toBe(137); // 150000 / (3 * 365)
-  });
+    const result = calculateDailyCost(150000, 3)
+    expect(result).toBe(137) // 150000 / (3 * 365)
+  })
 
   it('should handle mocked dependencies', () => {
-    const mock = vi.fn(() => 42);
-    expect(mock()).toBe(42);
-  });
-});
+    const mock = vi.fn(() => 42)
+    expect(mock()).toBe(42)
+  })
+})
 ```
 
 #### E2Eテスト: Playwright
@@ -283,17 +283,17 @@ describe('CalculateDailyCost', () => {
 // 3. スクリーンショット・動画記録
 // 4. モバイルデバイスエミュレーション
 
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test'
 
 test('calculate daily cost', async ({ page }) => {
-  await page.goto('/');
-  await page.fill('[name="price"]', '150000');
-  await page.fill('[name="years"]', '3');
-  await page.click('button:has-text("計算する")');
+  await page.goto('/')
+  await page.fill('[name="price"]', '150000')
+  await page.fill('[name="years"]', '3')
+  await page.click('button:has-text("計算する")')
 
   await expect(page.locator('.daily-cost'))
-    .toContainText('137円');
-});
+    .toContainText('137円')
+})
 ```
 
 ### 3.3 リンター/フォーマッター
@@ -308,7 +308,7 @@ test('calculate daily cost', async ({ page }) => {
 // 4. 合理的なデフォルト設定
 
 // eslint.config.js
-import antfu from '@antfu/eslint-config';
+import antfu from '@antfu/eslint-config'
 
 export default antfu({
   vue: true,
@@ -322,7 +322,7 @@ export default antfu({
     'no-console': 'warn',
     'vue/component-name-in-template-casing': ['error', 'PascalCase'],
   },
-});
+})
 ```
 
 ### 3.4 CI/CD: GitHub Actions
@@ -355,12 +355,12 @@ jobs:
 
 #### 選定理由
 
-| 観点 | Vercel | Netlify | Cloudflare Pages | AWS |
-|------|--------|---------|------------------|------|
-| **Nuxt対応** | ◎ 公式 | ○ 対応 | ○ 対応 | △ 要設定 |
-| **パフォーマンス** | ◎ エッジ | ○ CDN | ◎ エッジ | ○ CloudFront |
-| **無料枠** | ◎ 寛大 | ○ 普通 | ◎ 寛大 | × 有料 |
-| **DX** | ◎ 最高 | ○ 良好 | △ 普通 | × 複雑 |
+| 観点               | Vercel   | Netlify | Cloudflare Pages | AWS          |
+| ------------------ | -------- | ------- | ---------------- | ------------ |
+| **Nuxt対応**       | ◎ 公式   | ○ 対応  | ○ 対応           | △ 要設定     |
+| **パフォーマンス** | ◎ エッジ | ○ CDN   | ◎ エッジ         | ○ CloudFront |
+| **無料枠**         | ◎ 寛大   | ○ 普通  | ◎ 寛大           | × 有料       |
+| **DX**             | ◎ 最高   | ○ 良好  | △ 普通           | × 複雑       |
 
 ## 4. 技術スタックまとめ
 

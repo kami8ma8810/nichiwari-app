@@ -75,61 +75,61 @@ erDiagram
 ```typescript
 // src/core/domain/entities/Product.ts
 export class Product {
-  private readonly _id: ProductId;
-  private readonly _name: ProductName;
-  private readonly _price: Money;
-  private readonly _years: Years;
-  private readonly _category: Category;
-  private readonly _icon: Icon;
+  private readonly _id: ProductId
+  private readonly _name: ProductName
+  private readonly _price: Money
+  private readonly _years: Years
+  private readonly _category: Category
+  private readonly _icon: Icon
 
   constructor(props: {
-    id: string;
-    name: string;
-    price: number;
-    years: number;
-    category?: string;
-    icon?: string;
+    id: string
+    name: string
+    price: number
+    years: number
+    category?: string
+    icon?: string
   }) {
-    this._id = new ProductId(props.id);
-    this._name = new ProductName(props.name);
-    this._price = Money.of(props.price);
-    this._years = Years.of(props.years);
-    this._category = new Category(props.category || 'その他');
-    this._icon = new Icon(props.icon || '📦');
+    this._id = new ProductId(props.id)
+    this._name = new ProductName(props.name)
+    this._price = Money.of(props.price)
+    this._years = Years.of(props.years)
+    this._category = new Category(props.category || 'その他')
+    this._icon = new Icon(props.icon || '📦')
   }
 
   // ビジネスロジック
   calculateDailyCost(): DailyCost {
-    const totalDays = this._years.toDays();
-    return new DailyCost(this._price.value / totalDays);
+    const totalDays = this._years.toDays()
+    return new DailyCost(this._price.value / totalDays)
   }
 
   calculateMonthlyCost(): MonthlyCost {
-    const dailyCost = this.calculateDailyCost();
-    return dailyCost.toMonthly();
+    const dailyCost = this.calculateDailyCost()
+    return dailyCost.toMonthly()
   }
 
   calculateYearlyCost(): YearlyCost {
-    return new YearlyCost(this._price.value / this._years.value);
+    return new YearlyCost(this._price.value / this._years.value)
   }
 
   // 比較メトリクス
   getComparisonMetrics(): ComparisonMetrics {
-    const dailyCost = this.calculateDailyCost();
+    const dailyCost = this.calculateDailyCost()
     return {
       coffeeCount: Math.floor(dailyCost.value / 200),
       lunchCount: Math.floor(dailyCost.value / 500),
       subscriptionCount: Math.floor(this.calculateMonthlyCost().value / 1000)
-    };
+    }
   }
 
   // ゲッター
-  get id(): string { return this._id.value; }
-  get name(): string { return this._name.value; }
-  get price(): number { return this._price.value; }
-  get years(): number { return this._years.value; }
-  get category(): string { return this._category.value; }
-  get icon(): string { return this._icon.value; }
+  get id(): string { return this._id.value }
+  get name(): string { return this._name.value }
+  get price(): number { return this._price.value }
+  get years(): number { return this._years.value }
+  get category(): string { return this._category.value }
+  get icon(): string { return this._icon.value }
 }
 ```
 
@@ -138,22 +138,22 @@ export class Product {
 ```typescript
 // src/core/domain/entities/Calculation.ts
 export class Calculation {
-  private readonly _id: CalculationId;
-  private readonly _product: Product;
-  private readonly _dailyCost: DailyCost;
-  private readonly _monthlyCost: MonthlyCost;
-  private readonly _yearlyCost: YearlyCost;
-  private readonly _totalDays: number;
-  private readonly _calculatedAt: Date;
+  private readonly _id: CalculationId
+  private readonly _product: Product
+  private readonly _dailyCost: DailyCost
+  private readonly _monthlyCost: MonthlyCost
+  private readonly _yearlyCost: YearlyCost
+  private readonly _totalDays: number
+  private readonly _calculatedAt: Date
 
   constructor(product: Product) {
-    this._id = CalculationId.generate();
-    this._product = product;
-    this._dailyCost = product.calculateDailyCost();
-    this._monthlyCost = product.calculateMonthlyCost();
-    this._yearlyCost = product.calculateYearlyCost();
-    this._totalDays = Years.of(product.years).toDays();
-    this._calculatedAt = new Date();
+    this._id = CalculationId.generate()
+    this._product = product
+    this._dailyCost = product.calculateDailyCost()
+    this._monthlyCost = product.calculateMonthlyCost()
+    this._yearlyCost = product.calculateYearlyCost()
+    this._totalDays = Years.of(product.years).toDays()
+    this._calculatedAt = new Date()
   }
 
   // 結果の取得
@@ -169,7 +169,7 @@ export class Calculation {
       totalDays: this._totalDays,
       comparisonMetrics: this._product.getComparisonMetrics(),
       calculatedAt: this._calculatedAt
-    };
+    }
   }
 
   // 履歴用のサマリー
@@ -179,7 +179,7 @@ export class Calculation {
       productName: this._product.name,
       dailyCost: this._dailyCost.formatted(),
       calculatedAt: this._calculatedAt
-    };
+    }
   }
 }
 ```
@@ -189,83 +189,85 @@ export class Calculation {
 ```typescript
 // src/core/domain/entities/HappinessScore.ts
 export class HappinessScore {
-  private readonly _id: HappinessScoreId;
-  private readonly _checklist: ChecklistAnswers;
-  private readonly _totalScore: Score;
-  private readonly _categoryScores: CategoryScores;
-  private readonly _recommendation: Recommendation;
-  private readonly _evaluatedAt: Date;
+  private readonly _id: HappinessScoreId
+  private readonly _checklist: ChecklistAnswers
+  private readonly _totalScore: Score
+  private readonly _categoryScores: CategoryScores
+  private readonly _recommendation: Recommendation
+  private readonly _evaluatedAt: Date
 
   constructor(answers: Map<string, boolean>) {
-    this._id = HappinessScoreId.generate();
-    this._checklist = new ChecklistAnswers(answers);
-    this._totalScore = this.calculateTotalScore();
-    this._categoryScores = this.calculateCategoryScores();
-    this._recommendation = this.determineRecommendation();
-    this._evaluatedAt = new Date();
+    this._id = HappinessScoreId.generate()
+    this._checklist = new ChecklistAnswers(answers)
+    this._totalScore = this.calculateTotalScore()
+    this._categoryScores = this.calculateCategoryScores()
+    this._recommendation = this.determineRecommendation()
+    this._evaluatedAt = new Date()
   }
 
   private calculateTotalScore(): Score {
-    const items = HappinessChecklistItems.getAll();
-    let weightedScore = 0;
-    let maxScore = 0;
+    const items = HappinessChecklistItems.getAll()
+    let weightedScore = 0
+    let maxScore = 0
 
-    items.forEach(item => {
-      maxScore += item.weight;
+    items.forEach((item) => {
+      maxScore += item.weight
       if (this._checklist.isChecked(item.id)) {
-        weightedScore += item.weight;
+        weightedScore += item.weight
       }
-    });
+    })
 
-    const percentage = (weightedScore / maxScore) * 100;
-    return new Score(percentage);
+    const percentage = (weightedScore / maxScore) * 100
+    return new Score(percentage)
   }
 
   private calculateCategoryScores(): CategoryScores {
-    const categories = ['frequency', 'value', 'financial', 'emotional'];
-    const scores = new Map<string, number>();
+    const categories = ['frequency', 'value', 'financial', 'emotional']
+    const scores = new Map<string, number>()
 
-    categories.forEach(category => {
-      const categoryItems = HappinessChecklistItems.getByCategory(category);
-      let categoryScore = 0;
-      let categoryMax = 0;
+    categories.forEach((category) => {
+      const categoryItems = HappinessChecklistItems.getByCategory(category)
+      let categoryScore = 0
+      let categoryMax = 0
 
-      categoryItems.forEach(item => {
-        categoryMax += item.weight;
+      categoryItems.forEach((item) => {
+        categoryMax += item.weight
         if (this._checklist.isChecked(item.id)) {
-          categoryScore += item.weight;
+          categoryScore += item.weight
         }
-      });
+      })
 
-      scores.set(category, (categoryScore / categoryMax) * 100);
-    });
+      scores.set(category, (categoryScore / categoryMax) * 100)
+    })
 
-    return new CategoryScores(scores);
+    return new CategoryScores(scores)
   }
 
   private determineRecommendation(): Recommendation {
-    const score = this._totalScore.value;
+    const score = this._totalScore.value
 
     if (score >= 70) {
       return new Recommendation(
         'highly-recommended',
         '購入する価値が高いです！長期的な満足度が期待できます。'
-      );
-    } else if (score >= 40) {
+      )
+    }
+    else if (score >= 40) {
       return new Recommendation(
         'consider-more',
         `もう少し検討が必要かもしれません。特に${this.getWeakestCategory()}の観点を再考してみてください。`
-      );
-    } else {
+      )
+    }
+    else {
       return new Recommendation(
         'reconsider',
         '再考をお勧めします。レンタルや代替品も検討してみてください。'
-      );
+      )
     }
   }
 
   private getWeakestCategory(): string {
-    return this._categoryScores.getWeakest();
+    return this._categoryScores.getWeakest()
   }
 
   // 結果の取得
@@ -278,7 +280,7 @@ export class HappinessScore {
       advice: this._recommendation.message,
       checkedItems: this._checklist.getCheckedItems(),
       evaluatedAt: this._evaluatedAt
-    };
+    }
   }
 }
 ```
@@ -293,44 +295,44 @@ export class Money {
   private constructor(
     private readonly _value: number
   ) {
-    this.validate();
+    this.validate()
   }
 
   private validate(): void {
     if (this._value < 0) {
-      throw new ValidationError('金額は0以上である必要があります');
+      throw new ValidationError('金額は0以上である必要があります')
     }
     if (this._value > 1000000000) {
-      throw new ValidationError('金額は10億円以下である必要があります');
+      throw new ValidationError('金額は10億円以下である必要があります')
     }
     if (!Number.isInteger(this._value)) {
-      throw new ValidationError('金額は整数である必要があります');
+      throw new ValidationError('金額は整数である必要があります')
     }
   }
 
   static of(value: number): Money {
-    return new Money(Math.floor(value));
+    return new Money(Math.floor(value))
   }
 
   get value(): number {
-    return this._value;
+    return this._value
   }
 
   // 演算
   add(other: Money): Money {
-    return Money.of(this._value + other._value);
+    return Money.of(this._value + other._value)
   }
 
   subtract(other: Money): Money {
-    return Money.of(this._value - other._value);
+    return Money.of(this._value - other._value)
   }
 
   multiply(factor: number): Money {
-    return Money.of(this._value * factor);
+    return Money.of(this._value * factor)
   }
 
   divideByDays(days: number): number {
-    return Math.round(this._value / days);
+    return Math.round(this._value / days)
   }
 
   // フォーマット
@@ -338,11 +340,11 @@ export class Money {
     return new Intl.NumberFormat('ja-JP', {
       style: 'currency',
       currency: 'JPY'
-    }).format(this._value);
+    }).format(this._value)
   }
 
   equals(other: Money): boolean {
-    return this._value === other._value;
+    return this._value === other._value
   }
 }
 ```
@@ -355,45 +357,45 @@ export class Years {
   private constructor(
     private readonly _value: number
   ) {
-    this.validate();
+    this.validate()
   }
 
   private validate(): void {
     if (this._value < 0.5) {
-      throw new ValidationError('使用年数は0.5年以上である必要があります');
+      throw new ValidationError('使用年数は0.5年以上である必要があります')
     }
     if (this._value > 100) {
-      throw new ValidationError('使用年数は100年以下である必要があります');
+      throw new ValidationError('使用年数は100年以下である必要があります')
     }
     if (this._value % 0.5 !== 0) {
-      throw new ValidationError('使用年数は0.5年単位である必要があります');
+      throw new ValidationError('使用年数は0.5年単位である必要があります')
     }
   }
 
   static of(value: number): Years {
     // 0.5単位に丸める
-    const rounded = Math.round(value * 2) / 2;
-    return new Years(rounded);
+    const rounded = Math.round(value * 2) / 2
+    return new Years(rounded)
   }
 
   get value(): number {
-    return this._value;
+    return this._value
   }
 
   toDays(): number {
-    return Math.floor(this._value * 365);
+    return Math.floor(this._value * 365)
   }
 
   toMonths(): number {
-    return Math.floor(this._value * 12);
+    return Math.floor(this._value * 12)
   }
 
   formatted(): string {
-    return `${this._value}年`;
+    return `${this._value}年`
   }
 
   equals(other: Years): boolean {
-    return this._value === other._value;
+    return this._value === other._value
   }
 }
 ```
@@ -406,47 +408,47 @@ export class DailyCost {
   constructor(
     private readonly _value: number
   ) {
-    this.validate();
+    this.validate()
   }
 
   private validate(): void {
     if (this._value < 0) {
-      throw new ValidationError('日割りコストは0以上である必要があります');
+      throw new ValidationError('日割りコストは0以上である必要があります')
     }
   }
 
   get value(): number {
-    return Math.round(this._value);
+    return Math.round(this._value)
   }
 
   toMonthly(): MonthlyCost {
-    return new MonthlyCost(this._value * 30);
+    return new MonthlyCost(this._value * 30)
   }
 
   toYearly(): YearlyCost {
-    return new YearlyCost(this._value * 365);
+    return new YearlyCost(this._value * 365)
   }
 
   // 比較用メソッド
   isLessThan(amount: number): boolean {
-    return this._value < amount;
+    return this._value < amount
   }
 
   isMoreThan(amount: number): boolean {
-    return this._value > amount;
+    return this._value > amount
   }
 
   // 参考指標への変換
   toCoffeeCount(): number {
-    return Math.floor(this._value / 200);
+    return Math.floor(this._value / 200)
   }
 
   toLunchCount(): number {
-    return Math.floor(this._value / 500);
+    return Math.floor(this._value / 500)
   }
 
   formatted(): string {
-    return `${Math.round(this._value)}円/日`;
+    return `${Math.round(this._value)}円/日`
   }
 }
 ```
@@ -563,12 +565,12 @@ CREATE POLICY "Trend data is viewable by everyone"
 ```typescript
 // src/core/ports/ProductRepository.ts
 export interface ProductRepository {
-  findById(id: string): Promise<Product | null>;
-  findByName(name: string): Promise<Product[]>;
-  findByCategory(category: string): Promise<Product[]>;
-  findPopular(limit: number): Promise<Product[]>;
-  save(product: Product): Promise<void>;
-  saveSearchLog(log: SearchLog): Promise<void>;
+  findById: (id: string) => Promise<Product | null>
+  findByName: (name: string) => Promise<Product[]>
+  findByCategory: (category: string) => Promise<Product[]>
+  findPopular: (limit: number) => Promise<Product[]>
+  save: (product: Product) => Promise<void>
+  saveSearchLog: (log: SearchLog) => Promise<void>
 }
 
 // src/infrastructure/repositories/ProductRepositoryImpl.ts
@@ -580,8 +582,9 @@ export class ProductRepositoryImpl implements ProductRepository {
 
   async findByName(name: string): Promise<Product[]> {
     // キャッシュチェック
-    const cached = await this.cache.get(`products:name:${name}`);
-    if (cached) return cached;
+    const cached = await this.cache.get(`products:name:${name}`)
+    if (cached)
+      return cached
 
     // データベースクエリ
     const { data, error } = await this.supabase
@@ -589,16 +592,17 @@ export class ProductRepositoryImpl implements ProductRepository {
       .select('*')
       .ilike('name', `%${name}%`)
       .order('popularity_score', { ascending: false })
-      .limit(10);
+      .limit(10)
 
-    if (error) throw new RepositoryError(error.message);
+    if (error)
+      throw new RepositoryError(error.message)
 
-    const products = data.map(this.toDomainModel);
+    const products = data.map(this.toDomainModel)
 
     // キャッシュ保存（5分）
-    await this.cache.set(`products:name:${name}`, products, 300);
+    await this.cache.set(`products:name:${name}`, products, 300)
 
-    return products;
+    return products
   }
 
   private toDomainModel(data: any): Product {
@@ -609,7 +613,7 @@ export class ProductRepositoryImpl implements ProductRepository {
       years: data.years,
       category: data.category,
       icon: data.icon
-    });
+    })
   }
 }
 ```

@@ -148,31 +148,31 @@ WCAG 2.1 Level AA:
 ```typescript
 // フォーカス管理
 interface FocusManagement {
-  tabIndex: number;           // タブ順序
-  focusVisible: boolean;      // フォーカス表示
-  skipLinks: boolean;         // スキップリンク
-  focusTrap: boolean;         // モーダル内フォーカストラップ
+  tabIndex: number // タブ順序
+  focusVisible: boolean // フォーカス表示
+  skipLinks: boolean // スキップリンク
+  focusTrap: boolean // モーダル内フォーカストラップ
 }
 
 // ARIAサポート
 interface ARIASupport {
-  role: string;              // 要素の役割
-  ariaLabel: string;         // ラベル
-  ariaDescribedBy: string;   // 説明
-  ariaLive: 'polite' | 'assertive'; // 動的コンテンツ
-  ariaExpanded: boolean;     // 展開状態
+  role: string // 要素の役割
+  ariaLabel: string // ラベル
+  ariaDescribedBy: string // 説明
+  ariaLive: 'polite' | 'assertive' // 動的コンテンツ
+  ariaExpanded: boolean // 展開状態
 }
 
 // カラーコントラスト
 interface ColorContrast {
   normal: {
-    large: 3.0,   // 18pt以上
-    small: 4.5    // 18pt未満
-  };
+    large: 3.0 // 18pt以上
+    small: 4.5 // 18pt未満
+  }
   enhanced: {
-    large: 4.5,
+    large: 4.5
     small: 7.0
-  };
+  }
 }
 ```
 

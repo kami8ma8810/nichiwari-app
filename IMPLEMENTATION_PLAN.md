@@ -5,6 +5,7 @@
 > **実装期間**: 約7週間
 >
 > **重要更新（2025-11-22）**:
+>
 > - ✅ 環境構築時のエラー・警告解消を必須化
 > - ✅ 各ステップでの確認項目を明記
 > - ✅ トラブルシューティングセクションを追加（よくあるエラー8種類と解決方法）
@@ -54,31 +55,31 @@
 
 ### フロントエンド
 
-| 技術 | バージョン | 選定理由 |
-|------|-----------|---------|
-| **Nuxt 3** | ^3.15.0 | SSG/SPA両対応、優れたDX、SEO最適化 |
-| **TypeScript** | ^5.7.2 | 型安全性、保守性向上、エディタサポート |
-| **Vue 3** | ^3.5.13 | Composition API、軽量、高速レンダリング |
-| **Volt** | latest | PrimeVue拡張、洗練されたUI、カスタマイズ性 |
-| **Tailwind CSS** | ^4.0.0 | ユーティリティファースト、柔軟性、高速開発 |
-| **Valibot** | ^1.0.0 | 軽量バリデーション、型推論、優れたDX |
+| 技術             | バージョン | 選定理由                                   |
+| ---------------- | ---------- | ------------------------------------------ |
+| **Nuxt 3**       | ^3.15.0    | SSG/SPA両対応、優れたDX、SEO最適化         |
+| **TypeScript**   | ^5.7.2     | 型安全性、保守性向上、エディタサポート     |
+| **Vue 3**        | ^3.5.13    | Composition API、軽量、高速レンダリング    |
+| **Volt**         | latest     | PrimeVue拡張、洗練されたUI、カスタマイズ性 |
+| **Tailwind CSS** | ^4.0.0     | ユーティリティファースト、柔軟性、高速開発 |
+| **Valibot**      | ^1.0.0     | 軽量バリデーション、型推論、優れたDX       |
 
 ### バックエンド・インフラ
 
-| 技術 | 用途 | 選定理由 |
-|------|------|---------|
-| **Supabase** | BaaS | PostgreSQL、認証、リアルタイム、無料枠充実 |
-| **Vercel** | ホスティング | Edge Network、自動デプロイ、分析機能 |
-| **Sentry** | エラー監視 | リアルタイム通知、詳細なスタックトレース |
+| 技術         | 用途         | 選定理由                                   |
+| ------------ | ------------ | ------------------------------------------ |
+| **Supabase** | BaaS         | PostgreSQL、認証、リアルタイム、無料枠充実 |
+| **Vercel**   | ホスティング | Edge Network、自動デプロイ、分析機能       |
+| **Sentry**   | エラー監視   | リアルタイム通知、詳細なスタックトレース   |
 
 ### 開発・テスト
 
-| 技術 | 用途 | 選定理由 |
-|------|------|---------|
-| **Vitest** | 単体テスト | 高速、Viteネイティブ、ESM対応 |
-| **Playwright** | E2Eテスト | クロスブラウザ、並列実行、安定性 |
-| **Storybook** | UIカタログ | コンポーネント駆動開発、デザインシステム |
-| **ESLint** | Lint | @antfu/eslint-config、最新ベストプラクティス |
+| 技術           | 用途       | 選定理由                                     |
+| -------------- | ---------- | -------------------------------------------- |
+| **Vitest**     | 単体テスト | 高速、Viteネイティブ、ESM対応                |
+| **Playwright** | E2Eテスト  | クロスブラウザ、並列実行、安定性             |
+| **Storybook**  | UIカタログ | コンポーネント駆動開発、デザインシステム     |
+| **ESLint**     | Lint       | @antfu/eslint-config、最新ベストプラクティス |
 
 ---
 
@@ -130,6 +131,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 ### Phase 1: 環境構築とドメイン層（2日）
 
 #### 目標
+
 - 開発環境の構築
 - プロジェクト基盤の確立
 - ドメインロジックの実装（TDD）
@@ -137,6 +139,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 #### タスク
 
 **Day 1: 環境構築**
+
 - [x] Node.js/pnpm環境構築
 - [ ] Nuxt 3プロジェクト作成
 - [ ] TypeScript設定（strict: true）
@@ -148,6 +151,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 - [ ] ESLint/Prettier設定
 
 **Day 2: ドメイン層実装（TDD）**
+
 - [ ] 値オブジェクト実装
   - [ ] `Money`: 金額の値オブジェクト
   - [ ] `Years`: 使用年数の値オブジェクト
@@ -159,6 +163,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
   - [ ] `CalculateDailyCostUseCase`: 日割り計算ユースケース
 
 #### 品質チェックリスト
+
 - [ ] **環境構築時のエラー・警告がすべて解消されている**
   - [ ] `pnpm install` で警告・エラーがない
   - [ ] `pnpm dev` が正常に起動する
@@ -174,6 +179,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 ### Phase 2: UIコンポーネント実装（3日）
 
 #### 目標
+
 - 計算フォームの実装
 - 結果表示の実装
 - レスポンシブ対応
@@ -182,6 +188,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 #### タスク
 
 **Day 3: レイアウト・フォーム**
+
 - [ ] AppHeader コンポーネント
 - [ ] AppFooter コンポーネント
 - [ ] CalculatorForm コンポーネント
@@ -192,6 +199,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
   - [ ] プリセットボタン
 
 **Day 4: 結果表示**
+
 - [ ] CalculatorResult コンポーネント
   - [ ] 日割り金額表示（大きく強調）
   - [ ] カウントアップアニメーション
@@ -202,6 +210,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 - [ ] ComparisonList コンポーネント
 
 **Day 5: インタラクション・ポリッシュ**
+
 - [ ] アニメーション実装
   - [ ] フェードイン/アウト
   - [ ] スライドアップ
@@ -211,6 +220,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 - [ ] Storybook ストーリー作成
 
 #### 品質チェックリスト
+
 - [ ] レスポンシブ対応（Mobile/Tablet/Desktop）
 - [ ] WCAG 2.2 AA準拠
   - [ ] キーボード操作可能
@@ -225,6 +235,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 ### Phase 3: データ永続化とSupabase連携（3日）
 
 #### 目標
+
 - Supabaseプロジェクトセットアップ
 - データベーススキーマ作成
 - リポジトリパターン実装
@@ -233,6 +244,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 #### タスク
 
 **Day 6: Supabase初期設定**
+
 - [ ] Supabaseプロジェクト作成
 - [ ] テーブル定義
   - [ ] `products`: 商品マスタ
@@ -244,6 +256,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 - [ ] サンプルデータ投入
 
 **Day 7: リポジトリ実装**
+
 - [ ] `ProductRepository` インターフェース
 - [ ] `ProductRepositoryImpl` 実装
   - [ ] findByName: 商品名で検索
@@ -253,6 +266,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 - [ ] キャッシュ戦略実装
 
 **Day 8: オフライン対応**
+
 - [ ] LocalStorage管理
   - [ ] 計算履歴保存（最大100件）
   - [ ] 設定保存
@@ -263,6 +277,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
   - [ ] オンライン復帰時の同期
 
 #### 品質チェックリスト
+
 - [ ] RLSポリシーが正しく設定されている
 - [ ] データマイグレーションが作成されている
 - [ ] オフラインで計算可能
@@ -273,6 +288,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 ### Phase 4: 拡張機能（PWA、幸福度診断）（3日）
 
 #### 目標
+
 - PWA対応
 - 幸福度診断機能
 - 履歴・統計機能
@@ -281,6 +297,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 #### タスク
 
 **Day 9: PWA対応**
+
 - [ ] manifest.json作成
 - [ ] アイコン生成（192x192, 512x512）
 - [ ] Service Worker最適化
@@ -289,6 +306,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 - [ ] App ShellパターンとプリレンダリングでTTI < 3s実現
 
 **Day 10: 幸福度診断**
+
 - [ ] `HappinessScore` エンティティ
   - [ ] チェックリスト管理
   - [ ] スコア計算ロジック
@@ -299,6 +317,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
   - [ ] メッセージ表示
 
 **Day 11: 履歴・統計**
+
 - [ ] HistoryPage 実装
   - [ ] 計算履歴一覧
   - [ ] 月別グルーピング
@@ -309,6 +328,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
   - [ ] 月別グラフ（Chart.js）
 
 #### 品質チェックリスト
+
 - [ ] PWAとしてインストール可能（iOS/Android）
 - [ ] Lighthouse PWAスコア100
 - [ ] 幸福度スコア計算が正確
@@ -319,6 +339,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 ### Phase 5: テストとリリース準備（2日）
 
 #### 目標
+
 - 総合テスト
 - パフォーマンス最適化
 - セキュリティ監査
@@ -327,6 +348,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 #### タスク
 
 **Day 12: 総合テスト**
+
 - [ ] E2Eテスト全実行
   - [ ] 計算フロー
   - [ ] 履歴保存フロー
@@ -342,6 +364,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
   - [ ] SQLインジェクション対策確認
 
 **Day 13: リリース準備**
+
 - [ ] ドキュメント整備
   - [ ] README.md更新
   - [ ] ユーザーガイド作成
@@ -359,6 +382,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
   - [ ] フィードバック収集
 
 #### 品質チェックリスト
+
 - [ ] すべてのE2Eテストがパス
 - [ ] Lighthouse全項目90+
 - [ ] セキュリティ問題なし
@@ -372,6 +396,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 ### MVP（2週間）- 最小限で価値提供
 
 #### Week 1: デザインシステム構築
+
 - **Day 1-2**: CSS変数とユーティリティクラス
   - カラーパレット（オレンジ〜レッド系のグラデーション）
   - タイポグラフィ（Hiragino Sans、Noto Sans JP）
@@ -382,6 +407,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
   - TextField、NumberField、SliderField、PrimaryButton
 
 #### Week 2: 結果表示と計算機能
+
 - **Day 8-10**: 結果表示コンポーネント
   - ResultCard（大きく強調）
   - ComparisonItem（絵文字+数値）
@@ -398,6 +424,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 ### 拡張機能（1.5週間）- データ蓄積
 
 #### Week 3: 履歴機能
+
 - **Day 15-17**: バックエンド連携
   - Supabase設定
   - テーブル作成
@@ -408,6 +435,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
   - スワイプで削除
 
 #### Week 4: 統計・設定
+
 - **Day 20-21**: 統計画面
   - StatsCard
   - BarChart（Chart.js）
@@ -420,6 +448,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 ### 高度機能（2週間）- 個別最適化
 
 #### Week 5: 認証・幸福度
+
 - **Day 25-27**: 認証機能
   - メール/パスワード認証
   - ソーシャルログイン
@@ -429,6 +458,7 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
   - スコア計算
 
 #### Week 6: レコメンド・改善
+
 - **Day 31-33**: レコメンド機能
 - **Day 34-35**: データ同期
 - **Day 36-38**: ポリッシュ
@@ -439,31 +469,31 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 
 ### パフォーマンス
 
-| 指標 | 目標 | 計測方法 |
-|------|------|---------|
-| **Lighthouse Performance** | 90+ | Lighthouse CI |
-| **First Contentful Paint** | < 1.5s | WebPageTest |
-| **Time to Interactive** | < 3s | WebPageTest |
+| 指標                         | 目標   | 計測方法        |
+| ---------------------------- | ------ | --------------- |
+| **Lighthouse Performance**   | 90+    | Lighthouse CI   |
+| **First Contentful Paint**   | < 1.5s | WebPageTest     |
+| **Time to Interactive**      | < 3s   | WebPageTest     |
 | **Largest Contentful Paint** | < 2.5s | Core Web Vitals |
-| **Cumulative Layout Shift** | < 0.1 | Core Web Vitals |
+| **Cumulative Layout Shift**  | < 0.1  | Core Web Vitals |
 
 ### アクセシビリティ
 
-| 項目 | 基準 | 検証方法 |
-|------|------|---------|
-| **WCAG 2.2準拠** | AA | axe DevTools |
-| **キーボード操作** | 全機能対応 | 手動テスト |
-| **スクリーンリーダー** | VoiceOver/NVDA対応 | 手動テスト |
-| **コントラスト比** | 4.5:1以上 | Chrome DevTools |
-| **フォーカス表示** | 明確に表示 | 手動テスト |
+| 項目                   | 基準               | 検証方法        |
+| ---------------------- | ------------------ | --------------- |
+| **WCAG 2.2準拠**       | AA                 | axe DevTools    |
+| **キーボード操作**     | 全機能対応         | 手動テスト      |
+| **スクリーンリーダー** | VoiceOver/NVDA対応 | 手動テスト      |
+| **コントラスト比**     | 4.5:1以上          | Chrome DevTools |
+| **フォーカス表示**     | 明確に表示         | 手動テスト      |
 
 ### テストカバレッジ
 
-| テストタイプ | 目標カバレッジ | ツール |
-|-------------|--------------|-------|
-| **単体テスト** | 90%+ | Vitest |
-| **統合テスト** | 70%+ | Vitest |
-| **E2Eテスト** | クリティカルパス100% | Playwright |
+| テストタイプ   | 目標カバレッジ       | ツール     |
+| -------------- | -------------------- | ---------- |
+| **単体テスト** | 90%+                 | Vitest     |
+| **統合テスト** | 70%+                 | Vitest     |
+| **E2Eテスト**  | クリティカルパス100% | Playwright |
 
 ### コード品質
 
@@ -473,26 +503,82 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 - **型安全性**: any/unknown禁止（例外は型ガード使用）
 - **エラーハンドリング**: すべてのエラーをキャッチして適切に処理
 
+### 実装のルール
+
+#### TDD（テスト駆動開発）
+
+- **Red → Green → Refactor** サイクルを厳守
+- 実装コードを書く前に必ずテストを書く
+- テストがパスしてから次の機能に進む
+- リファクタリング時もテストを実行して安全性を確保
+
+#### Git コミットルール
+
+**コミットの粒度**
+
+- 作業がひととおり終わったら、細かくまとまりごとにコミット
+- 1つのコミットには1つの目的のみを含める
+- 以下のような単位でコミットすることを推奨：
+  - 1つの値オブジェクトの実装完了
+  - 1つのエンティティの実装完了
+  - 1つのユースケースの実装完了
+  - 1つのコンポーネントの実装完了
+  - 設定ファイルの追加・変更
+  - テストの追加・修正
+  - リファクタリング
+
+**コミットメッセージ**
+
+- 日本語で記述
+- プレフィックスを使用（feat, fix, chore, docs, refactor, test等）
+- 1行目: 変更の概要（50文字以内）
+- 2行目: 空行
+- 3行目以降: 詳細な変更内容（箇条書き推奨）
+- 末尾に Claude Code 署名を含める
+
+**例**:
+
+```
+feat: Money値オブジェクトをTDDで実装
+
+- 金額の値オブジェクトを作成（0〜10億円）
+- バリデーション実装（整数チェック、範囲チェック）
+- format()メソッドで日本円表記
+- 12個のテストケース作成（すべてパス）
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+**コミット前の確認事項**
+
+- [ ] すべてのテストがパス（`pnpm test`）
+- [ ] 型チェックでエラーなし（`pnpm typecheck`）
+- [ ] Lint エラーなし（`pnpm lint`）
+- [ ] 不要なコンソールログやデバッグコードを削除
+- [ ] コミットメッセージが明確で分かりやすい
+
 ---
 
 ## ⚠️ リスクと対策
 
 ### 技術的リスク
 
-| リスク | 影響度 | 対策 |
-|--------|--------|------|
-| **Volt UIの習熟に時間がかかる** | 中 | 事前ドキュメント精読、カスタムコンポーネント優先 |
-| **Supabase RLS設定ミス** | 高 | セキュリティレビュー、テストケース作成 |
-| **パフォーマンス問題** | 中 | 早期Lighthouse計測、コード分割、キャッシュ戦略 |
-| **PWA動作不良（iOS）** | 中 | 実機テスト徹底、フォールバック実装 |
+| リスク                          | 影響度 | 対策                                             |
+| ------------------------------- | ------ | ------------------------------------------------ |
+| **Volt UIの習熟に時間がかかる** | 中     | 事前ドキュメント精読、カスタムコンポーネント優先 |
+| **Supabase RLS設定ミス**        | 高     | セキュリティレビュー、テストケース作成           |
+| **パフォーマンス問題**          | 中     | 早期Lighthouse計測、コード分割、キャッシュ戦略   |
+| **PWA動作不良（iOS）**          | 中     | 実機テスト徹底、フォールバック実装               |
 
 ### スケジュールリスク
 
-| リスク | 影響度 | 対策 |
-|--------|--------|------|
-| **見積もり甘く遅延** | 高 | バッファ20%確保、毎日進捗確認 |
-| **仕様変更** | 中 | 設計書を先に固める、変更管理 |
-| **外部依存の障害** | 低 | Supabase以外のBaaSも検討、冗長化 |
+| リスク               | 影響度 | 対策                             |
+| -------------------- | ------ | -------------------------------- |
+| **見積もり甘く遅延** | 高     | バッファ20%確保、毎日進捗確認    |
+| **仕様変更**         | 中     | 設計書を先に固める、変更管理     |
+| **外部依存の障害**   | 低     | Supabase以外のBaaSも検討、冗長化 |
 
 ---
 
@@ -500,13 +586,13 @@ User Input → Presentation Layer → Use Case → Domain Logic → Repository �
 
 ### マイルストーン
 
-| マイルストーン | 期間 | 完了条件 |
-|--------------|------|---------|
-| **M1: 環境構築完了** | Day 1-2 | 開発環境が整い、ドメイン層が実装されている |
-| **M2: MVP完成** | Day 1-14 | 計算機能が動作し、PWAとしてインストール可能 |
-| **M3: 拡張機能完成** | Day 15-24 | 履歴・統計機能が利用可能 |
-| **M4: 高度機能完成** | Day 25-38 | 認証、幸福度診断が動作 |
-| **M5: リリース** | Day 39-50 | 全テストパス、本番環境デプロイ完了 |
+| マイルストーン       | 期間      | 完了条件                                    |
+| -------------------- | --------- | ------------------------------------------- |
+| **M1: 環境構築完了** | Day 1-2   | 開発環境が整い、ドメイン層が実装されている  |
+| **M2: MVP完成**      | Day 1-14  | 計算機能が動作し、PWAとしてインストール可能 |
+| **M3: 拡張機能完成** | Day 15-24 | 履歴・統計機能が利用可能                    |
+| **M4: 高度機能完成** | Day 25-38 | 認証、幸福度診断が動作                      |
+| **M5: リリース**     | Day 39-50 | 全テストパス、本番環境デプロイ完了          |
 
 ### タイムライン（7週間）
 
@@ -812,6 +898,7 @@ pnpm add -D cross-env
    - 解決策が提示されている場合が多い
 
 3. **環境をクリーンにして再試行**
+
    ```bash
    # すべてをクリーンにして再インストール
    rm -rf node_modules pnpm-lock.yaml .nuxt .output
@@ -819,6 +906,7 @@ pnpm add -D cross-env
    ```
 
 4. **バージョンを確認**
+
    ```bash
    node --version   # v20.x.x
    pnpm --version   # 8.x.x
@@ -850,12 +938,14 @@ DEBUG=nuxt:* pnpm dev
 ## 📚 関連ドキュメント
 
 ### 必読ドキュメント
+
 - [環境構築ガイド](./docs/03-development/setup.md)
 - [アーキテクチャ概要](./docs/02-architecture/overview.md)
 - [コーディング規約](./docs/03-development/coding-standards.md)
 - [TDD実践ガイド](./docs/03-development/tdd-guide.md)
 
 ### フェーズ別ガイド
+
 - [Phase 1: 初期セットアップ](./docs/05-implementation/phase-1-setup.md)
 - [Phase 2: UIコンポーネント](./docs/05-implementation/phase-2-ui.md)
 - [Phase 3: データ永続化](./docs/05-implementation/phase-3-data.md)
@@ -863,6 +953,7 @@ DEBUG=nuxt:* pnpm dev
 - [Phase 5: リリース準備](./docs/05-implementation/phase-5-release.md)
 
 ### デザイン関連
+
 - [デザイン実装ロードマップ](./docs/08-design/implementation-roadmap.md)
 - [画面設計](./docs/08-design/screens.md)
 - [コンポーネント設計](./docs/08-design/components.md)

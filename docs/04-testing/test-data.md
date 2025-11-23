@@ -227,7 +227,7 @@ export const formInputs = {
     sql: {
       price: '100000; DROP TABLE users;',
       years: '3',
-      name: "'; DELETE FROM products; --"
+      name: '\'; DELETE FROM products; --'
     }
   }
 }
@@ -296,8 +296,7 @@ export class ProductBuilder {
         `${this.name}_${i + 1}`,
         new Money(this.price + i * 1000),
         new Years(this.years)
-      )
-    )
+      ))
   }
 }
 
@@ -318,9 +317,7 @@ const products = new ProductBuilder().buildMany(10)
 import { faker } from '@faker-js/faker'
 import { Calculation } from '@/domain/entities/Calculation'
 
-export const createCalculation = (
-  overrides: Partial<Calculation> = {}
-): Calculation => {
+export function createCalculation(overrides: Partial<Calculation> = {}): Calculation {
   return {
     id: faker.string.uuid(),
     product: {
@@ -335,17 +332,13 @@ export const createCalculation = (
   }
 }
 
-export const createCalculationList = (
-  count: number,
-  overrides: Partial<Calculation> = {}
-): Calculation[] => {
+export function createCalculationList(count: number, overrides: Partial<Calculation> = {}): Calculation[] {
   return Array.from({ length: count }, () =>
-    createCalculation(overrides)
-  )
+    createCalculation(overrides))
 }
 
 // シード値を使った再現可能なデータ生成
-export const createSeededCalculation = (seed: number) => {
+export function createSeededCalculation(seed: number) {
   faker.seed(seed)
   return createCalculation()
 }
@@ -429,7 +422,7 @@ export const server = setupServer(...handlers)
 // test/mocks/supabase-mock.ts
 import { vi } from 'vitest'
 
-export const createSupabaseMock = () => {
+export function createSupabaseMock() {
   const mockFrom = vi.fn((table: string) => ({
     select: vi.fn().mockReturnThis(),
     insert: vi.fn().mockReturnThis(),
@@ -482,7 +475,7 @@ vi.mock('@/lib/supabase', () => ({
 ```typescript
 // test/seed/database-seed.ts
 import { createClient } from '@supabase/supabase-js'
-import { products, calculations, happinessScores } from '../fixtures/domain-data'
+import { calculations, happinessScores, products } from '../fixtures/domain-data'
 
 export class DatabaseSeeder {
   private supabase: any
@@ -614,7 +607,7 @@ global.localStorage = new LocalStorageMock()
 
 ```typescript
 // test/snapshots/calculation-snapshots.test.ts
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { createCalculation } from '../factories/calculation-factory'
 
 describe('計算データスナップショット', () => {
@@ -626,8 +619,7 @@ describe('計算データスナップショット', () => {
 
   it('複数の計算結果', () => {
     const calculations = Array.from({ length: 5 }, (_, i) =>
-      createSeededCalculation(i)
-    )
+      createSeededCalculation(i))
 
     expect(calculations).toMatchSnapshot()
   })
@@ -732,6 +724,9 @@ describe('パフォーマンステスト', () => {
 ```typescript
 // test/helpers/cleanup.ts
 
+// Vitestフック
+import { afterEach, beforeEach } from 'vitest'
+
 export class TestDataCleaner {
   private cleanupTasks: (() => void | Promise<void>)[] = []
 
@@ -743,16 +738,14 @@ export class TestDataCleaner {
     for (const task of this.cleanupTasks.reverse()) {
       try {
         await task()
-      } catch (error) {
+      }
+      catch (error) {
         console.error('Cleanup task failed:', error)
       }
     }
     this.cleanupTasks = []
   }
 }
-
-// Vitestフック
-import { afterEach, beforeEach } from 'vitest'
 
 const cleaner = new TestDataCleaner()
 
@@ -816,7 +809,8 @@ export class TestDataSanitizer {
       for (const [key, value] of Object.entries(data)) {
         if (this.isSensitiveField(key)) {
           sanitized[key] = this.maskValue(value)
-        } else {
+        }
+        else {
           sanitized[key] = this.sanitize(value)
         }
       }
@@ -828,8 +822,14 @@ export class TestDataSanitizer {
 
   private static isSensitiveField(field: string): boolean {
     const sensitiveFields = [
-      'password', 'token', 'secret', 'apiKey',
-      'email', 'phone', 'ssn', 'creditCard'
+      'password',
+      'token',
+      'secret',
+      'apiKey',
+      'email',
+      'phone',
+      'ssn',
+      'creditCard'
     ]
     return sensitiveFields.some(f =>
       field.toLowerCase().includes(f.toLowerCase())
@@ -838,7 +838,8 @@ export class TestDataSanitizer {
 
   private static maskValue(value: any): string {
     const str = String(value)
-    if (str.length <= 4) return '****'
+    if (str.length <= 4)
+      return '****'
     return str.slice(0, 2) + '*'.repeat(str.length - 4) + str.slice(-2)
   }
 

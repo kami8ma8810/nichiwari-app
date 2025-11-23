@@ -227,7 +227,7 @@ CONFIG: 設定関連
 
 ### AUTH_TOKEN_001: トークン無効
 
-```typescript
+````typescript
 {
   code: 'AUTH_TOKEN_001',
   message: '認証トークンが無効です',
@@ -249,7 +249,7 @@ CONFIG: 設定関連
   },
   action: 'upgrade_account'
 }
-```
+````
 
 ## 6. データベースエラー (DB)
 
@@ -389,7 +389,7 @@ export class AppError extends Error {
 
 ```typescript
 // composables/useErrorHandler.ts
-export const useErrorHandler = () => {
+export function useErrorHandler() {
   const { t } = useI18n()
   const toast = useToast()
 
@@ -467,7 +467,7 @@ export const useErrorHandler = () => {
 
 ```typescript
 // server/api/errors.ts
-export const createErrorResponse = (error: AppError) => {
+export function createErrorResponse(error: AppError) {
   const statusCode = getStatusCode(error.code)
 
   return {
@@ -558,9 +558,9 @@ const retryConfig = {
 
 ```typescript
 const fallbackStrategies = {
-  'APP_CALC_002': useOfflineComparisons,
-  'NET_CONN_001': useLocalCache,
-  'DB_QUERY_001': useIndexedDB
+  APP_CALC_002: useOfflineComparisons,
+  NET_CONN_001: useLocalCache,
+  DB_QUERY_001: useIndexedDB
 }
 ```
 

@@ -255,7 +255,8 @@ serve(async (req) => {
       .select()
       .single()
 
-    if (productError) throw productError
+    if (productError)
+      throw productError
 
     // 計算結果保存
     const { data: calculation, error: calcError } = await supabase
@@ -268,7 +269,8 @@ serve(async (req) => {
       .select()
       .single()
 
-    if (calcError) throw calcError
+    if (calcError)
+      throw calcError
 
     return new Response(
       JSON.stringify({
@@ -281,7 +283,8 @@ serve(async (req) => {
         status: 200
       }
     )
-  } catch (error) {
+  }
+  catch (error) {
     return new Response(
       JSON.stringify({ error: error.message }),
       { status: 500 }
@@ -318,7 +321,8 @@ serve(async (req) => {
       .from('calculations')
       .select('daily_cost')
       .then(({ data }) => {
-        if (!data || data.length === 0) return 0
+        if (!data || data.length === 0)
+          return 0
         const sum = data.reduce((acc, item) => acc + item.daily_cost, 0)
         return Math.round(sum / data.length)
       }),
@@ -335,7 +339,8 @@ serve(async (req) => {
       .from('happiness_scores')
       .select('score')
       .then(({ data }) => {
-        if (!data || data.length === 0) return null
+        if (!data || data.length === 0)
+          return null
         const scores = data.map(d => d.score)
         return {
           average: Math.round(scores.reduce((a, b) => a + b, 0) / scores.length),
@@ -365,7 +370,7 @@ serve(async (req) => {
 
 ```typescript
 // lib/supabase-realtime.ts
-export const setupRealtimeSubscription = () => {
+export function setupRealtimeSubscription() {
   const supabase = useSupabase()
 
   // 計算履歴のリアルタイム更新
@@ -434,7 +439,7 @@ export const setupRealtimeSubscription = () => {
 ```yaml
 # supabase/backup.yml
 backup:
-  schedule: "0 2 * * *" # 毎日2時
+  schedule: '0 2 * * *' # 毎日2時
   retention: 30 # 30日間保持
 
   databases:
@@ -587,7 +592,8 @@ async function checkDatabase() {
       healthy: !error,
       message: error?.message
     }
-  } catch (error) {
+  }
+  catch (error) {
     return {
       healthy: false,
       message: error.message

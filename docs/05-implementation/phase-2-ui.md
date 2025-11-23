@@ -84,13 +84,112 @@ last-updated: 2024-11-22
 
 ```vue
 <!-- components/domain/Calculator/CalculatorForm.vue -->
+<script setup lang="ts">
+import * as v from 'valibot'
+import { reactive, ref } from 'vue'
+
+const emit = defineEmits<{
+  calculate: [data: { name?: string, price: number, years: number }]
+}>()
+
+// バリデーションスキーマ
+const FormSchema = v.object({
+  name: v.optional(v.pipe(
+    v.string(),
+    v.maxLength(100, '100文字以内で入力してください')
+  )),
+  price: v.pipe(
+    v.number(),
+    v.minValue(1, '1円以上で入力してください'),
+    v.maxValue(1000000000, '10億円以下で入力してください')
+  ),
+  years: v.pipe(
+    v.number(),
+    v.minValue(0.5, '0.5年以上で入力してください'),
+    v.maxValue(100, '100年以下で入力してください'),
+    v.multipleOf(0.5, '0.5年単位で入力してください')
+  )
+})
+
+const formData = reactive({
+  name: '',
+  price: null as number | null,
+  years: null as number | null
+})
+
+const errors = reactive<Record<string, string>>({})
+const isCalculating = ref(false)
+
+// プリセットデータ
+const presets = [
+  { id: 1, name: 'スマホ', price: 150000, years: 2 },
+  { id: 2, name: 'PC', price: 200000, years: 4 },
+  { id: 3, name: '洗濯機', price: 100000, years: 10 },
+  { id: 4, name: 'テレビ', price: 80000, years: 7 }
+]
+
+function applyPreset(preset: typeof presets[0]) {
+  formData.name = preset.name
+  formData.price = preset.price
+  formData.years = preset.years
+}
+
+function validate() {
+  try {
+    const parsed = v.parse(FormSchema, {
+      name: formData.name,
+      price: formData.price,
+      years: formData.years
+    })
+    Object.keys(errors).forEach(key => delete errors[key])
+    return parsed
+  }
+  catch (error) {
+    if (v.isValiError(error)) {
+      error.issues.forEach((issue) => {
+        if (issue.path) {
+          errors[issue.path[0].toString()] = issue.message
+        }
+      })
+    }
+    return null
+  }
+}
+
+async function handleSubmit() {
+  const validated = validate()
+  if (!validated)
+    return
+
+  isCalculating.value = true
+
+  // 計算処理をエミット
+  emit('calculate', {
+    name: validated.name,
+    price: validated.price,
+    years: validated.years
+  })
+
+  setTimeout(() => {
+    isCalculating.value = false
+  }, 500)
+}
+
+function reset() {
+  formData.name = ''
+  formData.price = null
+  formData.years = null
+  Object.keys(errors).forEach(key => delete errors[key])
+}
+</script>
+
 <template>
   <div class="bg-white rounded-2xl shadow-xl p-8">
     <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">
       買い物の価値を計算する
     </h2>
 
-    <form @submit.prevent="handleSubmit" class="space-y-6">
+    <form class="space-y-6" @submit.prevent="handleSubmit">
       <!-- 商品名入力 -->
       <div>
         <label for="product-name" class="block text-sm font-medium text-gray-700 mb-2">
@@ -104,7 +203,7 @@ last-updated: 2024-11-22
           placeholder="例：iPhone 15 Pro"
           :aria-invalid="!!errors.name"
           :aria-describedby="errors.name ? 'name-error' : undefined"
-        />
+        >
         <p v-if="errors.name" id="name-error" class="mt-2 text-sm text-red-600" role="alert">
           {{ errors.name }}
         </p>
@@ -130,7 +229,7 @@ last-updated: 2024-11-22
             max="1000000000"
             :aria-invalid="!!errors.price"
             :aria-describedby="errors.price ? 'price-error' : undefined"
-          />
+          >
         </div>
         <p v-if="errors.price" id="price-error" class="mt-2 text-sm text-red-600" role="alert">
           {{ errors.price }}
@@ -155,7 +254,7 @@ last-updated: 2024-11-22
             step="0.5"
             :aria-invalid="!!errors.years"
             :aria-describedby="errors.years ? 'years-error' : undefined"
-          />
+          >
           <span class="text-gray-500">年</span>
         </div>
         <p v-if="errors.years" id="years-error" class="mt-2 text-sm text-red-600" role="alert">
@@ -165,14 +264,16 @@ last-updated: 2024-11-22
 
       <!-- プリセット -->
       <div class="border-t pt-6">
-        <p class="text-sm text-gray-600 mb-3">よく使う商品から選択：</p>
+        <p class="text-sm text-gray-600 mb-3">
+          よく使う商品から選択：
+        </p>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
           <button
             v-for="preset in presets"
             :key="preset.id"
             type="button"
-            @click="applyPreset(preset)"
             class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-orange-50 hover:border-orange-300 transition-colors"
+            @click="applyPreset(preset)"
           >
             {{ preset.name }}
           </button>
@@ -183,8 +284,8 @@ last-updated: 2024-11-22
       <div class="flex gap-4 pt-6">
         <button
           type="button"
-          @click="reset"
           class="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+          @click="reset"
         >
           リセット
         </button>
@@ -206,157 +307,12 @@ last-updated: 2024-11-22
     </form>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, reactive } from 'vue'
-import * as v from 'valibot'
-
-// バリデーションスキーマ
-const FormSchema = v.object({
-  name: v.optional(v.pipe(
-    v.string(),
-    v.maxLength(100, '100文字以内で入力してください')
-  )),
-  price: v.pipe(
-    v.number(),
-    v.minValue(1, '1円以上で入力してください'),
-    v.maxValue(1000000000, '10億円以下で入力してください')
-  ),
-  years: v.pipe(
-    v.number(),
-    v.minValue(0.5, '0.5年以上で入力してください'),
-    v.maxValue(100, '100年以下で入力してください'),
-    v.multipleOf(0.5, '0.5年単位で入力してください')
-  )
-})
-
-const emit = defineEmits<{
-  calculate: [data: { name?: string; price: number; years: number }]
-}>()
-
-const formData = reactive({
-  name: '',
-  price: null as number | null,
-  years: null as number | null
-})
-
-const errors = reactive<Record<string, string>>({})
-const isCalculating = ref(false)
-
-// プリセットデータ
-const presets = [
-  { id: 1, name: 'スマホ', price: 150000, years: 2 },
-  { id: 2, name: 'PC', price: 200000, years: 4 },
-  { id: 3, name: '洗濯機', price: 100000, years: 10 },
-  { id: 4, name: 'テレビ', price: 80000, years: 7 }
-]
-
-const applyPreset = (preset: typeof presets[0]) => {
-  formData.name = preset.name
-  formData.price = preset.price
-  formData.years = preset.years
-}
-
-const validate = () => {
-  try {
-    const parsed = v.parse(FormSchema, {
-      name: formData.name,
-      price: formData.price,
-      years: formData.years
-    })
-    Object.keys(errors).forEach(key => delete errors[key])
-    return parsed
-  } catch (error) {
-    if (v.isValiError(error)) {
-      error.issues.forEach(issue => {
-        if (issue.path) {
-          errors[issue.path[0].toString()] = issue.message
-        }
-      })
-    }
-    return null
-  }
-}
-
-const handleSubmit = async () => {
-  const validated = validate()
-  if (!validated) return
-
-  isCalculating.value = true
-
-  // 計算処理をエミット
-  emit('calculate', {
-    name: validated.name,
-    price: validated.price,
-    years: validated.years
-  })
-
-  setTimeout(() => {
-    isCalculating.value = false
-  }, 500)
-}
-
-const reset = () => {
-  formData.name = ''
-  formData.price = null
-  formData.years = null
-  Object.keys(errors).forEach(key => delete errors[key])
-}
-</script>
 ```
 
 ### 3.2 計算結果表示コンポーネント
 
 ```vue
 <!-- components/domain/Calculator/CalculatorResult.vue -->
-<template>
-  <Transition name="slide-up">
-    <div v-if="result" class="bg-white rounded-2xl shadow-xl p-8 mt-8">
-      <!-- メイン結果 -->
-      <div class="text-center mb-8">
-        <p class="text-gray-600 mb-2">1日あたり</p>
-        <div class="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">
-          {{ formatCurrency(result.dailyCost) }}
-        </div>
-        <p v-if="result.productName" class="mt-4 text-gray-700">
-          「{{ result.productName }}」の1日あたりの価値
-        </p>
-      </div>
-
-      <!-- 比較 -->
-      <div class="border-t pt-8">
-        <h3 class="text-lg font-semibold mb-4">身近なものと比較すると...</h3>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <ComparisonCard
-            v-for="item in comparisons"
-            :key="item.id"
-            :item="item"
-            :daily-cost="result.dailyCost"
-          />
-        </div>
-      </div>
-
-      <!-- アクション -->
-      <div class="flex gap-4 mt-8">
-        <button
-          @click="saveToHistory"
-          class="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-        >
-          <Icon name="save" class="inline w-5 h-5 mr-2" />
-          保存する
-        </button>
-        <button
-          @click="share"
-          class="flex-1 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
-        >
-          <Icon name="share" class="inline w-5 h-5 mr-2" />
-          シェアする
-        </button>
-      </div>
-    </div>
-  </Transition>
-</template>
-
 <script setup lang="ts">
 import type { CalculationResult } from '@/types'
 
@@ -369,12 +325,13 @@ const emit = defineEmits<{
   share: []
 }>()
 
-const formatCurrency = (value: number) => {
+function formatCurrency(value: number) {
   return `${value.toLocaleString()}円`
 }
 
 const comparisons = computed(() => {
-  if (!props.result) return []
+  if (!props.result)
+    return []
 
   const dailyCost = props.result.dailyCost
 
@@ -400,22 +357,75 @@ const comparisons = computed(() => {
   ]
 })
 
-const saveToHistory = () => {
+function saveToHistory() {
   emit('save')
 }
 
-const share = async () => {
+async function share() {
   if (navigator.share) {
     await navigator.share({
       title: 'にちわり！計算結果',
       text: `1日あたり${props.result?.dailyCost}円でした！`,
       url: window.location.href
     })
-  } else {
+  }
+  else {
     emit('share')
   }
 }
 </script>
+
+<template>
+  <Transition name="slide-up">
+    <div v-if="result" class="bg-white rounded-2xl shadow-xl p-8 mt-8">
+      <!-- メイン結果 -->
+      <div class="text-center mb-8">
+        <p class="text-gray-600 mb-2">
+          1日あたり
+        </p>
+        <div class="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">
+          {{ formatCurrency(result.dailyCost) }}
+        </div>
+        <p v-if="result.productName" class="mt-4 text-gray-700">
+          「{{ result.productName }}」の1日あたりの価値
+        </p>
+      </div>
+
+      <!-- 比較 -->
+      <div class="border-t pt-8">
+        <h3 class="text-lg font-semibold mb-4">
+          身近なものと比較すると...
+        </h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <ComparisonCard
+            v-for="item in comparisons"
+            :key="item.id"
+            :item="item"
+            :daily-cost="result.dailyCost"
+          />
+        </div>
+      </div>
+
+      <!-- アクション -->
+      <div class="flex gap-4 mt-8">
+        <button
+          class="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+          @click="saveToHistory"
+        >
+          <Icon name="save" class="inline w-5 h-5 mr-2" />
+          保存する
+        </button>
+        <button
+          class="flex-1 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
+          @click="share"
+        >
+          <Icon name="share" class="inline w-5 h-5 mr-2" />
+          シェアする
+        </button>
+      </div>
+    </div>
+  </Transition>
+</template>
 
 <style scoped>
 .slide-up-enter-active,
@@ -439,16 +449,6 @@ const share = async () => {
 
 ```vue
 <!-- components/domain/Calculator/ComparisonCard.vue -->
-<template>
-  <div class="bg-gray-50 rounded-lg p-4 text-center hover:bg-orange-50 transition-colors">
-    <div class="text-3xl mb-2">{{ getEmoji(item.name) }}</div>
-    <p class="text-sm text-gray-600 mb-1">{{ item.name }}</p>
-    <p class="font-bold text-lg">
-      約{{ item.quantity }}{{ getUnit(item.name) }}
-    </p>
-  </div>
-</template>
-
 <script setup lang="ts">
 interface ComparisonItem {
   id: number
@@ -462,28 +462,42 @@ defineProps<{
   dailyCost: number
 }>()
 
-const getEmoji = (name: string): string => {
+function getEmoji(name: string): string {
   const emojiMap: Record<string, string> = {
-    'コンビニコーヒー': '☕',
-    'ペットボトル': '🥤',
-    '電車運賃': '🚃',
-    '映画チケット': '🎬',
-    'ランチ': '🍱'
+    コンビニコーヒー: '☕',
+    ペットボトル: '🥤',
+    電車運賃: '🚃',
+    映画チケット: '🎬',
+    ランチ: '🍱'
   }
   return emojiMap[name] || '💰'
 }
 
-const getUnit = (name: string): string => {
+function getUnit(name: string): string {
   const unitMap: Record<string, string> = {
-    'コンビニコーヒー': '杯',
-    'ペットボトル': '本',
-    '電車運賃': '回',
-    '映画チケット': '回',
-    'ランチ': '食'
+    コンビニコーヒー: '杯',
+    ペットボトル: '本',
+    電車運賃: '回',
+    映画チケット: '回',
+    ランチ: '食'
   }
   return unitMap[name] || '個'
 }
 </script>
+
+<template>
+  <div class="bg-gray-50 rounded-lg p-4 text-center hover:bg-orange-50 transition-colors">
+    <div class="text-3xl mb-2">
+      {{ getEmoji(item.name) }}
+    </div>
+    <p class="text-sm text-gray-600 mb-1">
+      {{ item.name }}
+    </p>
+    <p class="font-bold text-lg">
+      約{{ item.quantity }}{{ getUnit(item.name) }}
+    </p>
+  </div>
+</template>
 ```
 
 ## 4. ページ実装
@@ -492,6 +506,29 @@ const getUnit = (name: string): string => {
 
 ```vue
 <!-- pages/index.vue -->
+<script setup lang="ts">
+import { useCalculator } from '@/composables/useCalculator'
+import { useCalculatorStore } from '@/stores/calculator'
+
+const { calculate, calculationResult } = useCalculator()
+const store = useCalculatorStore()
+
+async function handleCalculate(data: any) {
+  await calculate(data)
+}
+
+function saveCalculation() {
+  if (calculationResult.value) {
+    store.addCalculation(calculationResult.value)
+    // トースト表示など
+  }
+}
+
+function shareResult() {
+  // シェア処理
+}
+</script>
+
 <template>
   <div>
     <!-- ヒーローセクション -->
@@ -522,47 +559,42 @@ const getUnit = (name: string): string => {
       </h2>
       <div class="grid md:grid-cols-3 gap-8">
         <div class="bg-white rounded-xl p-6 shadow-lg">
-          <div class="text-4xl mb-4">💰</div>
-          <h3 class="font-bold mb-2">1. 価格を入力</h3>
-          <p class="text-gray-600">購入価格を入力します</p>
+          <div class="text-4xl mb-4">
+            💰
+          </div>
+          <h3 class="font-bold mb-2">
+            1. 価格を入力
+          </h3>
+          <p class="text-gray-600">
+            購入価格を入力します
+          </p>
         </div>
         <div class="bg-white rounded-xl p-6 shadow-lg">
-          <div class="text-4xl mb-4">📅</div>
-          <h3 class="font-bold mb-2">2. 使用年数を入力</h3>
-          <p class="text-gray-600">何年使う予定か入力</p>
+          <div class="text-4xl mb-4">
+            📅
+          </div>
+          <h3 class="font-bold mb-2">
+            2. 使用年数を入力
+          </h3>
+          <p class="text-gray-600">
+            何年使う予定か入力
+          </p>
         </div>
         <div class="bg-white rounded-xl p-6 shadow-lg">
-          <div class="text-4xl mb-4">✨</div>
-          <h3 class="font-bold mb-2">3. 結果を確認</h3>
-          <p class="text-gray-600">1日あたりの価値が分かる！</p>
+          <div class="text-4xl mb-4">
+            ✨
+          </div>
+          <h3 class="font-bold mb-2">
+            3. 結果を確認
+          </h3>
+          <p class="text-gray-600">
+            1日あたりの価値が分かる！
+          </p>
         </div>
       </div>
     </section>
   </div>
 </template>
-
-<script setup lang="ts">
-import { useCalculator } from '@/composables/useCalculator'
-import { useCalculatorStore } from '@/stores/calculator'
-
-const { calculate, calculationResult } = useCalculator()
-const store = useCalculatorStore()
-
-const handleCalculate = async (data: any) => {
-  await calculate(data)
-}
-
-const saveCalculation = () => {
-  if (calculationResult.value) {
-    store.addCalculation(calculationResult.value)
-    // トースト表示など
-  }
-}
-
-const shareResult = () => {
-  // シェア処理
-}
-</script>
 ```
 
 ## 5. レスポンシブ対応
@@ -586,7 +618,8 @@ const shareResult = () => {
   px-4 sm:px-6 lg:px-8
   py-4 sm:py-6 lg:py-8
   grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4
-">
+"
+>
   <!-- コンテンツ -->
 </div>
 ```

@@ -59,12 +59,12 @@ last-updated: 2024-11-22
 ```typescript
 // public/sw.ts
 /// <reference lib="webworker" />
-declare const self: ServiceWorkerGlobalScope;
+declare const self: ServiceWorkerGlobalScope
 
-const CACHE_VERSION = 'v1';
-const STATIC_CACHE = `static-${CACHE_VERSION}`;
-const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
-const DATA_CACHE = `data-${CACHE_VERSION}`;
+const CACHE_VERSION = 'v1'
+const STATIC_CACHE = `static-${CACHE_VERSION}`
+const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`
+const DATA_CACHE = `data-${CACHE_VERSION}`
 
 // キャッシュする静的ファイル
 const STATIC_FILES = [
@@ -76,32 +76,32 @@ const STATIC_FILES = [
   '/data/presets.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png'
-];
+]
 
 // インストールイベント
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE).then(cache => {
-      console.log('[SW] Caching static files');
-      return cache.addAll(STATIC_FILES);
+    caches.open(STATIC_CACHE).then((cache) => {
+      console.log('[SW] Caching static files')
+      return cache.addAll(STATIC_FILES)
     })
-  );
-  self.skipWaiting();
-});
+  )
+  self.skipWaiting()
+})
 
 // アクティベートイベント
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
+    caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames
           .filter(name => name !== STATIC_CACHE && name !== DYNAMIC_CACHE)
           .map(name => caches.delete(name))
-      );
+      )
     })
-  );
-  self.clients.claim();
-});
+  )
+  self.clients.claim()
+})
 ```
 
 ### 2.2 キャッシュ戦略
@@ -109,10 +109,10 @@ self.addEventListener('activate', (event) => {
 ```typescript
 // キャッシュ戦略の定義
 interface CacheStrategy {
-  pattern: RegExp;
-  strategy: 'CacheFirst' | 'NetworkFirst' | 'NetworkOnly' | 'StaleWhileRevalidate';
-  cacheName: string;
-  expiration?: number;
+  pattern: RegExp
+  strategy: 'CacheFirst' | 'NetworkFirst' | 'NetworkOnly' | 'StaleWhileRevalidate'
+  cacheName: string
+  expiration?: number
 }
 
 const cacheStrategies: CacheStrategy[] = [
@@ -139,20 +139,20 @@ const cacheStrategies: CacheStrategy[] = [
     cacheName: DATA_CACHE,
     expiration: 7 * 24 * 60 * 60 * 1000 // 7日
   }
-];
+]
 
 // フェッチイベント
 self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
+  const { request } = event
+  const url = new URL(request.url)
 
   // 適切な戦略を選択
-  const strategy = getStrategy(url.pathname);
+  const strategy = getStrategy(url.pathname)
 
   if (strategy) {
-    event.respondWith(handleRequest(request, strategy));
+    event.respondWith(handleRequest(request, strategy))
   }
-});
+})
 
 async function handleRequest(
   request: Request,
@@ -160,15 +160,15 @@ async function handleRequest(
 ): Promise<Response> {
   switch (strategy.strategy) {
     case 'CacheFirst':
-      return cacheFirst(request, strategy);
+      return cacheFirst(request, strategy)
     case 'NetworkFirst':
-      return networkFirst(request, strategy);
+      return networkFirst(request, strategy)
     case 'NetworkOnly':
-      return networkOnly(request);
+      return networkOnly(request)
     case 'StaleWhileRevalidate':
-      return staleWhileRevalidate(request, strategy);
+      return staleWhileRevalidate(request, strategy)
     default:
-      return fetch(request);
+      return fetch(request)
   }
 }
 ```
@@ -181,31 +181,33 @@ async function cacheFirst(
   request: Request,
   strategy: CacheStrategy
 ): Promise<Response> {
-  const cache = await caches.open(strategy.cacheName);
-  const cached = await cache.match(request);
+  const cache = await caches.open(strategy.cacheName)
+  const cached = await cache.match(request)
 
   if (cached) {
     // キャッシュ有効期限チェック
-    const cachedDate = new Date(cached.headers.get('date') || 0);
-    const now = new Date();
-    const age = now.getTime() - cachedDate.getTime();
+    const cachedDate = new Date(cached.headers.get('date') || 0)
+    const now = new Date()
+    const age = now.getTime() - cachedDate.getTime()
 
     if (!strategy.expiration || age < strategy.expiration) {
-      return cached;
+      return cached
     }
   }
 
   // キャッシュがない、または期限切れ
   try {
-    const response = await fetch(request);
+    const response = await fetch(request)
     if (response.status === 200) {
-      await cache.put(request, response.clone());
+      await cache.put(request, response.clone())
     }
-    return response;
-  } catch (error) {
+    return response
+  }
+  catch (error) {
     // オフライン時はキャッシュを返す
-    if (cached) return cached;
-    throw error;
+    if (cached)
+      return cached
+    throw error
   }
 }
 
@@ -214,24 +216,26 @@ async function networkFirst(
   request: Request,
   strategy: CacheStrategy
 ): Promise<Response> {
-  const cache = await caches.open(strategy.cacheName);
+  const cache = await caches.open(strategy.cacheName)
 
   try {
-    const response = await fetch(request);
+    const response = await fetch(request)
     if (response.status === 200) {
-      await cache.put(request, response.clone());
+      await cache.put(request, response.clone())
     }
-    return response;
-  } catch (error) {
+    return response
+  }
+  catch (error) {
     // ネットワークエラー時はキャッシュを使用
-    const cached = await cache.match(request);
-    if (cached) return cached;
+    const cached = await cache.match(request)
+    if (cached)
+      return cached
 
     // キャッシュもない場合はオフライン応答
     return new Response(
       JSON.stringify({ error: 'Offline', message: 'データを取得できません' }),
       { status: 503, headers: { 'Content-Type': 'application/json' } }
-    );
+    )
   }
 }
 
@@ -240,18 +244,18 @@ async function staleWhileRevalidate(
   request: Request,
   strategy: CacheStrategy
 ): Promise<Response> {
-  const cache = await caches.open(strategy.cacheName);
-  const cached = await cache.match(request);
+  const cache = await caches.open(strategy.cacheName)
+  const cached = await cache.match(request)
 
   // キャッシュがあれば即座に返す
-  const fetchPromise = fetch(request).then(response => {
+  const fetchPromise = fetch(request).then((response) => {
     if (response.status === 200) {
-      cache.put(request, response.clone());
+      cache.put(request, response.clone())
     }
-    return response;
-  });
+    return response
+  })
 
-  return cached || fetchPromise;
+  return cached || fetchPromise
 }
 ```
 
@@ -301,34 +305,35 @@ async function staleWhileRevalidate(
 ```typescript
 // src/infrastructure/services/PresetDataService.ts
 export class PresetDataService {
-  private static instance: PresetDataService;
-  private presetData: PresetData | null = null;
-  private lastFetch: Date | null = null;
+  private static instance: PresetDataService
+  private presetData: PresetData | null = null
+  private lastFetch: Date | null = null
 
   static getInstance(): PresetDataService {
     if (!PresetDataService.instance) {
-      PresetDataService.instance = new PresetDataService();
+      PresetDataService.instance = new PresetDataService()
     }
-    return PresetDataService.instance;
+    return PresetDataService.instance
   }
 
   async loadPresetData(): Promise<PresetData> {
     // キャッシュチェック（1時間有効）
     if (this.presetData && this.lastFetch) {
-      const age = Date.now() - this.lastFetch.getTime();
+      const age = Date.now() - this.lastFetch.getTime()
       if (age < 60 * 60 * 1000) {
-        return this.presetData;
+        return this.presetData
       }
     }
 
     try {
-      const response = await fetch('/data/presets.json');
-      this.presetData = await response.json();
-      this.lastFetch = new Date();
-      return this.presetData;
-    } catch (error) {
+      const response = await fetch('/data/presets.json')
+      this.presetData = await response.json()
+      this.lastFetch = new Date()
+      return this.presetData
+    }
+    catch (error) {
       // フォールバック: ハードコードされたデータ
-      return this.getFallbackData();
+      return this.getFallbackData()
     }
   }
 
@@ -350,27 +355,27 @@ export class PresetDataService {
       ],
       categories: {},
       tips: []
-    };
+    }
   }
 
   async searchProducts(query: string): Promise<Product[]> {
-    const data = await this.loadPresetData();
-    const normalizedQuery = query.toLowerCase();
+    const data = await this.loadPresetData()
+    const normalizedQuery = query.toLowerCase()
 
     return data.products
       .filter(p =>
-        p.name.toLowerCase().includes(normalizedQuery) ||
-        p.category.toLowerCase().includes(normalizedQuery)
+        p.name.toLowerCase().includes(normalizedQuery)
+        || p.category.toLowerCase().includes(normalizedQuery)
       )
       .sort((a, b) => b.popularity - a.popularity)
-      .slice(0, 10);
+      .slice(0, 10)
   }
 
   async getPopularProducts(limit: number = 10): Promise<Product[]> {
-    const data = await this.loadPresetData();
+    const data = await this.loadPresetData()
     return data.products
       .sort((a, b) => b.popularity - a.popularity)
-      .slice(0, limit);
+      .slice(0, limit)
   }
 }
 ```
@@ -381,91 +386,93 @@ export class PresetDataService {
 
 ```typescript
 // src/presentation/composables/useOfflineMode.ts
-export const useOfflineMode = () => {
-  const isOffline = ref(false);
-  const offlineSince = ref<Date | null>(null);
-  const pendingActions = ref<PendingAction[]>([]);
+export function useOfflineMode() {
+  const isOffline = ref(false)
+  const offlineSince = ref<Date | null>(null)
+  const pendingActions = ref<PendingAction[]>([])
 
   // オフライン状態の検出
   const detectOffline = () => {
-    isOffline.value = !navigator.onLine;
+    isOffline.value = !navigator.onLine
     if (isOffline.value && !offlineSince.value) {
-      offlineSince.value = new Date();
-    } else if (!isOffline.value) {
-      offlineSince.value = null;
+      offlineSince.value = new Date()
     }
-  };
+    else if (!isOffline.value) {
+      offlineSince.value = null
+    }
+  }
 
   // イベントリスナー設定
   onMounted(() => {
-    detectOffline();
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-  });
+    detectOffline()
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+  })
 
   onUnmounted(() => {
-    window.removeEventListener('online', handleOnline);
-    window.removeEventListener('offline', handleOffline);
-  });
+    window.removeEventListener('online', handleOnline)
+    window.removeEventListener('offline', handleOffline)
+  })
 
   // オンライン復帰時の処理
   const handleOnline = async () => {
-    isOffline.value = false;
-    offlineSince.value = null;
+    isOffline.value = false
+    offlineSince.value = null
 
     // 保留中のアクションを実行
-    await syncPendingActions();
+    await syncPendingActions()
 
     // トースト通知
     showToast({
       type: 'success',
       message: 'オンラインに復帰しました',
       duration: 3000
-    });
-  };
+    })
+  }
 
   // オフライン移行時の処理
   const handleOffline = () => {
-    isOffline.value = true;
-    offlineSince.value = new Date();
+    isOffline.value = true
+    offlineSince.value = new Date()
 
     // トースト通知
     showToast({
       type: 'warning',
       message: 'オフラインモードで動作中',
       duration: 5000
-    });
-  };
+    })
+  }
 
   // 保留アクションの同期
   const syncPendingActions = async () => {
-    const actions = [...pendingActions.value];
-    pendingActions.value = [];
+    const actions = [...pendingActions.value]
+    pendingActions.value = []
 
     for (const action of actions) {
       try {
-        await executeAction(action);
-      } catch (error) {
-        console.error('Failed to sync action:', error);
+        await executeAction(action)
+      }
+      catch (error) {
+        console.error('Failed to sync action:', error)
         // 失敗したアクションは再度保留
-        pendingActions.value.push(action);
+        pendingActions.value.push(action)
       }
     }
-  };
+  }
 
   // アクションの保留
   const queueAction = (action: PendingAction) => {
     pendingActions.value.push({
       ...action,
       timestamp: new Date()
-    });
+    })
 
     // localStorageに保存
     localStorage.setItem(
       'pendingActions',
       JSON.stringify(pendingActions.value)
-    );
-  };
+    )
+  }
 
   return {
     isOffline: readonly(isOffline),
@@ -473,14 +480,25 @@ export const useOfflineMode = () => {
     pendingActions: readonly(pendingActions),
     queueAction,
     syncPendingActions
-  };
-};
+  }
+}
 ```
 
 ### 4.2 オフラインUI通知
 
 ```vue
 <!-- src/presentation/components/common/OfflineNotice.vue -->
+<script setup lang="ts">
+import { useOfflineMode } from '@/presentation/composables/useOfflineMode'
+
+const { isOffline } = useOfflineMode()
+const showDetails = ref(false)
+
+function dismiss() {
+  showDetails.value = false
+}
+</script>
+
 <template>
   <Transition
     name="slide-down"
@@ -517,9 +535,9 @@ export const useOfflineMode = () => {
           </span>
         </div>
         <button
-          @click="dismiss"
           class="text-white hover:text-yellow-200 transition-colors"
           aria-label="通知を閉じる"
+          @click="dismiss"
         >
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path
@@ -543,17 +561,6 @@ export const useOfflineMode = () => {
     </div>
   </Transition>
 </template>
-
-<script setup lang="ts">
-import { useOfflineMode } from '@/presentation/composables/useOfflineMode';
-
-const { isOffline } = useOfflineMode();
-const showDetails = ref(false);
-
-const dismiss = () => {
-  showDetails.value = false;
-};
-</script>
 ```
 
 ## 5. データ同期戦略
@@ -563,61 +570,61 @@ const dismiss = () => {
 ```typescript
 // src/infrastructure/services/LocalStorageService.ts
 export class LocalStorageService {
-  private readonly prefix = 'nichiwari_';
+  private readonly prefix = 'nichiwari_'
 
   // 計算履歴の保存
   saveCalculationHistory(calculation: CalculationResult): void {
-    const key = `${this.prefix}history`;
-    const existing = this.getCalculationHistory();
-    existing.unshift(calculation);
+    const key = `${this.prefix}history`
+    const existing = this.getCalculationHistory()
+    existing.unshift(calculation)
 
     // 最大100件まで保持
     if (existing.length > 100) {
-      existing.pop();
+      existing.pop()
     }
 
-    localStorage.setItem(key, JSON.stringify(existing));
+    localStorage.setItem(key, JSON.stringify(existing))
   }
 
   getCalculationHistory(): CalculationResult[] {
-    const key = `${this.prefix}history`;
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : [];
+    const key = `${this.prefix}history`
+    const data = localStorage.getItem(key)
+    return data ? JSON.parse(data) : []
   }
 
   // 幸福度診断結果の保存
   saveHappinessScore(score: EvaluationResult): void {
-    const key = `${this.prefix}happiness_${Date.now()}`;
-    localStorage.setItem(key, JSON.stringify(score));
+    const key = `${this.prefix}happiness_${Date.now()}`
+    localStorage.setItem(key, JSON.stringify(score))
 
     // 古い結果を削除（30日以上前）
-    this.cleanOldHappinessScores();
+    this.cleanOldHappinessScores()
   }
 
   private cleanOldHappinessScores(): void {
-    const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
-    const keys = Object.keys(localStorage);
+    const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000
+    const keys = Object.keys(localStorage)
 
     keys
       .filter(key => key.startsWith(`${this.prefix}happiness_`))
-      .forEach(key => {
-        const timestamp = parseInt(key.split('_')[2]);
+      .forEach((key) => {
+        const timestamp = Number.parseInt(key.split('_')[2])
         if (timestamp < thirtyDaysAgo) {
-          localStorage.removeItem(key);
+          localStorage.removeItem(key)
         }
-      });
+      })
   }
 
   // 設定の保存
   saveSettings(settings: AppSettings): void {
-    const key = `${this.prefix}settings`;
-    localStorage.setItem(key, JSON.stringify(settings));
+    const key = `${this.prefix}settings`
+    localStorage.setItem(key, JSON.stringify(settings))
   }
 
   getSettings(): AppSettings | null {
-    const key = `${this.prefix}settings`;
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : null;
+    const key = `${this.prefix}settings`
+    const data = localStorage.getItem(key)
+    return data ? JSON.parse(data) : null
   }
 }
 ```
@@ -637,70 +644,73 @@ export class SyncService {
       synced: 0,
       failed: 0,
       errors: []
-    };
+    }
 
     // オフライン中に蓄積されたデータを取得
-    const pendingData = this.getPendingData();
+    const pendingData = this.getPendingData()
 
     for (const item of pendingData) {
       try {
-        await this.syncItem(item);
-        result.synced++;
-        this.markAsSynced(item.id);
-      } catch (error) {
-        result.failed++;
+        await this.syncItem(item)
+        result.synced++
+        this.markAsSynced(item.id)
+      }
+      catch (error) {
+        result.failed++
         result.errors.push({
           itemId: item.id,
           error: error.message
-        });
+        })
       }
     }
 
-    return result;
+    return result
   }
 
   private async syncItem(item: PendingItem): Promise<void> {
     switch (item.type) {
       case 'search_log':
-        await this.syncSearchLog(item.data);
-        break;
+        await this.syncSearchLog(item.data)
+        break
       case 'calculation':
-        await this.syncCalculation(item.data);
-        break;
+        await this.syncCalculation(item.data)
+        break
       case 'happiness_score':
-        await this.syncHappinessScore(item.data);
-        break;
+        await this.syncHappinessScore(item.data)
+        break
       default:
-        throw new Error(`Unknown sync type: ${item.type}`);
+        throw new Error(`Unknown sync type: ${item.type}`)
     }
   }
 
   private async syncSearchLog(data: any): Promise<void> {
     const { error } = await this.supabase
       .from('search_logs')
-      .insert(data);
+      .insert(data)
 
-    if (error) throw error;
+    if (error)
+      throw error
   }
 
   private async syncCalculation(data: any): Promise<void> {
     const { error } = await this.supabase
       .from('calculation_history')
-      .insert(data);
+      .insert(data)
 
-    if (error) throw error;
+    if (error)
+      throw error
   }
 
   private getPendingData(): PendingItem[] {
-    const key = 'nichiwari_pending_sync';
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : [];
+    const key = 'nichiwari_pending_sync'
+    const data = localStorage.getItem(key)
+    return data ? JSON.parse(data) : []
   }
 
   private markAsSynced(itemId: string): void {
-    const pending = this.getPendingData();
-    const updated = pending.filter(item => item.id !== itemId);
-    localStorage.setItem('nichiwari_pending_sync', JSON.stringify(updated));
+    const pending = this.getPendingData()
+    const updated = pending.filter(item => item.id !== itemId)
+    localStorage.setItem('nichiwari_pending_sync', JSON.stringify(updated))
   }
 }
 ```

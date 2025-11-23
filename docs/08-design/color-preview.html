@@ -1,772 +1,767 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>にちわり！カラーパレット（WCAG 2.2 AA準拠）</title>
-  <!-- Lucide Icons CDN -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Hiragino Sans", sans-serif;
-      background: #FAFAFA;
-      padding: 40px 20px;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    h1 {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: #212121;
-    }
-
-    h2 {
-      font-size: 24px;
-      font-weight: 700;
-      margin: 48px 0 24px;
-      color: #212121;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    h3 {
-      font-size: 18px;
-      font-weight: 600;
-      margin: 32px 0 16px;
-      color: #212121;
-    }
-
-    p {
-      color: #757575;
-      line-height: 1.6;
-      margin-bottom: 24px;
-    }
-
-    .badge {
-      display: inline-block;
-      background: #2E7D32;
-      color: white;
-      padding: 4px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-left: 8px;
-    }
-
-    /* カラーパレットグリッド */
-    .color-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 48px;
-    }
-
-    .color-card {
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      background: white;
-    }
-
-    .color-swatch {
-      height: 120px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .contrast-ratio {
-      font-size: 12px;
-      padding: 4px 8px;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 4px;
-    }
-
-    .color-info {
-      padding: 16px;
-      background: white;
-    }
-
-    .color-name {
-      font-weight: 600;
-      font-size: 14px;
-      color: #212121;
-      margin-bottom: 4px;
-    }
-
-    .color-hex {
-      font-family: monospace;
-      font-size: 13px;
-      color: #757575;
-    }
-
-    .text-note {
-      font-size: 11px;
-      color: #FF9800;
-      margin-top: 4px;
-      font-weight: 500;
-    }
-
-    /* 60-30-10 ルール視覚化 */
-    .ratio-demo {
-      display: flex;
-      height: 80px;
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 48px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .ratio-primary {
-      flex: 60;
-      background: #1976D2;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-    }
-
-    .ratio-secondary {
-      flex: 30;
-      background: #FAFAFA;
-      color: #212121;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-    }
-
-    .ratio-accent {
-      flex: 10;
-      background: #FF9800;
-      color: #212121;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-    }
-
-    /* ボタンサンプル */
-    .button-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 48px;
-    }
-
-    .btn {
-      padding: 16px 32px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .btn-primary {
-      background: #1976D2;
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: #1565C0;
-      transform: translateY(-1px);
-    }
-
-    .btn-accent {
-      background: #FF9800;
-      color: #212121;
-    }
-
-    .btn-accent:hover {
-      background: #F57C00;
-      transform: translateY(-1px);
-    }
-
-    .btn-success {
-      background: #2E7D32;
-      color: white;
-    }
-
-    .btn-error {
-      background: #D32F2F;
-      color: white;
-    }
-
-    .btn-warning {
-      background: #FFA000;
-      color: #212121;
-    }
-
-    .btn-info {
-      background: #00838F;
-      color: white;
-    }
-
-    /* カード */
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      margin-bottom: 16px;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
-      font-weight: 600;
-      color: #212121;
-    }
-
-    .card-content {
-      color: #757575;
-      line-height: 1.6;
-    }
-
-    /* UIモックアップ */
-    .mockup {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-      max-width: 400px;
-      margin: 0 auto 48px;
-    }
-
-    .mockup-header {
-      background: #1976D2;
-      color: white;
-      padding: 16px;
-      font-size: 20px;
-      font-weight: 700;
-      text-align: center;
-    }
-
-    .mockup-body {
-      padding: 24px;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    .form-label {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #212121;
-      margin-bottom: 8px;
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 12px 16px;
-      border: 1px solid #E0E0E0;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: #1976D2;
-      box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
-    }
-
-    /* ResultCard - パターンA: ラベル強調型 */
-    .result-card {
-      background: #FFFFFF;
-      border: 2px solid #E3F2FD;
-      border-radius: 16px;
-      padding: 32px 24px;
-      text-align: center;
-      margin: 24px 0;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .result-label {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-size: 20px;        /* 14px → 20px に拡大 ✨ */
-      font-weight: 700;       /* bold で強調 ✨ */
-      color: #212121;         /* メインテキスト (14.10:1 ✅) */
-      margin-bottom: 12px;
-    }
-
-    .result-label i {
-      color: #1976D2;         /* プライマリカラー */
-      width: 24px;
-      height: 24px;
-    }
-
-    .result-amount {
-      font-size: 56px;        /* 48px → 56px にさらに拡大 */
-      font-weight: 800;       /* extrabold */
-      color: #1565C0;         /* Primary Dark (5.03:1 ✅) */
-      font-family: monospace;
-      line-height: 1.2;
-      margin: 0;
-    }
-
-    .comparison-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      background: #FFF3E0;
-      border-radius: 8px;
-      margin-bottom: 8px;
-    }
-
-    .comparison-icon {
-      color: #FF9800;
-    }
-
-    .comparison-text {
-      color: #212121;
-      font-size: 14px;
-    }
-
-    .accent-badge {
-      background: #FF9800;
-      color: #212121;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    /* 比較テーブル */
-    .comparison-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 32px 0;
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .comparison-table th {
-      background: #1976D2;
-      color: white;
-      padding: 12px;
-      text-align: left;
-      font-weight: 600;
-    }
-
-    .comparison-table td {
-      padding: 12px;
-      border-bottom: 1px solid #E0E0E0;
-    }
-
-    .comparison-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .check-icon {
-      color: #2E7D32;
-    }
-
-    .x-icon {
-      color: #D32F2F;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>にちわり！カラーパレット</h1>
-    <p>WCAG 2.2 AA準拠のアクセシブルなカラーシステム <span class="badge">AA準拠</span></p>
-
-    <!-- 60-30-10 ルール -->
-    <h2>
-      <i data-lucide="palette"></i>
-      60-30-10 カラーバランスルール
-    </h2>
-    <div class="ratio-demo">
-      <div class="ratio-primary">プライマリ 60%</div>
-      <div class="ratio-secondary">背景 30%</div>
-      <div class="ratio-accent">
-        <i data-lucide="sparkles"></i>
-      </div>
-    </div>
-
-    <!-- プライマリカラー -->
-    <h2>
-      <i data-lucide="droplet"></i>
-      プライマリカラー
-    </h2>
-    <div class="color-grid">
-      <div class="color-card">
-        <div class="color-swatch" style="background: #1976D2; color: white;">
-          白テキスト
-          <span class="contrast-ratio">4.60:1 ✓</span>
-        </div>
-        <div class="color-info">
-          <div class="color-name">Primary</div>
-          <div class="color-hex">#1976D2</div>
-          <div class="text-note">メインボタン・リンク</div>
-        </div>
-      </div>
-
-      <div class="color-card">
-        <div class="color-swatch" style="background: #1565C0; color: white;">
-          白テキスト
-          <span class="contrast-ratio">5.75:1 ✓</span>
-        </div>
-        <div class="color-info">
-          <div class="color-name">Primary Dark</div>
-          <div class="color-hex">#1565C0</div>
-          <div class="text-note">Hover/Active</div>
-        </div>
-      </div>
-
-      <div class="color-card">
-        <div class="color-swatch" style="background: #42A5F5; color: #212121;">
-          黒テキスト
-        </div>
-        <div class="color-info">
-          <div class="color-name">Primary Light</div>
-          <div class="color-hex">#42A5F5</div>
-          <div class="text-note">装飾・アイコン用</div>
-        </div>
-      </div>
-
-      <div class="color-card">
-        <div class="color-swatch" style="background: #E3F2FD; color: #212121;">
-          背景用
-        </div>
-        <div class="color-info">
-          <div class="color-name">Primary Very Light</div>
-          <div class="color-hex">#E3F2FD</div>
-          <div class="text-note">結果カード背景</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- アクセントカラー -->
-    <h2>
-      <i data-lucide="zap"></i>
-      アクセントカラー
-    </h2>
-    <div class="color-grid">
-      <div class="color-card">
-        <div class="color-swatch" style="background: #FF9800; color: #212121;">
-          黒テキスト
-          <span class="contrast-ratio" style="background: rgba(255,255,255,0.3);">7.47:1 ✓</span>
-        </div>
-        <div class="color-info">
-          <div class="color-name">Accent</div>
-          <div class="color-hex">#FF9800</div>
-          <div class="text-note">⚠️ 黒テキスト必須</div>
-        </div>
-      </div>
-
-      <div class="color-card">
-        <div class="color-swatch" style="background: #F57C00; color: #212121;">
-          黒テキスト
-          <span class="contrast-ratio" style="background: rgba(255,255,255,0.3);">5.95:1 ✓</span>
-        </div>
-        <div class="color-info">
-          <div class="color-name">Accent Dark</div>
-          <div class="color-hex">#F57C00</div>
-          <div class="text-note">⚠️ 黒テキスト必須</div>
-        </div>
-      </div>
-
-      <div class="color-card">
-        <div class="color-swatch" style="background: #FFB74D; color: #212121;">
-          装飾用
-        </div>
-        <div class="color-info">
-          <div class="color-name">Accent Light</div>
-          <div class="color-hex">#FFB74D</div>
-          <div class="text-note">背景・装飾</div>
-        </div>
-      </div>
-
-      <div class="color-card">
-        <div class="color-swatch" style="background: #FFF3E0; color: #212121;">
-          背景用
-        </div>
-        <div class="color-info">
-          <div class="color-name">Accent Very Light</div>
-          <div class="color-hex">#FFF3E0</div>
-          <div class="text-note">比較カード背景</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ステータスカラー -->
-    <h2>
-      <i data-lucide="check-circle"></i>
-      ステータスカラー
-    </h2>
-    <div class="color-grid">
-      <div class="color-card">
-        <div class="color-swatch" style="background: #2E7D32; color: white;">
-          白テキスト
-          <span class="contrast-ratio">5.13:1 ✓</span>
-        </div>
-        <div class="color-info">
-          <div class="color-name">Success</div>
-          <div class="color-hex">#2E7D32</div>
-        </div>
-      </div>
-
-      <div class="color-card">
-        <div class="color-swatch" style="background: #D32F2F; color: white;">
-          白テキスト
-          <span class="contrast-ratio">4.98:1 ✓</span>
-        </div>
-        <div class="color-info">
-          <div class="color-name">Error</div>
-          <div class="color-hex">#D32F2F</div>
-        </div>
-      </div>
-
-      <div class="color-card">
-        <div class="color-swatch" style="background: #FFA000; color: #212121;">
-          黒テキスト
-          <span class="contrast-ratio" style="background: rgba(255,255,255,0.3);">7.88:1 ✓</span>
-        </div>
-        <div class="color-info">
-          <div class="color-name">Warning</div>
-          <div class="color-hex">#FFA000</div>
-          <div class="text-note">⚠️ 黒テキスト必須</div>
-        </div>
-      </div>
-
-      <div class="color-card">
-        <div class="color-swatch" style="background: #00838F; color: white;">
-          白テキスト
-          <span class="contrast-ratio">4.52:1 ✓</span>
-        </div>
-        <div class="color-info">
-          <div class="color-name">Info</div>
-          <div class="color-hex">#00838F</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ボタンサンプル -->
-    <h2>
-      <i data-lucide="square"></i>
-      ボタンサンプル（rounded 8px）
-    </h2>
-    <div class="button-grid">
-      <button class="btn btn-primary">
-        <i data-lucide="check" style="width: 20px; height: 20px;"></i>
-        Primary
-      </button>
-      <button class="btn btn-accent">
-        <i data-lucide="sparkles" style="width: 20px; height: 20px;"></i>
-        Accent
-      </button>
-      <button class="btn btn-success">
-        <i data-lucide="check-circle" style="width: 20px; height: 20px;"></i>
-        Success
-      </button>
-      <button class="btn btn-error">
-        <i data-lucide="x-circle" style="width: 20px; height: 20px;"></i>
-        Error
-      </button>
-      <button class="btn btn-warning">
-        <i data-lucide="alert-triangle" style="width: 20px; height: 20px;"></i>
-        Warning
-      </button>
-      <button class="btn btn-info">
-        <i data-lucide="info" style="width: 20px; height: 20px;"></i>
-        Info
-      </button>
-    </div>
-
-    <!-- UIモックアップ -->
-    <h2>
-      <i data-lucide="smartphone"></i>
-      UIモックアップ（Lucide Icons使用）
-    </h2>
-    <div class="mockup">
-      <div class="mockup-header">にちわり！</div>
-      <div class="mockup-body">
-        <div class="form-group">
-          <div class="form-label">
-            <i data-lucide="package" style="width: 16px; height: 16px;"></i>
-            商品名
-          </div>
-          <input type="text" class="form-input" placeholder="例: iPhone 15 Pro">
-        </div>
-
-        <div class="form-group">
-          <div class="form-label">
-            <i data-lucide="wallet" style="width: 16px; height: 16px;"></i>
-            購入価格
-          </div>
-          <input type="text" class="form-input" placeholder="例: 150,000">
-        </div>
-
-        <div class="form-group">
-          <div class="form-label">
-            <i data-lucide="calendar" style="width: 16px; height: 16px;"></i>
-            使用年数
-          </div>
-          <input type="text" class="form-input" placeholder="例: 2">
-        </div>
-
-        <button class="btn btn-primary" style="width: 100%;">
-          <i data-lucide="calculator" style="width: 20px; height: 20px;"></i>
-          計算する
-        </button>
-
-        <div class="result-card">
-          <div class="result-label">
-            <i data-lucide="lightbulb"></i>
-            1日あたり
-          </div>
-          <div class="result-amount">¥205</div>
-        </div>
-
-        <h3 style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
-          <i data-lucide="bar-chart-3" style="width: 20px; height: 20px;"></i>
-          身近なもので例えると…
-        </h3>
-
-        <div class="comparison-item">
-          <i data-lucide="coffee" class="comparison-icon" style="width: 24px; height: 24px;"></i>
-          <div class="comparison-text">コンビニコーヒー 1.5杯分</div>
-        </div>
-
-        <div class="comparison-item">
-          <i data-lucide="utensils" class="comparison-icon" style="width: 24px; height: 24px;"></i>
-          <div class="comparison-text">カップラーメン 1個分</div>
-        </div>
-
-        <div style="margin-top: 16px; text-align: center;">
-          <span class="accent-badge">
-            <i data-lucide="smile" style="width: 14px; height: 14px;"></i>
-            幸福度スコア: 85点
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <!-- WCAG準拠テーブル -->
-    <h2>
-      <i data-lucide="shield-check"></i>
-      WCAG 2.2 AA準拠状況
-    </h2>
-    <table class="comparison-table">
-      <thead>
-        <tr>
-          <th>組み合わせ</th>
-          <th>コントラスト比</th>
-          <th>AA準拠</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>白テキスト on プライマリ (#1976D2)</td>
-          <td>4.60:1</td>
-          <td><i data-lucide="check" class="check-icon"></i></td>
-        </tr>
-        <tr>
-          <td>黒テキスト on アクセント (#FF9800)</td>
-          <td>7.47:1</td>
-          <td><i data-lucide="check" class="check-icon"></i></td>
-        </tr>
-        <tr>
-          <td>白テキスト on サクセス (#2E7D32)</td>
-          <td>5.13:1</td>
-          <td><i data-lucide="check" class="check-icon"></i></td>
-        </tr>
-        <tr>
-          <td>白テキスト on エラー (#D32F2F)</td>
-          <td>4.98:1</td>
-          <td><i data-lucide="check" class="check-icon"></i></td>
-        </tr>
-        <tr>
-          <td>黒テキスト on ワーニング (#FFA000)</td>
-          <td>7.88:1</td>
-          <td><i data-lucide="check" class="check-icon"></i></td>
-        </tr>
-        <tr>
-          <td>白テキスト on インフォ (#00838F)</td>
-          <td>4.52:1</td>
-          <td><i data-lucide="check" class="check-icon"></i></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- カラー選定理由 -->
-    <h2>
-      <i data-lucide="file-text"></i>
-      カラー選定理由
-    </h2>
-    <div class="card">
-      <div class="card-header">
-        <i data-lucide="droplet"></i>
-        プライマリ: #1976D2（Material Blue 700）
-      </div>
-      <div class="card-content">
-        <strong>理由:</strong> 金融・計算機アプリで最も信頼感があり、100個以上の競合分析でも最頻出。WCAG AA準拠（4.60:1）でアクセシブル。
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        <i data-lucide="zap"></i>
-        アクセント: #FF9800（Orange 500）
-      </div>
-      <div class="card-content">
-        <strong>理由:</strong> 幸福感・ポジティブな感情を表現し、ブルーと補色関係で目立つ。黒テキスト使用で高いコントラスト比（7.47:1）を確保。
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>にちわり！カラーパレット（WCAG 2.2 AA準拠）</title>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', 'Hiragino Sans', sans-serif;
+        background: #fafafa;
+        padding: 40px 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: #212121;
+      }
+
+      h2 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 48px 0 24px;
+        color: #212121;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      h3 {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 32px 0 16px;
+        color: #212121;
+      }
+
+      p {
+        color: #757575;
+        line-height: 1.6;
+        margin-bottom: 24px;
+      }
+
+      .badge {
+        display: inline-block;
+        background: #2e7d32;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 8px;
+      }
+
+      /* カラーパレットグリッド */
+      .color-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 48px;
+      }
+
+      .color-card {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        background: white;
+      }
+
+      .color-swatch {
+        height: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .contrast-ratio {
+        font-size: 12px;
+        padding: 4px 8px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+      }
+
+      .color-info {
+        padding: 16px;
+        background: white;
+      }
+
+      .color-name {
+        font-weight: 600;
+        font-size: 14px;
+        color: #212121;
+        margin-bottom: 4px;
+      }
+
+      .color-hex {
+        font-family: monospace;
+        font-size: 13px;
+        color: #757575;
+      }
+
+      .text-note {
+        font-size: 11px;
+        color: #ff9800;
+        margin-top: 4px;
+        font-weight: 500;
+      }
+
+      /* 60-30-10 ルール視覚化 */
+      .ratio-demo {
+        display: flex;
+        height: 80px;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 48px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .ratio-primary {
+        flex: 60;
+        background: #1976d2;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+      }
+
+      .ratio-secondary {
+        flex: 30;
+        background: #fafafa;
+        color: #212121;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+      }
+
+      .ratio-accent {
+        flex: 10;
+        background: #ff9800;
+        color: #212121;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+      }
+
+      /* ボタンサンプル */
+      .button-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 48px;
+      }
+
+      .btn {
+        padding: 16px 32px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .btn-primary {
+        background: #1976d2;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #1565c0;
+        transform: translateY(-1px);
+      }
+
+      .btn-accent {
+        background: #ff9800;
+        color: #212121;
+      }
+
+      .btn-accent:hover {
+        background: #f57c00;
+        transform: translateY(-1px);
+      }
+
+      .btn-success {
+        background: #2e7d32;
+        color: white;
+      }
+
+      .btn-error {
+        background: #d32f2f;
+        color: white;
+      }
+
+      .btn-warning {
+        background: #ffa000;
+        color: #212121;
+      }
+
+      .btn-info {
+        background: #00838f;
+        color: white;
+      }
+
+      /* カード */
+      .card {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 16px;
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 16px;
+        font-weight: 600;
+        color: #212121;
+      }
+
+      .card-content {
+        color: #757575;
+        line-height: 1.6;
+      }
+
+      /* UIモックアップ */
+      .mockup {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        max-width: 400px;
+        margin: 0 auto 48px;
+      }
+
+      .mockup-header {
+        background: #1976d2;
+        color: white;
+        padding: 16px;
+        font-size: 20px;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .mockup-body {
+        padding: 24px;
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-label {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #212121;
+        margin-bottom: 8px;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 16px;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: #1976d2;
+        box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+      }
+
+      /* ResultCard - パターンA: ラベル強調型 */
+      .result-card {
+        background: #ffffff;
+        border: 2px solid #e3f2fd;
+        border-radius: 16px;
+        padding: 32px 24px;
+        text-align: center;
+        margin: 24px 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .result-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 20px; /* 14px → 20px に拡大 ✨ */
+        font-weight: 700; /* bold で強調 ✨ */
+        color: #212121; /* メインテキスト (14.10:1 ✅) */
+        margin-bottom: 12px;
+      }
+
+      .result-label i {
+        color: #1976d2; /* プライマリカラー */
+        width: 24px;
+        height: 24px;
+      }
+
+      .result-amount {
+        font-size: 56px; /* 48px → 56px にさらに拡大 */
+        font-weight: 800; /* extrabold */
+        color: #1565c0; /* Primary Dark (5.03:1 ✅) */
+        font-family: monospace;
+        line-height: 1.2;
+        margin: 0;
+      }
+
+      .comparison-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        background: #fff3e0;
+        border-radius: 8px;
+        margin-bottom: 8px;
+      }
+
+      .comparison-icon {
+        color: #ff9800;
+      }
+
+      .comparison-text {
+        color: #212121;
+        font-size: 14px;
+      }
+
+      .accent-badge {
+        background: #ff9800;
+        color: #212121;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      /* 比較テーブル */
+      .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 32px 0;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .comparison-table th {
+        background: #1976d2;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+      }
+
+      .comparison-table td {
+        padding: 12px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .comparison-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .check-icon {
+        color: #2e7d32;
+      }
+
+      .x-icon {
+        color: #d32f2f;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>にちわり！カラーパレット</h1>
+      <p>WCAG 2.2 AA準拠のアクセシブルなカラーシステム <span class="badge">AA準拠</span></p>
+
+      <!-- 60-30-10 ルール -->
+      <h2>
         <i data-lucide="palette"></i>
-        60-30-10ルール適用
+        60-30-10 カラーバランスルール
+      </h2>
+      <div class="ratio-demo">
+        <div class="ratio-primary">プライマリ 60%</div>
+        <div class="ratio-secondary">背景 30%</div>
+        <div class="ratio-accent">
+          <i data-lucide="sparkles"></i>
+        </div>
       </div>
-      <div class="card-content">
-        <strong>配分:</strong> プライマリ60%（メイン要素）、ニュートラル30%（背景・テキスト）、アクセント10%（強調要素）でバランスの取れたデザインを実現。
+
+      <!-- プライマリカラー -->
+      <h2>
+        <i data-lucide="droplet"></i>
+        プライマリカラー
+      </h2>
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="color-swatch" style="background: #1976d2; color: white">
+            白テキスト
+            <span class="contrast-ratio">4.60:1 ✓</span>
+          </div>
+          <div class="color-info">
+            <div class="color-name">Primary</div>
+            <div class="color-hex">#1976D2</div>
+            <div class="text-note">メインボタン・リンク</div>
+          </div>
+        </div>
+
+        <div class="color-card">
+          <div class="color-swatch" style="background: #1565c0; color: white">
+            白テキスト
+            <span class="contrast-ratio">5.75:1 ✓</span>
+          </div>
+          <div class="color-info">
+            <div class="color-name">Primary Dark</div>
+            <div class="color-hex">#1565C0</div>
+            <div class="text-note">Hover/Active</div>
+          </div>
+        </div>
+
+        <div class="color-card">
+          <div class="color-swatch" style="background: #42a5f5; color: #212121">黒テキスト</div>
+          <div class="color-info">
+            <div class="color-name">Primary Light</div>
+            <div class="color-hex">#42A5F5</div>
+            <div class="text-note">装飾・アイコン用</div>
+          </div>
+        </div>
+
+        <div class="color-card">
+          <div class="color-swatch" style="background: #e3f2fd; color: #212121">背景用</div>
+          <div class="color-info">
+            <div class="color-name">Primary Very Light</div>
+            <div class="color-hex">#E3F2FD</div>
+            <div class="text-note">結果カード背景</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- アクセントカラー -->
+      <h2>
+        <i data-lucide="zap"></i>
+        アクセントカラー
+      </h2>
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="color-swatch" style="background: #ff9800; color: #212121">
+            黒テキスト
+            <span class="contrast-ratio" style="background: rgba(255, 255, 255, 0.3)">7.47:1 ✓</span>
+          </div>
+          <div class="color-info">
+            <div class="color-name">Accent</div>
+            <div class="color-hex">#FF9800</div>
+            <div class="text-note">⚠️ 黒テキスト必須</div>
+          </div>
+        </div>
+
+        <div class="color-card">
+          <div class="color-swatch" style="background: #f57c00; color: #212121">
+            黒テキスト
+            <span class="contrast-ratio" style="background: rgba(255, 255, 255, 0.3)">5.95:1 ✓</span>
+          </div>
+          <div class="color-info">
+            <div class="color-name">Accent Dark</div>
+            <div class="color-hex">#F57C00</div>
+            <div class="text-note">⚠️ 黒テキスト必須</div>
+          </div>
+        </div>
+
+        <div class="color-card">
+          <div class="color-swatch" style="background: #ffb74d; color: #212121">装飾用</div>
+          <div class="color-info">
+            <div class="color-name">Accent Light</div>
+            <div class="color-hex">#FFB74D</div>
+            <div class="text-note">背景・装飾</div>
+          </div>
+        </div>
+
+        <div class="color-card">
+          <div class="color-swatch" style="background: #fff3e0; color: #212121">背景用</div>
+          <div class="color-info">
+            <div class="color-name">Accent Very Light</div>
+            <div class="color-hex">#FFF3E0</div>
+            <div class="text-note">比較カード背景</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ステータスカラー -->
+      <h2>
+        <i data-lucide="check-circle"></i>
+        ステータスカラー
+      </h2>
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="color-swatch" style="background: #2e7d32; color: white">
+            白テキスト
+            <span class="contrast-ratio">5.13:1 ✓</span>
+          </div>
+          <div class="color-info">
+            <div class="color-name">Success</div>
+            <div class="color-hex">#2E7D32</div>
+          </div>
+        </div>
+
+        <div class="color-card">
+          <div class="color-swatch" style="background: #d32f2f; color: white">
+            白テキスト
+            <span class="contrast-ratio">4.98:1 ✓</span>
+          </div>
+          <div class="color-info">
+            <div class="color-name">Error</div>
+            <div class="color-hex">#D32F2F</div>
+          </div>
+        </div>
+
+        <div class="color-card">
+          <div class="color-swatch" style="background: #ffa000; color: #212121">
+            黒テキスト
+            <span class="contrast-ratio" style="background: rgba(255, 255, 255, 0.3)">7.88:1 ✓</span>
+          </div>
+          <div class="color-info">
+            <div class="color-name">Warning</div>
+            <div class="color-hex">#FFA000</div>
+            <div class="text-note">⚠️ 黒テキスト必須</div>
+          </div>
+        </div>
+
+        <div class="color-card">
+          <div class="color-swatch" style="background: #00838f; color: white">
+            白テキスト
+            <span class="contrast-ratio">4.52:1 ✓</span>
+          </div>
+          <div class="color-info">
+            <div class="color-name">Info</div>
+            <div class="color-hex">#00838F</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ボタンサンプル -->
+      <h2>
+        <i data-lucide="square"></i>
+        ボタンサンプル（rounded 8px）
+      </h2>
+      <div class="button-grid">
+        <button class="btn btn-primary">
+          <i data-lucide="check" style="width: 20px; height: 20px"></i>
+          Primary
+        </button>
+        <button class="btn btn-accent">
+          <i data-lucide="sparkles" style="width: 20px; height: 20px"></i>
+          Accent
+        </button>
+        <button class="btn btn-success">
+          <i data-lucide="check-circle" style="width: 20px; height: 20px"></i>
+          Success
+        </button>
+        <button class="btn btn-error">
+          <i data-lucide="x-circle" style="width: 20px; height: 20px"></i>
+          Error
+        </button>
+        <button class="btn btn-warning">
+          <i data-lucide="alert-triangle" style="width: 20px; height: 20px"></i>
+          Warning
+        </button>
+        <button class="btn btn-info">
+          <i data-lucide="info" style="width: 20px; height: 20px"></i>
+          Info
+        </button>
+      </div>
+
+      <!-- UIモックアップ -->
+      <h2>
+        <i data-lucide="smartphone"></i>
+        UIモックアップ（Lucide Icons使用）
+      </h2>
+      <div class="mockup">
+        <div class="mockup-header">にちわり！</div>
+        <div class="mockup-body">
+          <div class="form-group">
+            <div class="form-label">
+              <i data-lucide="package" style="width: 16px; height: 16px"></i>
+              商品名
+            </div>
+            <input type="text" class="form-input" placeholder="例: iPhone 15 Pro" />
+          </div>
+
+          <div class="form-group">
+            <div class="form-label">
+              <i data-lucide="wallet" style="width: 16px; height: 16px"></i>
+              購入価格
+            </div>
+            <input type="text" class="form-input" placeholder="例: 150,000" />
+          </div>
+
+          <div class="form-group">
+            <div class="form-label">
+              <i data-lucide="calendar" style="width: 16px; height: 16px"></i>
+              使用年数
+            </div>
+            <input type="text" class="form-input" placeholder="例: 2" />
+          </div>
+
+          <button class="btn btn-primary" style="width: 100%">
+            <i data-lucide="calculator" style="width: 20px; height: 20px"></i>
+            計算する
+          </button>
+
+          <div class="result-card">
+            <div class="result-label">
+              <i data-lucide="lightbulb"></i>
+              1日あたり
+            </div>
+            <div class="result-amount">¥205</div>
+          </div>
+
+          <h3 style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px">
+            <i data-lucide="bar-chart-3" style="width: 20px; height: 20px"></i>
+            身近なもので例えると…
+          </h3>
+
+          <div class="comparison-item">
+            <i data-lucide="coffee" class="comparison-icon" style="width: 24px; height: 24px"></i>
+            <div class="comparison-text">コンビニコーヒー 1.5杯分</div>
+          </div>
+
+          <div class="comparison-item">
+            <i data-lucide="utensils" class="comparison-icon" style="width: 24px; height: 24px"></i>
+            <div class="comparison-text">カップラーメン 1個分</div>
+          </div>
+
+          <div style="margin-top: 16px; text-align: center">
+            <span class="accent-badge">
+              <i data-lucide="smile" style="width: 14px; height: 14px"></i>
+              幸福度スコア: 85点
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- WCAG準拠テーブル -->
+      <h2>
+        <i data-lucide="shield-check"></i>
+        WCAG 2.2 AA準拠状況
+      </h2>
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>組み合わせ</th>
+            <th>コントラスト比</th>
+            <th>AA準拠</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>白テキスト on プライマリ (#1976D2)</td>
+            <td>4.60:1</td>
+            <td><i data-lucide="check" class="check-icon"></i></td>
+          </tr>
+          <tr>
+            <td>黒テキスト on アクセント (#FF9800)</td>
+            <td>7.47:1</td>
+            <td><i data-lucide="check" class="check-icon"></i></td>
+          </tr>
+          <tr>
+            <td>白テキスト on サクセス (#2E7D32)</td>
+            <td>5.13:1</td>
+            <td><i data-lucide="check" class="check-icon"></i></td>
+          </tr>
+          <tr>
+            <td>白テキスト on エラー (#D32F2F)</td>
+            <td>4.98:1</td>
+            <td><i data-lucide="check" class="check-icon"></i></td>
+          </tr>
+          <tr>
+            <td>黒テキスト on ワーニング (#FFA000)</td>
+            <td>7.88:1</td>
+            <td><i data-lucide="check" class="check-icon"></i></td>
+          </tr>
+          <tr>
+            <td>白テキスト on インフォ (#00838F)</td>
+            <td>4.52:1</td>
+            <td><i data-lucide="check" class="check-icon"></i></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- カラー選定理由 -->
+      <h2>
+        <i data-lucide="file-text"></i>
+        カラー選定理由
+      </h2>
+      <div class="card">
+        <div class="card-header">
+          <i data-lucide="droplet"></i>
+          プライマリ: #1976D2（Material Blue 700）
+        </div>
+        <div class="card-content">
+          <strong>理由:</strong> 金融・計算機アプリで最も信頼感があり、100個以上の競合分析でも最頻出。WCAG
+          AA準拠（4.60:1）でアクセシブル。
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <i data-lucide="zap"></i>
+          アクセント: #FF9800（Orange 500）
+        </div>
+        <div class="card-content">
+          <strong>理由:</strong>
+          幸福感・ポジティブな感情を表現し、ブルーと補色関係で目立つ。黒テキスト使用で高いコントラスト比（7.47:1）を確保。
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <i data-lucide="palette"></i>
+          60-30-10ルール適用
+        </div>
+        <div class="card-content">
+          <strong>配分:</strong>
+          プライマリ60%（メイン要素）、ニュートラル30%（背景・テキスト）、アクセント10%（強調要素）でバランスの取れたデザインを実現。
+        </div>
       </div>
     </div>
-  </div>
 
-  <script>
-    // Lucide Icons を初期化
-    lucide.createIcons();
-  </script>
-</body>
+    <script>
+      // Lucide Icons を初期化
+      lucide.createIcons()
+    </script>
+  </body>
 </html>

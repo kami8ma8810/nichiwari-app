@@ -65,38 +65,38 @@ export default defineNuxtConfig({
   security: {
     headers: {
       contentSecurityPolicy: {
-        'default-src': ["'self'"],
+        'default-src': ['\'self\''],
         'script-src': [
-          "'self'",
-          "'unsafe-inline'", // Nuxt用
-          "'unsafe-eval'", // 開発時のみ
+          '\'self\'',
+          '\'unsafe-inline\'', // Nuxt用
+          '\'unsafe-eval\'', // 開発時のみ
           'https://www.googletagmanager.com',
           'https://www.google-analytics.com'
         ],
         'style-src': [
-          "'self'",
-          "'unsafe-inline'", // Tailwind用
+          '\'self\'',
+          '\'unsafe-inline\'', // Tailwind用
           'https://fonts.googleapis.com'
         ],
         'font-src': [
-          "'self'",
+          '\'self\'',
           'https://fonts.gstatic.com'
         ],
         'img-src': [
-          "'self'",
+          '\'self\'',
           'data:',
           'https:',
           'blob:'
         ],
         'connect-src': [
-          "'self'",
+          '\'self\'',
           'https://*.supabase.co',
           'wss://*.supabase.co',
           'https://www.google-analytics.com'
         ],
-        'frame-ancestors': ["'none'"],
-        'base-uri': ["'self'"],
-        'form-action': ["'self'"],
+        'frame-ancestors': ['\'none\''],
+        'base-uri': ['\'self\''],
+        'form-action': ['\'self\''],
         'upgrade-insecure-requests': true
       },
       strictTransportSecurity: {
@@ -127,7 +127,7 @@ import DOMPurify from 'isomorphic-dompurify'
 import * as v from 'valibot'
 
 // XSS対策
-export const sanitizeHTML = (dirty: string): string => {
+export function sanitizeHTML(dirty: string): string {
   return DOMPurify.sanitize(dirty, {
     ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a'],
     ALLOWED_ATTR: ['href']
@@ -135,9 +135,9 @@ export const sanitizeHTML = (dirty: string): string => {
 }
 
 // SQLインジェクション対策
-export const sanitizeForSQL = (input: string): string => {
+export function sanitizeForSQL(input: string): string {
   return input
-    .replace(/'/g, "''") // シングルクォートエスケープ
+    .replace(/'/g, '\'\'') // シングルクォートエスケープ
     .replace(/;/g, '') // セミコロン削除
     .replace(/--/g, '') // コメント削除
     .replace(/\/\*/g, '') // コメント削除
@@ -145,9 +145,9 @@ export const sanitizeForSQL = (input: string): string => {
 }
 
 // ファイル名サニタイズ
-export const sanitizeFilename = (filename: string): string => {
+export function sanitizeFilename(filename: string): string {
   return filename
-    .replace(/[^a-zA-Z0-9.-]/g, '_') // 英数字以外を_に
+    .replace(/[^a-z0-9.-]/gi, '_') // 英数字以外を_に
     .replace(/^\.+/, '') // 先頭のドット削除
     .substring(0, 255) // 最大長制限
 }
@@ -167,13 +167,11 @@ export const UrlSchema = v.pipe(
 )
 
 // 数値範囲検証
-export const validateNumberRange = (
-  value: number,
-  min: number,
-  max: number
-): boolean => {
-  if (!Number.isFinite(value)) return false
-  if (value < min || value > max) return false
+export function validateNumberRange(value: number, min: number, max: number): boolean {
+  if (!Number.isFinite(value))
+    return false
+  if (value < min || value > max)
+    return false
   return true
 }
 ```
@@ -243,21 +241,27 @@ const EnvSchema = v.object({
   NODE_ENV: v.picklist(['development', 'test', 'production'])
 })
 
-export const validateEnv = () => {
+export function validateEnv() {
   try {
     const env = v.parse(EnvSchema, process.env)
     return env
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Environment validation failed:', error)
     throw new Error('Invalid environment configuration')
   }
 }
 
 // 機密情報の漏洩防止
-export const redactSensitiveData = (obj: any): any => {
+export function redactSensitiveData(obj: any): any {
   const sensitiveKeys = [
-    'password', 'token', 'key', 'secret',
-    'apikey', 'authorization', 'cookie'
+    'password',
+    'token',
+    'key',
+    'secret',
+    'apikey',
+    'authorization',
+    'cookie'
   ]
 
   if (typeof obj !== 'object' || obj === null) {
@@ -271,7 +275,8 @@ export const redactSensitiveData = (obj: any): any => {
 
     if (sensitiveKeys.some(k => lowerKey.includes(k))) {
       redacted[key] = '[REDACTED]'
-    } else if (typeof redacted[key] === 'object') {
+    }
+    else if (typeof redacted[key] === 'object') {
       redacted[key] = redactSensitiveData(redacted[key])
     }
   }
@@ -284,11 +289,12 @@ export const redactSensitiveData = (obj: any): any => {
 
 ```typescript
 // server/middleware/rate-limit.ts
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
+const rateLimitMap = new Map<string, { count: number, resetTime: number }>()
 
 export default defineEventHandler(async (event) => {
   // 静的ファイルはスキップ
-  if (event.node.req.url?.startsWith('/_nuxt/')) return
+  if (event.node.req.url?.startsWith('/_nuxt/'))
+    return
 
   const ip = getClientIP(event) || 'unknown'
   const key = `${ip}:${event.node.req.url}`
@@ -305,7 +311,8 @@ export default defineEventHandler(async (event) => {
       count: 1,
       resetTime: now + window
     }
-  } else {
+  }
+  else {
     record.count++
   }
 
@@ -341,7 +348,7 @@ export default defineEventHandler(async (event) => {
 
 ```typescript
 // utils/crypto.ts
-import crypto from 'crypto'
+import crypto from 'node:crypto'
 
 const algorithm = 'aes-256-gcm'
 const saltLength = 64
@@ -351,7 +358,7 @@ const iterations = 100000
 const keyLength = 32
 
 // 暗号化
-export const encrypt = (text: string, password: string): string => {
+export function encrypt(text: string, password: string): string {
   const salt = crypto.randomBytes(saltLength)
   const key = crypto.pbkdf2Sync(password, salt, iterations, keyLength, 'sha256')
   const iv = crypto.randomBytes(ivLength)
@@ -369,7 +376,7 @@ export const encrypt = (text: string, password: string): string => {
 }
 
 // 復号化
-export const decrypt = (encryptedData: string, password: string): string => {
+export function decrypt(encryptedData: string, password: string): string {
   const buffer = Buffer.from(encryptedData, 'base64')
 
   const salt = buffer.slice(0, saltLength)
@@ -386,7 +393,7 @@ export const decrypt = (encryptedData: string, password: string): string => {
 }
 
 // ハッシュ化（不可逆）
-export const hash = (text: string): string => {
+export function hash(text: string): string {
   return crypto
     .createHash('sha256')
     .update(text)
@@ -394,7 +401,7 @@ export const hash = (text: string): string => {
 }
 
 // セキュアランダム生成
-export const generateSecureToken = (length = 32): string => {
+export function generateSecureToken(length = 32): string {
   return crypto
     .randomBytes(length)
     .toString('base64url')
@@ -409,7 +416,7 @@ export class PrivacyManager {
   // 個人情報のマスキング
   static maskEmail(email: string): string {
     const [local, domain] = email.split('@')
-    const maskedLocal = local.slice(0, 2) + '***'
+    const maskedLocal = `${local.slice(0, 2)}***`
     return `${maskedLocal}@${domain}`
   }
 
@@ -422,11 +429,12 @@ export class PrivacyManager {
     if (ip.includes(':')) {
       // IPv6
       const parts = ip.split(':')
-      return parts.slice(0, 4).join(':') + '::0000:0000:0000:0000'
-    } else {
+      return `${parts.slice(0, 4).join(':')}::0000:0000:0000:0000`
+    }
+    else {
       // IPv4
       const parts = ip.split('.')
-      return parts.slice(0, 3).join('.') + '.0'
+      return `${parts.slice(0, 3).join('.')}.0`
     }
   }
 
@@ -499,8 +507,8 @@ jobs:
       - name: Run Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'fs'
-          scan-ref: '.'
+          scan-type: fs
+          scan-ref: .
 ```
 
 ### 5.2 ペネトレーションテスト
@@ -531,10 +539,10 @@ describe('Security Tests', () => {
 
   test('SQLインジェクション対策', async () => {
     const sqlInjections = [
-      "'; DROP TABLE users; --",
-      "1' OR '1'='1",
-      "admin'--",
-      "1' UNION SELECT * FROM users--"
+      '\'; DROP TABLE users; --',
+      '1\' OR \'1\'=\'1',
+      'admin\'--',
+      '1\' UNION SELECT * FROM users--'
     ]
 
     for (const injection of sqlInjections) {

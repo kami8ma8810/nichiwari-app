@@ -49,28 +49,30 @@ last-updated: 2024-11-22
 購入価格と使用年数から1日あたりの価値を計算
 
 **リクエスト:**
+
 ```typescript
 interface CalculateRequest {
-  name?: string      // 商品名（任意）
-  price: number      // 購入価格（1〜1,000,000,000）
-  years: number      // 使用年数（0.5〜100、0.5刻み）
-  userId?: string    // ユーザーID（任意）
+  name?: string // 商品名（任意）
+  price: number // 購入価格（1〜1,000,000,000）
+  years: number // 使用年数（0.5〜100、0.5刻み）
+  userId?: string // ユーザーID（任意）
 }
 ```
 
 **レスポンス:**
+
 ```typescript
 interface CalculateResponse {
   success: boolean
   data: {
-    id: string           // 計算ID
+    id: string // 計算ID
     product: {
       id: string
       name: string
       price: number
       years: number
     }
-    dailyCost: number    // 1日あたりの金額
+    dailyCost: number // 1日あたりの金額
     comparisons: Array<{
       id: string
       name: string
@@ -84,6 +86,7 @@ interface CalculateResponse {
 ```
 
 **エラーレスポンス:**
+
 ```typescript
 interface ErrorResponse {
   success: false
@@ -96,6 +99,7 @@ interface ErrorResponse {
 ```
 
 **実装例:**
+
 ```typescript
 // server/api/calculate.post.ts
 export default defineEventHandler(async (event) => {
@@ -142,7 +146,8 @@ export default defineEventHandler(async (event) => {
         createdAt: calculation.created_at
       }
     }
-  } catch (error) {
+  }
+  catch (error) {
     throw createError({
       statusCode: 400,
       statusMessage: error.message
@@ -158,13 +163,15 @@ export default defineEventHandler(async (event) => {
 計算履歴を取得
 
 **パラメータ:**
+
 ```yaml
-limit: number    # 取得件数（デフォルト: 20、最大: 100）
-offset: number   # オフセット（デフォルト: 0）
-userId: string   # ユーザーID（任意）
+limit: number # 取得件数（デフォルト: 20、最大: 100）
+offset: number # オフセット（デフォルト: 0）
+userId: string # ユーザーID（任意）
 ```
 
 **レスポンス:**
+
 ```typescript
 interface CalculationsListResponse {
   success: boolean
@@ -187,6 +194,7 @@ interface CalculationsListResponse {
 特定の計算結果を取得
 
 **レスポンス:**
+
 ```typescript
 interface CalculationDetailResponse {
   success: boolean
@@ -214,6 +222,7 @@ interface CalculationDetailResponse {
 計算履歴を削除
 
 **レスポンス:**
+
 ```typescript
 interface DeleteResponse {
   success: boolean
@@ -228,22 +237,24 @@ interface DeleteResponse {
 幸福度スコアを保存
 
 **リクエスト:**
+
 ```typescript
 interface HappinessScoreRequest {
   calculationId: string
-  frequency: number      // 1-5: 使用頻度
-  satisfaction: number   // 1-5: 満足度
-  necessity: number      // 1-5: 必要性
+  frequency: number // 1-5: 使用頻度
+  satisfaction: number // 1-5: 満足度
+  necessity: number // 1-5: 必要性
 }
 ```
 
 **レスポンス:**
+
 ```typescript
 interface HappinessScoreResponse {
   success: boolean
   data: {
     id: string
-    score: number         // 0-100
+    score: number // 0-100
     message: string
     createdAt: string
   }
@@ -257,6 +268,7 @@ interface HappinessScoreResponse {
 比較アイテム一覧を取得
 
 **レスポンス:**
+
 ```typescript
 interface ComparisonsResponse {
   success: boolean
@@ -278,6 +290,7 @@ interface ComparisonsResponse {
 アプリ全体の統計情報を取得
 
 **レスポンス:**
+
 ```typescript
 interface StatisticsResponse {
   success: boolean
@@ -302,6 +315,7 @@ interface StatisticsResponse {
 ユーザー個別の統計情報
 
 **レスポンス:**
+
 ```typescript
 interface UserStatisticsResponse {
   success: boolean
@@ -310,7 +324,7 @@ interface UserStatisticsResponse {
     totalSavings: number
     averageDailyCost: number
     mostExpensiveItem: Product
-    mostValueItem: Product  // 最も日割りが安い
+    mostValueItem: Product // 最も日割りが安い
     categoryBreakdown: Array<{
       category: string
       count: number

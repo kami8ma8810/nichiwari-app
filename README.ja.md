@@ -2,12 +2,12 @@
 
 <div align="center">
 
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
-  [![Nuxt](https://img.shields.io/badge/Nuxt-3.x-00DC82)](https://nuxt.com/)
-  [![Vue](https://img.shields.io/badge/Vue-3.x-4FC08D)](https://vuejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![Nuxt](https://img.shields.io/badge/Nuxt-3.x-00DC82)](https://nuxt.com/)
+[![Vue](https://img.shields.io/badge/Vue-3.x-4FC08D)](https://vuejs.org/)
 
-  [🇺🇸 English](./README.md)
+[🇺🇸 English](./README.md)
 
 </div>
 
@@ -100,6 +100,7 @@ pnpm storybook
 ## 🛠️ 技術スタック
 
 ### フロントエンド
+
 - **Framework**: Nuxt 3 (SSG)
 - **UI Library**: Volt (PrimeVue + Tailwind CSS)
 - **Language**: TypeScript (strict mode)
@@ -107,10 +108,12 @@ pnpm storybook
 - **Validation**: Valibot
 
 ### バックエンド
+
 - **Database**: Supabase (PostgreSQL)
 - **Real-time**: Supabase Realtime
 
 ### 開発環境
+
 - **Package Manager**: pnpm
 - **Testing**: Vitest + Playwright
 - **Linting**: ESLint + Prettier

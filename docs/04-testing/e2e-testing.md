@@ -161,7 +161,7 @@ export default globalSetup
 
 ```typescript
 // e2e/pages/BasePage.ts
-import { Page, Locator } from '@playwright/test'
+import { Locator, Page } from '@playwright/test'
 
 export abstract class BasePage {
   protected page: Page
@@ -194,7 +194,8 @@ export abstract class BasePage {
         if (window.axe) {
           // @ts-ignore
           window.axe.run().then(resolve).catch(reject)
-        } else {
+        }
+        else {
           resolve({ violations: [] })
         }
       })
@@ -216,7 +217,7 @@ export abstract class BasePage {
 
 ```typescript
 // e2e/pages/CalculatorPage.ts
-import { Page, expect } from '@playwright/test'
+import { expect, Page } from '@playwright/test'
 import { BasePage } from './BasePage'
 
 export class CalculatorPage extends BasePage {
@@ -296,7 +297,7 @@ export class CalculatorPage extends BasePage {
 
 ```typescript
 // e2e/pages/HistoryPage.ts
-import { Page, Locator } from '@playwright/test'
+import { Locator, Page } from '@playwright/test'
 import { BasePage } from './BasePage'
 
 export class HistoryPage extends BasePage {
@@ -354,7 +355,7 @@ export class HistoryPage extends BasePage {
 
 ```typescript
 // e2e/tests/calculator-basic.spec.ts
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { CalculatorPage } from '../pages/CalculatorPage'
 
 test.describe('基本計算機能', () => {
@@ -407,7 +408,7 @@ test.describe('基本計算機能', () => {
 
 ```typescript
 // e2e/tests/responsive.spec.ts
-import { test, expect, devices } from '@playwright/test'
+import { devices, expect, test } from '@playwright/test'
 import { CalculatorPage } from '../pages/CalculatorPage'
 
 const viewports = [
@@ -416,7 +417,7 @@ const viewports = [
   { name: 'Mobile', width: 375, height: 812 }
 ]
 
-viewports.forEach(viewport => {
+viewports.forEach((viewport) => {
   test.describe(`レスポンシブ: ${viewport.name}`, () => {
     test.use({
       viewport: { width: viewport.width, height: viewport.height }
@@ -447,7 +448,7 @@ viewports.forEach(viewport => {
 
 ```typescript
 // e2e/tests/offline.spec.ts
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { CalculatorPage } from '../pages/CalculatorPage'
 
 test.describe('オフライン機能', () => {
@@ -500,7 +501,7 @@ test.describe('オフライン機能', () => {
 
 ```typescript
 // e2e/tests/performance.spec.ts
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 test.describe('パフォーマンス', () => {
   test('初回読み込みが3秒以内', async ({ page }) => {
@@ -568,8 +569,8 @@ test.describe('パフォーマンス', () => {
 
 ```typescript
 // e2e/tests/accessibility.spec.ts
-import { test, expect } from '@playwright/test'
-import { injectAxe, checkA11y } from 'axe-playwright'
+import { expect, test } from '@playwright/test'
+import { checkA11y, injectAxe } from 'axe-playwright'
 
 test.describe('アクセシビリティ', () => {
   test('WCAG 2.1 AAに準拠', async ({ page }) => {
@@ -595,7 +596,7 @@ test.describe('アクセシビリティ', () => {
 
     // Tabキーでの移動
     await page.keyboard.press('Tab')
-    let focused = await page.evaluate(() => document.activeElement?.tagName)
+    const focused = await page.evaluate(() => document.activeElement?.tagName)
     expect(focused).toBe('INPUT')
 
     // Enterキーでの送信
@@ -654,8 +655,8 @@ export const invalidCalculations = [
 ```typescript
 // e2e/tests/calculation-variations.spec.ts
 import { test } from '@playwright/test'
+import { invalidCalculations, validCalculations } from '../fixtures/calculation-data'
 import { CalculatorPage } from '../pages/CalculatorPage'
-import { validCalculations, invalidCalculations } from '../fixtures/calculation-data'
 
 test.describe('計算バリエーション', () => {
   validCalculations.forEach(({ price, years, expected }) => {
@@ -771,15 +772,15 @@ export class DebugHelper {
     })
 
     const html = await page.content()
-    require('fs').writeFileSync(`debug/${name}.html`, html)
+    require('node:fs').writeFileSync(`debug/${name}.html`, html)
   }
 
   static async logNetworkActivity(page: Page) {
-    page.on('request', request => {
+    page.on('request', (request) => {
       console.log(`➡️ ${request.method()} ${request.url()}`)
     })
 
-    page.on('response', response => {
+    page.on('response', (response) => {
       console.log(`⬅️ ${response.status()} ${response.url()}`)
     })
   }

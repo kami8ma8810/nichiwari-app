@@ -27,14 +27,14 @@ last-updated: 2024-11-22
 
 ### 1.2 コンポーネント選択基準
 
-| コンポーネント | Volt使用 | 自作 | 理由 |
-|--------------|---------|------|------|
-| ボタン | ✅ | - | アクセシビリティ保証 |
-| インプット | ✅ | - | バリデーション統合 |
-| カード | ✅ | - | 一貫性のあるレイアウト |
-| モーダル | ✅ | - | フォーカストラップ実装済み |
-| 計算結果表示 | - | ✅ | ドメイン固有のUI |
-| グラフ | - | ✅ | Chart.js使用 |
+| コンポーネント | Volt使用 | 自作 | 理由                       |
+| -------------- | -------- | ---- | -------------------------- |
+| ボタン         | ✅       | -    | アクセシビリティ保証       |
+| インプット     | ✅       | -    | バリデーション統合         |
+| カード         | ✅       | -    | 一貫性のあるレイアウト     |
+| モーダル       | ✅       | -    | フォーカストラップ実装済み |
+| 計算結果表示   | -        | ✅   | ドメイン固有のUI           |
+| グラフ         | -        | ✅   | Chart.js使用               |
 
 ## 2. コンポーネント構成
 
@@ -160,19 +160,6 @@ const emit = defineEmits<{
 ```vue
 <!-- components/common/AppButton.vue -->
 <!-- Voltコンポーネントをラップして統一インターフェース提供 -->
-<template>
-  <VButton
-    :variant="variant"
-    :size="size"
-    :loading="loading"
-    :disabled="disabled"
-    :class="buttonClasses"
-    @click="handleClick"
-  >
-    <slot />
-  </VButton>
-</template>
-
 <script setup lang="ts">
 type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost'
 type ButtonSize = 'sm' | 'md' | 'lg'
@@ -202,12 +189,25 @@ const buttonClasses = computed(() => ({
   'opacity-75 cursor-not-allowed': props.disabled
 }))
 
-const handleClick = (event: MouseEvent) => {
+function handleClick(event: MouseEvent) {
   if (!props.disabled && !props.loading) {
     emit('click', event)
   }
 }
 </script>
+
+<template>
+  <VButton
+    :variant="variant"
+    :size="size"
+    :loading="loading"
+    :disabled="disabled"
+    :class="buttonClasses"
+    @click="handleClick"
+  >
+    <slot />
+  </VButton>
+</template>
 ```
 
 ## 4. ドメインコンポーネント実装
@@ -216,6 +216,29 @@ const handleClick = (event: MouseEvent) => {
 
 ```vue
 <!-- components/domain/Calculator/CalculatorResult.vue -->
+<script setup lang="ts">
+import type { ComparisonItem, DailyCost } from '@/domain/types'
+
+interface Props {
+  dailyCost: DailyCost
+  comparisons: ComparisonItem[]
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits<{
+  share: []
+  save: []
+}>()
+
+function formatCurrency(value: number): string {
+  return new Intl.NumberFormat('ja-JP', {
+    style: 'currency',
+    currency: 'JPY',
+    minimumFractionDigits: 0
+  }).format(value)
+}
+</script>
+
 <template>
   <VCard class="calculator-result">
     <template #header>
@@ -269,29 +292,6 @@ const handleClick = (event: MouseEvent) => {
   </VCard>
 </template>
 
-<script setup lang="ts">
-import type { DailyCost, ComparisonItem } from '@/domain/types'
-
-interface Props {
-  dailyCost: DailyCost
-  comparisons: ComparisonItem[]
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<{
-  share: []
-  save: []
-}>()
-
-const formatCurrency = (value: number): string => {
-  return new Intl.NumberFormat('ja-JP', {
-    style: 'currency',
-    currency: 'JPY',
-    minimumFractionDigits: 0
-  }).format(value)
-}
-</script>
-
 <style scoped>
 .calculator-result {
   @apply bg-white rounded-2xl shadow-xl p-6;
@@ -311,6 +311,35 @@ const formatCurrency = (value: number): string => {
 
 ```vue
 <!-- components/domain/HappinessScore/HappinessScoreDisplay.vue -->
+<script setup lang="ts">
+interface Props {
+  score: number // 0-100
+  message?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  message: ''
+})
+
+const radius = 45
+const circumference = 2 * Math.PI * radius
+
+const offset = computed(() => {
+  const progress = props.score / 100
+  return circumference * (1 - progress)
+})
+
+const scoreColor = computed(() => {
+  if (props.score >= 80)
+    return '#10b981' // green
+  if (props.score >= 60)
+    return '#3b82f6' // blue
+  if (props.score >= 40)
+    return '#f59e0b' // yellow
+  return '#ef4444' // red
+})
+</script>
+
 <template>
   <div class="happiness-score">
     <div class="score-circle">
@@ -351,32 +380,6 @@ const formatCurrency = (value: number): string => {
     </p>
   </div>
 </template>
-
-<script setup lang="ts">
-interface Props {
-  score: number // 0-100
-  message?: string
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  message: ''
-})
-
-const radius = 45
-const circumference = 2 * Math.PI * radius
-
-const offset = computed(() => {
-  const progress = props.score / 100
-  return circumference * (1 - progress)
-})
-
-const scoreColor = computed(() => {
-  if (props.score >= 80) return '#10b981' // green
-  if (props.score >= 60) return '#3b82f6' // blue
-  if (props.score >= 40) return '#f59e0b' // yellow
-  return '#ef4444' // red
-})
-</script>
 ```
 
 ## 5. Storybook設定
@@ -462,9 +465,9 @@ export const AllVariants: Story = {
 ### 5.2 インタラクションテスト
 
 ```typescript
-// components/domain/Calculator/Calculator.stories.ts
-import { within, userEvent } from '@storybook/testing-library'
 import { expect } from '@storybook/jest'
+// components/domain/Calculator/Calculator.stories.ts
+import { userEvent, within } from '@storybook/testing-library'
 
 export const CalculatorInteraction: Story = {
   play: async ({ canvasElement }) => {
@@ -496,9 +499,9 @@ export const CalculatorInteraction: Story = {
 ### 6.1 単体テスト
 
 ```typescript
-// components/common/VButton/VButton.test.ts
-import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+// components/common/VButton/VButton.test.ts
+import { describe, expect, it, vi } from 'vitest'
 import VButton from './VButton.vue'
 
 describe('VButton', () => {
@@ -543,7 +546,7 @@ import { toMatchImageSnapshot } from 'jest-image-snapshot'
 
 expect.extend({ toMatchImageSnapshot })
 
-export const postRender = async (page, context) => {
+export async function postRender(page, context) {
   // スクリーンショット取得
   const screenshot = await page.screenshot()
 
@@ -562,6 +565,29 @@ export const postRender = async (page, context) => {
 ### 7.1 キーボードナビゲーション
 
 ```vue
+<script setup lang="ts">
+function handleKeydown(event: KeyboardEvent) {
+  // Enterキーでフォーカス移動
+  if (event.key === 'Enter' && !event.shiftKey) {
+    const target = event.target as HTMLElement
+
+    if (target === priceInput.value?.$el) {
+      yearsInput.value?.$el.focus()
+      event.preventDefault()
+    }
+    else if (target === yearsInput.value?.$el) {
+      submitButton.value?.$el.focus()
+      event.preventDefault()
+    }
+  }
+
+  // Escapeキーでフォームリセット
+  if (event.key === 'Escape') {
+    resetForm()
+  }
+}
+</script>
+
 <template>
   <div
     class="calculator-form"
@@ -590,28 +616,6 @@ export const postRender = async (page, context) => {
     </VButton>
   </div>
 </template>
-
-<script setup lang="ts">
-const handleKeydown = (event: KeyboardEvent) => {
-  // Enterキーでフォーカス移動
-  if (event.key === 'Enter' && !event.shiftKey) {
-    const target = event.target as HTMLElement
-
-    if (target === priceInput.value?.$el) {
-      yearsInput.value?.$el.focus()
-      event.preventDefault()
-    } else if (target === yearsInput.value?.$el) {
-      submitButton.value?.$el.focus()
-      event.preventDefault()
-    }
-  }
-
-  // Escapeキーでフォームリセット
-  if (event.key === 'Escape') {
-    resetForm()
-  }
-}
-</script>
 ```
 
 ### 7.2 スクリーンリーダー対応
@@ -750,7 +754,7 @@ const emit = defineEmits<{ 'update:modelValue': [number] }>()
 
 const localValue = computed({
   get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
+  set: value => emit('update:modelValue', value)
 })
 ```
 

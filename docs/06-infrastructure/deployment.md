@@ -110,7 +110,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
-          cache: 'pnpm'
+          cache: pnpm
 
       - run: pnpm install --frozen-lockfile
 
@@ -180,7 +180,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
-          cache: 'pnpm'
+          cache: pnpm
 
       - run: pnpm install --frozen-lockfile
 
@@ -325,14 +325,14 @@ services:
   app:
     build: .
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
       - NUXT_PUBLIC_SUPABASE_URL=${NUXT_PUBLIC_SUPABASE_URL}
       - NUXT_PUBLIC_SUPABASE_ANON_KEY=${NUXT_PUBLIC_SUPABASE_ANON_KEY}
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      test: [CMD, wget, --quiet, --tries=1, --spider, 'http://localhost:3000/api/health']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -341,8 +341,8 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./ssl:/etc/nginx/ssl
@@ -422,7 +422,8 @@ export default defineEventHandler(async (event) => {
       .select('count')
       .limit(1)
 
-    if (error) throw error
+    if (error)
+      throw error
 
     return {
       status: 'healthy',
@@ -430,7 +431,8 @@ export default defineEventHandler(async (event) => {
       version: process.env.npm_package_version,
       environment: process.env.NODE_ENV
     }
-  } catch (error) {
+  }
+  catch (error) {
     setResponseStatus(event, 503)
     return {
       status: 'unhealthy',

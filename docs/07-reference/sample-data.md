@@ -559,10 +559,10 @@ export function generateBulkData(count: number) {
 
 // 使用例
 const testData = {
-  small: generateBulkData(100),     // 100件
-  medium: generateBulkData(1000),    // 1,000件
-  large: generateBulkData(10000),    // 10,000件
-  stress: generateBulkData(100000)   // 100,000件
+  small: generateBulkData(100), // 100件
+  medium: generateBulkData(1000), // 1,000件
+  large: generateBulkData(10000), // 10,000件
+  stress: generateBulkData(100000) // 100,000件
 }
 ```
 

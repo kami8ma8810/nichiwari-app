@@ -56,6 +56,7 @@ Phase 3 (高度機能):
 ### 2.1 AppHeader
 
 #### 用途
+
 全画面共通のヘッダー
 
 #### Props
@@ -93,19 +94,21 @@ interface AppHeaderProps {
     <button
       v-if="showBackButton"
       class="back-button"
-      @click="onBack"
       aria-label="戻る"
+      @click="onBack"
     >
       <lucide-icon name="chevron-left" :size="24" />
     </button>
 
-    <h1 class="logo">{{ title }}</h1>
+    <h1 class="logo">
+      {{ title }}
+    </h1>
 
     <button
       v-if="showMenuButton"
       class="menu-button"
-      @click="onMenuClick"
       aria-label="メニューを開く"
+      @click="onMenuClick"
     >
       <lucide-icon name="menu" :size="24" />
     </button>
@@ -165,6 +168,7 @@ interface AppHeaderProps {
 ### 2.2 AppContainer
 
 #### 用途
+
 メインコンテンツのラッパー
 
 #### Props
@@ -186,7 +190,7 @@ interface AppContainerProps {
     class="app-container"
     :class="[
       `max-width-${maxWidth}`,
-      `padding-${padding}`
+      `padding-${padding}`,
     ]"
   >
     <slot />
@@ -200,14 +204,28 @@ interface AppContainerProps {
 .app-container {
   margin: 0 auto;
 
-  &.max-width-sm { max-width: 600px; }
-  &.max-width-md { max-width: 800px; }
-  &.max-width-lg { max-width: 1000px; }
-  &.max-width-xl { max-width: 1200px; }
+  &.max-width-sm {
+    max-width: 600px;
+  }
+  &.max-width-md {
+    max-width: 800px;
+  }
+  &.max-width-lg {
+    max-width: 1000px;
+  }
+  &.max-width-xl {
+    max-width: 1200px;
+  }
 
-  &.padding-sm { padding: 8px; }
-  &.padding-md { padding: 16px; }
-  &.padding-lg { padding: 24px; }
+  &.padding-sm {
+    padding: 8px;
+  }
+  &.padding-md {
+    padding: 16px;
+  }
+  &.padding-lg {
+    padding: 24px;
+  }
 }
 ```
 
@@ -218,6 +236,7 @@ interface AppContainerProps {
 ### 3.1 TextField
 
 #### 用途
+
 テキスト入力フィールド
 
 #### Props
@@ -252,6 +271,10 @@ interface TextFieldProps {
 #### HTML構造
 
 ```vue
+<script setup lang="ts">
+const fieldId = `text-field-${Math.random().toString(36).slice(2)}`
+</script>
+
 <template>
   <div class="text-field">
     <label :for="fieldId" class="label">
@@ -269,10 +292,10 @@ interface TextFieldProps {
       :aria-required="required"
       :aria-invalid="!!error"
       :aria-describedby="error ? `${fieldId}-error` : undefined"
-      @input="$emit('update:modelValue', $event.target.value)"
       class="input"
       :class="{ 'input--error': !!error }"
-    />
+      @input="$emit('update:modelValue', $event.target.value)"
+    >
 
     <p
       v-if="error"
@@ -285,10 +308,6 @@ interface TextFieldProps {
     </p>
   </div>
 </template>
-
-<script setup lang="ts">
-const fieldId = `text-field-${Math.random().toString(36).slice(2)}`
-</script>
 ```
 
 #### スタイル仕様
@@ -320,7 +339,7 @@ const fieldId = `text-field-${Math.random().toString(36).slice(2)}`
     width: 100%;
     padding: 12px 16px;
     font-size: 16px;
-    border: 1px solid #E0E0E0;
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
     transition: border-color 0.2s;
 
@@ -335,7 +354,7 @@ const fieldId = `text-field-${Math.random().toString(36).slice(2)}`
     }
 
     &::placeholder {
-      color: #BDBDBD;
+      color: #bdbdbd;
     }
   }
 
@@ -365,6 +384,7 @@ const fieldId = `text-field-${Math.random().toString(36).slice(2)}`
 ### 3.2 NumberField
 
 #### 用途
+
 数値入力フィールド（価格用）
 
 #### Props
@@ -372,11 +392,11 @@ const fieldId = `text-field-${Math.random().toString(36).slice(2)}`
 ```typescript
 interface NumberFieldProps {
   label: string
-  icon?: string  // Lucideアイコン名
+  icon?: string // Lucideアイコン名
   required?: boolean
   min?: number
   max?: number
-  unit?: string  // 単位（円、など）
+  unit?: string // 単位（円、など）
   error?: string
   modelValue: number | null
 }
@@ -392,6 +412,26 @@ interface NumberFieldProps {
 #### HTML構造
 
 ```vue
+<script setup lang="ts">
+const displayValue = computed(() => {
+  if (props.modelValue === null)
+    return ''
+  return props.modelValue.toLocaleString('ja-JP')
+})
+
+function handleInput(e: Event) {
+  const value = (e.target as HTMLInputElement).value.replace(/,/g, '')
+  const numValue = Number.parseInt(value, 10)
+
+  if (isNaN(numValue)) {
+    emit('update:modelValue', null)
+  }
+  else {
+    emit('update:modelValue', numValue)
+  }
+}
+</script>
+
 <template>
   <div class="number-field">
     <label :for="fieldId" class="label">
@@ -408,11 +448,11 @@ interface NumberFieldProps {
         :value="displayValue"
         :aria-required="required"
         :aria-invalid="!!error"
-        @input="handleInput"
-        @blur="handleBlur"
         class="input"
         :class="{ 'input--error': !!error }"
-      />
+        @input="handleInput"
+        @blur="handleBlur"
+      >
       <span v-if="unit" class="unit">{{ unit }}</span>
     </div>
 
@@ -421,24 +461,6 @@ interface NumberFieldProps {
     </p>
   </div>
 </template>
-
-<script setup lang="ts">
-const displayValue = computed(() => {
-  if (props.modelValue === null) return ''
-  return props.modelValue.toLocaleString('ja-JP')
-})
-
-const handleInput = (e: Event) => {
-  const value = (e.target as HTMLInputElement).value.replace(/,/g, '')
-  const numValue = parseInt(value, 10)
-
-  if (isNaN(numValue)) {
-    emit('update:modelValue', null)
-  } else {
-    emit('update:modelValue', numValue)
-  }
-}
-</script>
 ```
 
 #### スタイル仕様
@@ -473,6 +495,7 @@ const handleInput = (e: Event) => {
 ### 3.3 SliderField
 
 #### 用途
+
 スライダー + 数値入力（使用年数用）
 
 #### Props
@@ -493,6 +516,24 @@ interface SliderFieldProps {
 #### HTML構造
 
 ```vue
+<script setup lang="ts">
+const displayMax = computed(() =>
+  props.max > 10 ? 10 : props.max
+)
+
+function handleSliderInput(e: Event) {
+  const value = Number.parseFloat((e.target as HTMLInputElement).value)
+  emit('update:modelValue', value)
+}
+
+function handleNumberInput(e: Event) {
+  const value = Number.parseFloat((e.target as HTMLInputElement).value)
+  if (value >= props.min && value <= props.max) {
+    emit('update:modelValue', value)
+  }
+}
+</script>
+
 <template>
   <div class="slider-field">
     <label class="label">
@@ -509,9 +550,9 @@ interface SliderFieldProps {
         :min="min"
         :max="max"
         :step="step"
-        @input="handleNumberInput"
         class="number-input"
-      />
+        @input="handleNumberInput"
+      >
       <span v-if="unit" class="unit">{{ unit }}</span>
 
       <!-- スライダー -->
@@ -521,9 +562,9 @@ interface SliderFieldProps {
         :min="min"
         :max="displayMax"
         :step="step"
-        @input="handleSliderInput"
         class="slider"
-      />
+        @input="handleSliderInput"
+      >
 
       <!-- 範囲ラベル -->
       <div class="range-labels">
@@ -533,24 +574,6 @@ interface SliderFieldProps {
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-const displayMax = computed(() =>
-  props.max > 10 ? 10 : props.max
-)
-
-const handleSliderInput = (e: Event) => {
-  const value = parseFloat((e.target as HTMLInputElement).value)
-  emit('update:modelValue', value)
-}
-
-const handleNumberInput = (e: Event) => {
-  const value = parseFloat((e.target as HTMLInputElement).value)
-  if (value >= props.min && value <= props.max) {
-    emit('update:modelValue', value)
-  }
-}
-</script>
 ```
 
 #### スタイル仕様
@@ -566,7 +589,7 @@ const handleNumberInput = (e: Event) => {
       width: 100px;
       padding: 8px;
       font-size: 16px;
-      border: 1px solid #E0E0E0;
+      border: 1px solid #e0e0e0;
       border-radius: 8px;
       text-align: center;
     }
@@ -575,7 +598,7 @@ const handleNumberInput = (e: Event) => {
       width: 100%;
       height: 6px;
       border-radius: 3px;
-      background: #E0E0E0;
+      background: #e0e0e0;
       outline: none;
       -webkit-appearance: none;
 
@@ -615,6 +638,7 @@ const handleNumberInput = (e: Event) => {
 ### 3.4 PrimaryButton
 
 #### 用途
+
 主要なアクション用ボタン
 
 #### Props
@@ -640,10 +664,9 @@ interface PrimaryButtonProps {
 <template>
   <button
     :disabled="disabled || loading"
-    :class="[
-      'primary-button',
+    class="primary-button" :class="[
       `primary-button--${size}`,
-      { 'primary-button--full-width': fullWidth }
+      { 'primary-button--full-width': fullWidth },
     ]"
     @click="$emit('click')"
   >
@@ -663,15 +686,15 @@ interface PrimaryButtonProps {
   padding: 16px 48px;
   font-size: 16px;
   font-weight: 600;
-  color: #FFFFFF;
-  background-color: var(--color-primary);  /* #1976D2 */
+  color: #ffffff;
+  background-color: var(--color-primary); /* #1976D2 */
   border: none;
-  border-radius: 8px;  /* 24px → 8px に変更 */
+  border-radius: 8px; /* 24px → 8px に変更 */
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover:not(:disabled) {
-    background-color: var(--color-primary-dark);  /* #1565C0 */
+    background-color: var(--color-primary-dark); /* #1565C0 */
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
   }
@@ -703,14 +726,16 @@ interface PrimaryButtonProps {
     width: 16px;
     height: 16px;
     border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top-color: #FFFFFF;
+    border-top-color: #ffffff;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 ```
 
@@ -721,6 +746,7 @@ interface PrimaryButtonProps {
 ### 4.1 ResultCard
 
 #### 用途
+
 日割り金額の結果表示カード
 
 #### Props
@@ -737,49 +763,36 @@ interface ResultCardProps {
 #### デザインパターン
 
 **パターンA: ラベル強調型（推奨）**
+
 - 「1日あたり」を大きく太く表示
 - 金額とのヒエラルキーを明確に
 
 **パターンB: コンパクト型**
+
 - 「1日あたり」を金額の上に配置
 - よりコンパクトな表示
 
 #### HTML構造（パターンA: ラベル強調型）
 
 ```vue
-<template>
-  <div class="result-card">
-    <!-- 「1日あたり」を強調 -->
-    <div class="label-wrapper">
-      <lucide-icon name="lightbulb" :size="24" class="icon" />
-      <h3 class="label">1日あたり</h3>
-    </div>
-
-    <!-- 金額 -->
-    <p class="amount">
-      <span class="currency">¥</span>
-      <span class="value">{{ displayValue }}</span>
-    </p>
-  </div>
-</template>
-
 <script setup lang="ts">
 const displayValue = ref(0)
 
 watch(() => props.dailyCost, (newValue) => {
   if (props.animated) {
     animateValue(0, newValue, 800)
-  } else {
+  }
+  else {
     displayValue.value = newValue
   }
 })
 
-const animateValue = (start: number, end: number, duration: number) => {
+function animateValue(start: number, end: number, duration: number) {
   const startTime = Date.now()
   const animate = () => {
     const elapsed = Date.now() - startTime
     const progress = Math.min(elapsed / duration, 1)
-    const easeOut = 1 - Math.pow(1 - progress, 3)
+    const easeOut = 1 - (1 - progress) ** 3
 
     displayValue.value = Math.floor(start + (end - start) * easeOut)
 
@@ -790,6 +803,24 @@ const animateValue = (start: number, end: number, duration: number) => {
   animate()
 }
 </script>
+
+<template>
+  <div class="result-card">
+    <!-- 「1日あたり」を強調 -->
+    <div class="label-wrapper">
+      <lucide-icon name="lightbulb" :size="24" class="icon" />
+      <h3 class="label">
+        1日あたり
+      </h3>
+    </div>
+
+    <!-- 金額 -->
+    <p class="amount">
+      <span class="currency">¥</span>
+      <span class="value">{{ displayValue }}</span>
+    </p>
+  </div>
+</template>
 ```
 
 #### スタイル仕様（パターンA: ラベル強調型）
@@ -798,8 +829,8 @@ const animateValue = (start: number, end: number, duration: number) => {
 .result-card {
   padding: 32px 24px;
   text-align: center;
-  background: #FFFFFF;  // 白背景でコントラスト確保
-  border: 2px solid #E3F2FD;  // 枠線でアクセント
+  background: #ffffff; // 白背景でコントラスト確保
+  border: 2px solid #e3f2fd; // 枠線でアクセント
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin: 24px 0;
@@ -812,21 +843,21 @@ const animateValue = (start: number, end: number, duration: number) => {
     margin-bottom: 12px;
 
     .icon {
-      color: #1976D2;  // プライマリカラー（目立つ）
+      color: #1976d2; // プライマリカラー（目立つ）
     }
 
     .label {
-      font-size: 20px;  // 14px → 20px に拡大 ✨
-      font-weight: 700;  // bold で強調 ✨
-      color: #212121;  // メインテキスト (14.10:1 ✅)
+      font-size: 20px; // 14px → 20px に拡大 ✨
+      font-weight: 700; // bold で強調 ✨
+      color: #212121; // メインテキスト (14.10:1 ✅)
       margin: 0;
     }
   }
 
   .amount {
-    font-size: 56px;  // 48px → 56px にさらに拡大
-    font-weight: 800;  // extrabold
-    color: #1565C0;  // Primary Dark (5.03:1 ✅)
+    font-size: 56px; // 48px → 56px にさらに拡大
+    font-weight: 800; // extrabold
+    color: #1565c0; // Primary Dark (5.03:1 ✅)
     line-height: 1.2;
     margin: 0;
 
@@ -844,8 +875,8 @@ const animateValue = (start: number, end: number, duration: number) => {
 .result-card {
   padding: 24px 20px;
   text-align: center;
-  background: #FFFFFF;
-  border: 2px solid #E3F2FD;
+  background: #ffffff;
+  border: 2px solid #e3f2fd;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin: 24px 0;
@@ -858,7 +889,7 @@ const animateValue = (start: number, end: number, duration: number) => {
     margin-bottom: 8px;
 
     .icon {
-      color: #1976D2;
+      color: #1976d2;
     }
 
     .label {
@@ -872,7 +903,7 @@ const animateValue = (start: number, end: number, duration: number) => {
   .amount {
     font-size: 48px;
     font-weight: 700;
-    color: #1565C0;
+    color: #1565c0;
     line-height: 1.2;
 
     .currency {
@@ -885,14 +916,15 @@ const animateValue = (start: number, end: number, duration: number) => {
 
 #### WCAG 2.2 AA準拠チェック ✅
 
-| 要素 | 色 | 背景 | コントラスト比 | 結果 |
-|------|-----|------|--------------|------|
-| ラベル「1日あたり」 | #212121 | #FFFFFF | 14.10:1 | ✅ |
-| 金額 | #1565C0 | #FFFFFF | 5.03:1 | ✅ |
-| アイコン | #1976D2 | #FFFFFF | 4.60:1 | ✅ |
+| 要素                | 色      | 背景    | コントラスト比 | 結果 |
+| ------------------- | ------- | ------- | -------------- | ---- |
+| ラベル「1日あたり」 | #212121 | #FFFFFF | 14.10:1        | ✅   |
+| 金額                | #1565C0 | #FFFFFF | 5.03:1         | ✅   |
+| アイコン            | #1976D2 | #FFFFFF | 4.60:1         | ✅   |
 
 すべてWCAG 2.2 AA基準（4.5:1以上）を満たしています ✨
-```
+
+````
 
 ---
 
@@ -914,19 +946,11 @@ interface ComparisonItemProps {
   /** 単位 */
   unit: string
 }
-```
+````
 
 #### HTML構造
 
 ```vue
-<template>
-  <div class="comparison-item">
-    <span class="emoji">{{ emoji }}</span>
-    <span class="name">{{ name }}</span>
-    <span class="quantity">{{ formattedQuantity }}</span>
-  </div>
-</template>
-
 <script setup lang="ts">
 const formattedQuantity = computed(() => {
   const q = props.quantity
@@ -935,6 +959,14 @@ const formattedQuantity = computed(() => {
     : `${q.toFixed(1)}${props.unit}`
 })
 </script>
+
+<template>
+  <div class="comparison-item">
+    <span class="emoji">{{ emoji }}</span>
+    <span class="name">{{ name }}</span>
+    <span class="quantity">{{ formattedQuantity }}</span>
+  </div>
+</template>
 ```
 
 #### スタイル仕様
@@ -977,6 +1009,7 @@ const formattedQuantity = computed(() => {
 ### 4.3 ComparisonList
 
 #### 用途
+
 比較アイテムのリスト表示
 
 #### Props
@@ -999,31 +1032,6 @@ interface ComparisonListProps {
 #### HTML構造
 
 ```vue
-<template>
-  <div class="comparison-list">
-    <h3 class="title">
-      <lucide-icon name="bar-chart-3" :size="20" class="icon" />
-      身近なもので例えると…
-    </h3>
-
-    <div class="items">
-      <ComparisonItem
-        v-for="item in displayedItems"
-        :key="item.id"
-        v-bind="item"
-      />
-    </div>
-
-    <button
-      v-if="hasMore"
-      @click="showAll = true"
-      class="show-more"
-    >
-      もっと見る（残り{{ remainingCount }}件）
-    </button>
-  </div>
-</template>
-
 <script setup lang="ts">
 const showAll = ref(false)
 
@@ -1041,6 +1049,31 @@ const remainingCount = computed(() =>
   props.items.length - (props.initialCount || 3)
 )
 </script>
+
+<template>
+  <div class="comparison-list">
+    <h3 class="title">
+      <lucide-icon name="bar-chart-3" :size="20" class="icon" />
+      身近なもので例えると…
+    </h3>
+
+    <div class="items">
+      <ComparisonItem
+        v-for="item in displayedItems"
+        :key="item.id"
+        v-bind="item"
+      />
+    </div>
+
+    <button
+      v-if="hasMore"
+      class="show-more"
+      @click="showAll = true"
+    >
+      もっと見る（残り{{ remainingCount }}件）
+    </button>
+  </div>
+</template>
 ```
 
 ---
@@ -1048,6 +1081,7 @@ const remainingCount = computed(() =>
 ### 4.4 HappinessScore
 
 #### 用途
+
 幸福度スコアの表示（プログレスバー）
 
 #### Props
@@ -1064,6 +1098,41 @@ interface HappinessScoreProps {
 #### HTML構造
 
 ```vue
+<script setup lang="ts">
+const displayScore = ref(0)
+
+watchEffect(() => {
+  if (props.animated) {
+    animateScore(0, props.score, 800)
+  }
+  else {
+    displayScore.value = props.score
+  }
+})
+
+const scoreColorClass = computed(() => {
+  if (displayScore.value >= 80)
+    return 'progress-fill--excellent'
+  if (displayScore.value >= 60)
+    return 'progress-fill--good'
+  if (displayScore.value >= 40)
+    return 'progress-fill--fair'
+  return 'progress-fill--poor'
+})
+
+const scoreMessage = computed(() => {
+  if (displayScore.value >= 90)
+    return 'めっちゃいい買い物！✨'
+  if (displayScore.value >= 70)
+    return 'なかなか良い買い物だね！'
+  if (displayScore.value >= 50)
+    return 'そこそこかな'
+  if (displayScore.value >= 30)
+    return 'もっといいのあったかも...'
+  return '次はもっと考えよう💦'
+})
+</script>
+
 <template>
   <div class="happiness-score">
     <div class="score-header">
@@ -1079,36 +1148,11 @@ interface HappinessScoreProps {
       />
     </div>
 
-    <p class="message">{{ scoreMessage }}</p>
+    <p class="message">
+      {{ scoreMessage }}
+    </p>
   </div>
 </template>
-
-<script setup lang="ts">
-const displayScore = ref(0)
-
-watchEffect(() => {
-  if (props.animated) {
-    animateScore(0, props.score, 800)
-  } else {
-    displayScore.value = props.score
-  }
-})
-
-const scoreColorClass = computed(() => {
-  if (displayScore.value >= 80) return 'progress-fill--excellent'
-  if (displayScore.value >= 60) return 'progress-fill--good'
-  if (displayScore.value >= 40) return 'progress-fill--fair'
-  return 'progress-fill--poor'
-})
-
-const scoreMessage = computed(() => {
-  if (displayScore.value >= 90) return 'めっちゃいい買い物！✨'
-  if (displayScore.value >= 70) return 'なかなか良い買い物だね！'
-  if (displayScore.value >= 50) return 'そこそこかな'
-  if (displayScore.value >= 30) return 'もっといいのあったかも...'
-  return '次はもっと考えよう💦'
-})
-</script>
 ```
 
 #### スタイル仕様
@@ -1138,7 +1182,7 @@ const scoreMessage = computed(() => {
 
   .progress-bar {
     height: 8px;
-    background: #E0E0E0;
+    background: #e0e0e0;
     border-radius: 4px;
     overflow: hidden;
     margin-bottom: 12px;
@@ -1147,10 +1191,18 @@ const scoreMessage = computed(() => {
       height: 100%;
       transition: width 0.8s ease-out;
 
-      &--excellent { background: #66BB6A; }
-      &--good { background: #42A5F5; }
-      &--fair { background: #FDD835; }
-      &--poor { background: #EF5350; }
+      &--excellent {
+        background: #66bb6a;
+      }
+      &--good {
+        background: #42a5f5;
+      }
+      &--fair {
+        background: #fdd835;
+      }
+      &--poor {
+        background: #ef5350;
+      }
     }
   }
 
@@ -1169,6 +1221,7 @@ const scoreMessage = computed(() => {
 ### 5.1 HappinessModal
 
 #### 用途
+
 幸福度スコア入力モーダル
 
 #### Props
@@ -1203,6 +1256,38 @@ interface HappinessModalProps {
 #### HTML構造
 
 ```vue
+<script setup lang="ts">
+const frequency = ref<number | null>(null)
+const satisfaction = ref<number | null>(null)
+const necessity = ref<number | null>(null)
+
+const isComplete = computed(() =>
+  frequency.value !== null
+  && satisfaction.value !== null
+  && necessity.value !== null
+)
+
+const calculatedScore = computed(() => {
+  if (!isComplete.value)
+    return 0
+  return Math.round(
+    (frequency.value! * 0.4
+      + satisfaction.value! * 0.4
+      + necessity.value! * 0.2) * 20
+  )
+})
+
+function handleSubmit() {
+  emit('submit', {
+    frequency: frequency.value!,
+    satisfaction: satisfaction.value!,
+    necessity: necessity.value!,
+    score: calculatedScore.value
+  })
+  emit('update:modelValue', false)
+}
+</script>
+
 <template>
   <Teleport to="body">
     <Transition name="modal">
@@ -1283,37 +1368,6 @@ interface HappinessModalProps {
     </Transition>
   </Teleport>
 </template>
-
-<script setup lang="ts">
-const frequency = ref<number | null>(null)
-const satisfaction = ref<number | null>(null)
-const necessity = ref<number | null>(null)
-
-const isComplete = computed(() =>
-  frequency.value !== null &&
-  satisfaction.value !== null &&
-  necessity.value !== null
-)
-
-const calculatedScore = computed(() => {
-  if (!isComplete.value) return 0
-  return Math.round(
-    (frequency.value! * 0.4 +
-     satisfaction.value! * 0.4 +
-     necessity.value! * 0.2) * 20
-  )
-})
-
-const handleSubmit = () => {
-  emit('submit', {
-    frequency: frequency.value!,
-    satisfaction: satisfaction.value!,
-    necessity: necessity.value!,
-    score: calculatedScore.value
-  })
-  emit('update:modelValue', false)
-}
-</script>
 ```
 
 #### スタイル仕様
@@ -1394,6 +1448,7 @@ const handleSubmit = () => {
 ### 6.1 HistoryCard
 
 #### 用途
+
 履歴一覧の1件表示
 
 #### Props
@@ -1479,7 +1534,7 @@ interface HistoryCardProps {
     }
 
     .score--empty {
-      color: #BDBDBD;
+      color: #bdbdbd;
     }
   }
 }
@@ -1491,15 +1546,15 @@ interface HistoryCardProps {
 
 ### 7.1 対応表
 
-| カスタムコンポーネント | Volt UI | 備考 |
-|---------------------|---------|------|
-| PrimaryButton | Button (variant="primary") | カスタマイズ |
-| SecondaryButton | Button (variant="outline") | カスタマイズ |
-| TextField | InputText | ラッパー作成 |
-| NumberField | InputNumber | カスタマイズ |
-| SliderField | Slider | カスタマイズ |
-| HappinessModal | Dialog | カスタマイズ |
-| ConfirmDialog | ConfirmDialog | そのまま使用 |
+| カスタムコンポーネント | Volt UI                    | 備考         |
+| ---------------------- | -------------------------- | ------------ |
+| PrimaryButton          | Button (variant="primary") | カスタマイズ |
+| SecondaryButton        | Button (variant="outline") | カスタマイズ |
+| TextField              | InputText                  | ラッパー作成 |
+| NumberField            | InputNumber                | カスタマイズ |
+| SliderField            | Slider                     | カスタマイズ |
+| HappinessModal         | Dialog                     | カスタマイズ |
+| ConfirmDialog          | ConfirmDialog              | そのまま使用 |
 
 ### 7.2 Volt UI活用方針
 

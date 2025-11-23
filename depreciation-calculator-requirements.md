@@ -5,9 +5,11 @@
 ## 1. プロジェクト概要
 
 ### 1.1 目的
+
 物を買うときに減価償却理論に基づいて、何年持つかから日割り換算して、本当に必要かどうか、買った方がお得か・自分が幸せになれるか判断できるWebアプリケーション
 
 ### 1.2 主要コンセプト
+
 - **減価償却理論の日常応用**: 購入価格を使用期間で割って日割りコストを算出
 - **科学的根拠に基づく購買判断**: 幸福度研究に基づいたチェックリスト
 - **データドリブン**: トレンド分析と参考データの提供
@@ -17,6 +19,7 @@
 ### 2.1 コア機能
 
 #### 2.1.1 減価償却計算機能
+
 ```yaml
 入力:
   - 商品名（テキスト、最大100文字）
@@ -37,10 +40,12 @@
 ```
 
 #### 2.1.2 商品サジェスト機能
+
 - 商品名入力時に参考データから候補を表示
 - 選択すると平均価格と耐用年数を自動入力
 
 #### 2.1.3 参考データベース
+
 ```yaml
 カテゴリ:
   - 家電
@@ -51,14 +56,15 @@
   - 趣味
 
 データ構造:
-  name: string        # 商品名
-  price: number       # 平均価格
-  years: number       # 平均耐用年数
-  category: string    # カテゴリ
-  icon: string       # 表示アイコン
+  name: string # 商品名
+  price: number # 平均価格
+  years: number # 平均耐用年数
+  category: string # カテゴリ
+  icon: string # 表示アイコン
 ```
 
 #### 2.1.4 幸福度診断機能
+
 ```yaml
 チェックリスト項目:
   - 毎日または週に数回は使用する予定
@@ -77,11 +83,13 @@
 ```
 
 #### 2.1.5 データ収集・トレンド機能
+
 - 匿名で検索データを収集（商品名、価格帯、耐用年数）
 - 人気商品ランキング表示（上位5-10件）
 - よく調べられている商品の表示
 
 ### 2.2 科学的根拠Tips
+
 ```yaml
 掲載する研究ベースのTips:
   - 経験vs物質: 経験への投資の方が長期的幸福度向上（Gilovich & Kumar, 2015）
@@ -95,6 +103,7 @@
 ## 3. 非機能要件
 
 ### 3.1 パフォーマンス要件
+
 ```yaml
 初回ロード: 3秒以内
 計算結果表示: 即座（< 100ms）
@@ -106,6 +115,7 @@ Lighthouse Score:
 ```
 
 ### 3.2 アクセシビリティ要件
+
 ```yaml
 準拠基準: WCAG 2.1 Level AA
 必須要件:
@@ -118,12 +128,13 @@ Lighthouse Score:
 ```
 
 ### 3.3 対応環境
+
 ```yaml
 ブラウザ:
   - Chrome/Edge: 最新2バージョン
   - Firefox: 最新2バージョン
   - Safari: 最新2バージョン
-  
+
 デバイス:
   - デスクトップ: 1024px以上
   - タブレット: 768px-1023px
@@ -133,30 +144,31 @@ Lighthouse Score:
 ## 4. 技術スタック
 
 ### 4.1 フロントエンド
+
 ```yaml
 フレームワーク:
   name: Nuxt 3
   version: 最新安定版
   mode: SSG（静的サイト生成）
-  
+
 言語:
-  TypeScript: 
+  TypeScript:
     strict: true
-    
+
 UIライブラリ:
   name: Volt (PrimeVue + Tailwind)
-  理由: 
+  理由:
     - Code Ownershipモデルで完全制御可能
     - WCAG AA準拠のアクセシビリティ
     - PrimeVueの豊富なコンポーネント
-    
+
 CSS:
   name: Tailwind CSS v4
   config: CSS-firstアプローチ
-  
+
 状態管理:
   name: Pinia
-  
+
 バリデーション:
   name: Valibot
   理由:
@@ -166,6 +178,7 @@ CSS:
 ```
 
 ### 4.2 バックエンド・データ
+
 ```yaml
 データベース:
   name: Supabase
@@ -173,13 +186,14 @@ CSS:
     - PostgreSQL
     - リアルタイム同期
     - 匿名認証（データ収集用）
-    
+
 分析:
   - Supabase Analytics
   - カスタムイベントトラッキング
 ```
 
 ### 4.3 開発環境
+
 ```yaml
 パッケージマネージャ: pnpm
 Node.js: v20 LTS（Voltaで管理）
@@ -194,11 +208,11 @@ Node.js: v20 LTS（Voltaで管理）
   Linter: ESLint + @antfu/eslint-config
   Formatter: Prettier
   型チェック: TypeScript strict mode
-  
+
 Git:
   Hooks: Husky + lint-staged
   コミット規約: Conventional Commits
-  
+
 CI/CD:
   platform: GitHub Actions
   デプロイ: Vercel（無料枠）
@@ -312,6 +326,7 @@ graph LR
 ### 6.1 TDD（テスト駆動開発）
 
 #### 実践方法
+
 ```yaml
 サイクル:
   1. Red: テストを書く（失敗）
@@ -326,7 +341,7 @@ graph LR
 命名規約:
   describe: "計算機能"のような機能名
   it: "〜する"という動作を記述
-  
+
 カバレッジ目標:
   単体テスト: 90%以上
   統合テスト: 70%以上
@@ -334,6 +349,7 @@ graph LR
 ```
 
 #### テスト例
+
 ```typescript
 // core/usecases/calculation/CalculateDailyCost.spec.ts
 describe('CalculateDailyCost', () => {
@@ -345,16 +361,16 @@ describe('CalculateDailyCost', () => {
         price: Money.of(150000),
         years: Years.of(5)
       }
-      
+
       // Act
       const result = useCase.execute(input)
-      
+
       // Assert
       expect(result.dailyCost.value).toBe(82)
       expect(result.monthlyCost.value).toBe(2460)
       expect(result.yearlyCost.value).toBe(30000)
     })
-    
+
     it('0年の場合はエラーを返す', () => {
       // Arrange
       const useCase = new CalculateDailyCost()
@@ -362,7 +378,7 @@ describe('CalculateDailyCost', () => {
         price: Money.of(150000),
         years: Years.of(0)
       }
-      
+
       // Act & Assert
       expect(() => useCase.execute(input)).toThrow('使用年数は0より大きい値を入力してください')
     })
@@ -404,46 +420,6 @@ export type ProductInput = v.InferInput<typeof ProductInputSchema>
 
 ```vue
 <!-- components/volt/VInput.vue -->
-<template>
-  <div class="v-input">
-    <label 
-      v-if="label"
-      :for="inputId"
-      class="block text-sm font-medium text-gray-700 mb-1"
-    >
-      {{ label }}
-      <span v-if="required" class="text-red-500 ml-1">*</span>
-    </label>
-    
-    <PrimeInputText
-      :id="inputId"
-      v-model="modelValue"
-      :unstyled="true"
-      :invalid="!!error"
-      :aria-describedby="errorId"
-      :aria-invalid="!!error"
-      :pt="{
-        root: [
-          'w-full px-3 py-2 border rounded-md',
-          'focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
-          'transition-colors duration-200',
-          error ? 'border-red-500' : 'border-gray-300'
-        ].join(' ')
-      }"
-      v-bind="$attrs"
-    />
-    
-    <p
-      v-if="error"
-      :id="errorId"
-      class="mt-1 text-sm text-red-600"
-      role="alert"
-    >
-      {{ error }}
-    </p>
-  </div>
-</template>
-
 <script setup lang="ts">
 import PrimeInputText from 'primevue/inputtext'
 import { useId } from 'vue'
@@ -458,11 +434,52 @@ defineProps<{
 const inputId = useId()
 const errorId = useId()
 </script>
+
+<template>
+  <div class="v-input">
+    <label
+      v-if="label"
+      :for="inputId"
+      class="block text-sm font-medium text-gray-700 mb-1"
+    >
+      {{ label }}
+      <span v-if="required" class="text-red-500 ml-1">*</span>
+    </label>
+
+    <PrimeInputText
+      :id="inputId"
+      v-model="modelValue"
+      :unstyled="true"
+      :invalid="!!error"
+      :aria-describedby="errorId"
+      :aria-invalid="!!error"
+      :pt="{
+        root: [
+          'w-full px-3 py-2 border rounded-md',
+          'focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
+          'transition-colors duration-200',
+          error ? 'border-red-500' : 'border-gray-300',
+        ].join(' '),
+      }"
+      v-bind="$attrs"
+    />
+
+    <p
+      v-if="error"
+      :id="errorId"
+      class="mt-1 text-sm text-red-600"
+      role="alert"
+    >
+      {{ error }}
+    </p>
+  </div>
+</template>
 ```
 
 ## 7. 実装フェーズ
 
 ### Phase 1: 基盤構築（Week 1）
+
 ```yaml
 タスク:
   - Nuxt 3プロジェクトセットアップ
@@ -470,7 +487,7 @@ const errorId = useId()
   - TDD環境構築（Vitest設定）
   - クリーンアーキテクチャの基本構造作成
   - 基本的なドメインモデル実装（TDD）
-  
+
 成果物:
   - 動作する開発環境
   - 基本的なテストが通るドメインモデル
@@ -478,6 +495,7 @@ const errorId = useId()
 ```
 
 ### Phase 2: コア機能実装（Week 2-3）
+
 ```yaml
 タスク:
   - 計算ロジック実装（TDD）
@@ -485,7 +503,7 @@ const errorId = useId()
   - 結果表示コンポーネント
   - バリデーション実装（Valibot）
   - 参考データの静的実装
-  
+
 成果物:
   - 計算機能が動作するアプリケーション
   - 単体テストカバレッジ80%以上
@@ -493,13 +511,14 @@ const errorId = useId()
 ```
 
 ### Phase 3: データ永続化（Week 4）
+
 ```yaml
 タスク:
   - Supabase環境構築
   - データモデル設計・実装
   - リポジトリパターン実装
   - トレンド集計機能
-  
+
 成果物:
   - データ永続化機能
   - トレンドランキング表示
@@ -507,13 +526,14 @@ const errorId = useId()
 ```
 
 ### Phase 4: 拡張機能（Week 5）
+
 ```yaml
 タスク:
   - 幸福度診断機能
   - 科学的根拠Tipsセクション
   - i18n対応（日英）
   - PWA対応
-  
+
 成果物:
   - 全機能実装完了
   - 多言語対応
@@ -521,13 +541,14 @@ const errorId = useId()
 ```
 
 ### Phase 5: 最適化・公開（Week 6）
+
 ```yaml
 タスク:
   - パフォーマンス最適化
   - アクセシビリティ監査
   - E2Eテスト実装
   - デプロイ設定
-  
+
 成果物:
   - Lighthouse Score 90+
   - WCAG AA準拠確認
@@ -589,36 +610,24 @@ CSP設定:
 
 ```yaml
 # vercel.json
-{
-  "buildCommand": "pnpm run build",
-  "outputDirectory": ".output/public",
-  "framework": "nuxt",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "SAMEORIGIN"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        }
-      ]
-    }
-  ]
-}
+buildCommand: pnpm run build
+outputDirectory: .output/public
+framework: nuxt
+rewrites:
+  - source: '/(.*)'
+    destination: /index.html
+
+headers:
+  - source: '/(.*)'
+    headers:
+      - key: X-Content-Type-Options
+        value: nosniff
+
+      - key: X-Frame-Options
+        value: SAMEORIGIN
+
+      - key: X-XSS-Protection
+        value: 1; mode=block
 ```
 
 ## 11. 参考データ（初期実装用）
@@ -632,12 +641,12 @@ export const REFERENCE_DATA = [
   { name: '冷蔵庫', price: 200000, years: 15, category: '家電', icon: '🧊' },
   { name: '洗濯機', price: 100000, years: 10, category: '家電', icon: '🌀' },
   { name: 'エアコン', price: 150000, years: 13, category: '家電', icon: '❄️' },
-  
+
   // ファッション
   { name: 'ビジネススーツ', price: 50000, years: 3, category: 'ファッション', icon: '👔' },
   { name: 'コート', price: 30000, years: 5, category: 'ファッション', icon: '🧥' },
   { name: 'スニーカー', price: 15000, years: 2, category: 'ファッション', icon: '👟' },
-  
+
   // 他のカテゴリも同様に追加
 ]
 ```
@@ -840,9 +849,9 @@ export const OFFLINE_PRESETS = {
           オフラインモードで動作中 - 一部機能が制限されています
         </span>
         <button
-          @click="dismiss"
           class="text-white/80 hover:text-white"
           aria-label="通知を閉じる"
+          @click="dismiss"
         >
           <Icon name="x" />
         </button>
@@ -867,9 +876,9 @@ export const OFFLINE_PRESETS = {
     - 準拠法と管轄
 
   免責条項（必須）:
-    - "本サービスの計算結果は参考値です"
-    - "購入判断は自己責任で行ってください"
-    - "計算結果による損害の責任は負いません"
+    - 本サービスの計算結果は参考値です
+    - 購入判断は自己責任で行ってください
+    - 計算結果による損害の責任は負いません
 
 プライバシーポリシー:
   記載事項:
@@ -896,24 +905,30 @@ Cookie同意:
 
 ```markdown
 <!-- pages/terms.vue -->
+
 # 利用規約
 
 最終更新日: 2024年XX月XX日
 
 ## 1. はじめに
+
 「にちわり！」（以下、「本サービス」）は、商品の減価償却計算を通じて
 賢い購買判断を支援する無料のWebアプリケーションです。
 
 ## 2. 免責事項
+
 **重要: 本サービスで提供される計算結果はすべて参考値です。**
+
 - 実際の商品寿命は使用状況により大きく異なります
 - 計算結果を基にした購買判断は自己責任で行ってください
 - 本サービスの利用により生じた損害について一切責任を負いません
 
 ## 3. 知的財産権
+
 本サービスのコンテンツ、ロゴ、デザインは当方に帰属します。
 
 ## 4. 準拠法
+
 本規約は日本法に準拠し、紛争が生じた場合は東京地方裁判所を管轄とします。
 ```
 
@@ -967,8 +982,8 @@ export const config = {
   },
 
   api: {
-    timeout: parseInt(process.env.API_TIMEOUT || '5000'),
-    maxRetry: parseInt(process.env.MAX_RETRY_COUNT || '3')
+    timeout: Number.parseInt(process.env.API_TIMEOUT || '5000'),
+    maxRetry: Number.parseInt(process.env.MAX_RETRY_COUNT || '3')
   }
 }
 ```
@@ -1164,7 +1179,7 @@ jobs:
       - uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-args: '--prod'
+          vercel-args: --prod
 ```
 
 ### 17.3 監視体制
@@ -1254,17 +1269,20 @@ export const Loading: Story = {
 # デザインシステムガイド
 
 ## カラーパレット
+
 - Primary: #3B82F6 (青)
 - Secondary: #10B981 (緑)
 - Danger: #EF4444 (赤)
 - Warning: #F59E0B (黄)
 
 ## タイポグラフィ
+
 - 見出し: Noto Sans JP Bold
 - 本文: Noto Sans JP Regular
 - 数値: Tabular nums
 
 ## スペーシング
+
 - xs: 4px
 - sm: 8px
 - md: 16px
@@ -1449,7 +1467,7 @@ export default defineConfig({
 
 ```typescript
 // tests/e2e/pages/CalculatorPage.ts
-import { Page, Locator } from '@playwright/test'
+import { Locator, Page } from '@playwright/test'
 
 export class CalculatorPage {
   readonly page: Page
@@ -1503,7 +1521,7 @@ export class CalculatorPage {
 
 ```typescript
 // tests/e2e/calculator.spec.ts
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { CalculatorPage } from './pages/CalculatorPage'
 
 test.describe('減価償却計算機能', () => {
@@ -1521,7 +1539,7 @@ test.describe('減価償却計算機能', () => {
 
     // 結果検証
     const dailyCost = await calculator.getDailyCost()
-    expect(dailyCost).toContain('137円')  // 150000 / (3 * 365) = 約137円
+    expect(dailyCost).toContain('137円') // 150000 / (3 * 365) = 約137円
   })
 
   test('バリデーションエラーが表示される', async ({ page }) => {
@@ -1597,9 +1615,9 @@ test.describe('幸福度診断機能', () => {
 ### 21.4 アクセシビリティテスト
 
 ```typescript
-// tests/e2e/a11y.spec.ts
-import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
+// tests/e2e/a11y.spec.ts
+import { expect, test } from '@playwright/test'
 
 test.describe('アクセシビリティテスト', () => {
   test('トップページがWCAG AA準拠', async ({ page }) => {
@@ -1644,8 +1662,8 @@ test.describe('アクセシビリティテスト', () => {
     const count = await inputs.count()
     for (let i = 0; i < count; i++) {
       const input = inputs.nth(i)
-      const label = await input.getAttribute('aria-label') ||
-                   await input.getAttribute('aria-labelledby')
+      const label = await input.getAttribute('aria-label')
+        || await input.getAttribute('aria-labelledby')
       expect(label).toBeTruthy()
     }
   })
@@ -1656,7 +1674,7 @@ test.describe('アクセシビリティテスト', () => {
 
 ```typescript
 // tests/e2e/visual.spec.ts
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 test.describe('ビジュアルリグレッションテスト', () => {
   test('トップページのスクリーンショット', async ({ page }) => {
@@ -1697,7 +1715,7 @@ test.describe('ビジュアルリグレッションテスト', () => {
 
 ```typescript
 // tests/e2e/performance.spec.ts
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 test.describe('パフォーマンステスト', () => {
   test('初回ロード時間が3秒以内', async ({ page }) => {
@@ -1864,9 +1882,9 @@ jobs:
 
 ```yaml
 カバレッジ目標:
-  クリティカルパス: 100%  # 計算機能、結果表示
-  主要機能: 80%          # 幸福度診断、商品サジェスト
-  エッジケース: 60%      # 境界値、エラーケース
+  クリティカルパス: 100% # 計算機能、結果表示
+  主要機能: 80% # 幸福度診断、商品サジェスト
+  エッジケース: 60% # 境界値、エラーケース
 
   デバイス:
     - デスクトップ: Chrome, Firefox, Safari

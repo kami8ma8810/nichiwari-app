@@ -74,17 +74,17 @@ chore/bump-nuxt-version
 
 ### 2.2 タイプ一覧
 
-| タイプ | 説明 | 例 |
-|--------|------|-----|
-| feat | 新機能追加 | feat(calculator): 履歴機能を追加 |
-| fix | バグ修正 | fix(validation): 価格の検証エラーを修正 |
-| docs | ドキュメント | docs(readme): インストール手順を更新 |
-| style | コード整形 | style: インデントを修正 |
-| refactor | リファクタリング | refactor(domain): 計算ロジックを簡潔に |
-| test | テスト | test(calculator): 単体テストを追加 |
-| chore | その他 | chore(deps): 依存関係を更新 |
-| perf | パフォーマンス | perf: レンダリング速度を改善 |
-| ci | CI/CD | ci: GitHub Actions設定を更新 |
+| タイプ   | 説明             | 例                                      |
+| -------- | ---------------- | --------------------------------------- |
+| feat     | 新機能追加       | feat(calculator): 履歴機能を追加        |
+| fix      | バグ修正         | fix(validation): 価格の検証エラーを修正 |
+| docs     | ドキュメント     | docs(readme): インストール手順を更新    |
+| style    | コード整形       | style: インデントを修正                 |
+| refactor | リファクタリング | refactor(domain): 計算ロジックを簡潔に  |
+| test     | テスト           | test(calculator): 単体テストを追加      |
+| chore    | その他           | chore(deps): 依存関係を更新             |
+| perf     | パフォーマンス   | perf: レンダリング速度を改善            |
+| ci       | CI/CD            | ci: GitHub Actions設定を更新            |
 
 ### 2.3 コミットメッセージ例
 
@@ -118,29 +118,39 @@ BREAKING CHANGE: calculateDailyCost関数のシグネチャが変更
 
 ```markdown
 <!-- .github/pull_request_template.md -->
+
 ## 概要
+
 <!-- このPRで何を実装/修正したか簡潔に記述 -->
 
 ## 変更内容
+
 <!-- 具体的な変更点をリスト形式で -->
+
 - [ ] 機能A を実装
 - [ ] バグB を修正
 - [ ] テストC を追加
 
 ## 関連Issue
+
 <!-- 関連するIssue番号を記載 -->
+
 Closes #
 
 ## スクリーンショット
+
 <!-- UIに変更がある場合は必須 -->
 
 ## テスト
+
 <!-- 実施したテストの内容 -->
+
 - [ ] 単体テスト実行
 - [ ] E2Eテスト実行
 - [ ] 手動テスト実施
 
 ## チェックリスト
+
 - [ ] コードは規約に従っている
 - [ ] セルフレビュー実施済み
 - [ ] テストを追加/更新した
@@ -149,9 +159,11 @@ Closes #
 - [ ] 破壊的変更なし（ある場合は明記）
 
 ## レビュワーへの注意事項
+
 <!-- レビュー時に特に見てほしい点 -->
 
 ## デプロイ後の確認事項
+
 <!-- 本番環境で確認すべき点 -->
 ```
 
@@ -424,6 +436,7 @@ git push origin v1.0.0
 
 ```markdown
 <!-- CHANGELOG.md -->
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -434,17 +447,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+
 - 計算履歴機能
 
 ### Changed
+
 - UIデザインの改善
 
 ### Fixed
+
 - バリデーションエラーの修正
 
 ## [1.0.0] - 2024-11-22
 
 ### Added
+
 - 初回リリース
 - 基本的な計算機能
 - オフライン対応

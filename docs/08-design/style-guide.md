@@ -14,17 +14,12 @@ last-updated: 2024-11-22
 
 ```css
 /* ブルー - メインカラー（WCAG 2.2 AA準拠） */
---color-primary: #1976D2;          /* 白テキスト 4.60:1 ✅ */
---color-primary-dark: #1565C0;     /* 白テキスト 5.75:1 ✅ */
---color-primary-light: #42A5F5;    /* 装飾・アイコン用（テキスト不可） */
---color-primary-lighter: #E3F2FD;  /* 背景用 */
+--color-primary: #1976d2; /* 白テキスト 4.60:1 ✅ */
+--color-primary-dark: #1565c0; /* 白テキスト 5.75:1 ✅ */
+--color-primary-light: #42a5f5; /* 装飾・アイコン用（テキスト不可） */
+--color-primary-lighter: #e3f2fd; /* 背景用 */
 
-使用場所:
-- メインボタン背景（白テキスト）
-- リンク
-- アクティブ状態
-- プログレスバー
-- フォーカスリング
+使用場所: -メインボタン背景（白テキスト） - リンク - アクティブ状態 - プログレスバー - フォーカスリング;
 ```
 
 ### 1.2 アクセントカラー
@@ -82,17 +77,17 @@ last-updated: 2024-11-22
 ```css
 /* グレースケール */
 --color-black: #000000;
---color-gray-900: #212121;  /* メインテキスト */
+--color-gray-900: #212121; /* メインテキスト */
 --color-gray-800: #424242;
 --color-gray-700: #616161;
---color-gray-600: #757575;  /* セカンダリテキスト */
---color-gray-500: #9E9E9E;
---color-gray-400: #BDBDBD;  /* プレースホルダー */
---color-gray-300: #E0E0E0;  /* ボーダー */
---color-gray-200: #EEEEEE;
---color-gray-100: #F5F5F5;
---color-gray-50: #FAFAFA;   /* 背景 */
---color-white: #FFFFFF;     /* サーフェス */
+--color-gray-600: #757575; /* セカンダリテキスト */
+--color-gray-500: #9e9e9e;
+--color-gray-400: #bdbdbd; /* プレースホルダー */
+--color-gray-300: #e0e0e0; /* ボーダー */
+--color-gray-200: #eeeeee;
+--color-gray-100: #f5f5f5;
+--color-gray-50: #fafafa; /* 背景 */
+--color-white: #ffffff; /* サーフェス */
 ```
 
 ### 1.5 セマンティックトークン
@@ -126,16 +121,16 @@ last-updated: 2024-11-22
 ```css
 /* ダークモード用カラーパレット（Phase 2） */
 @media (prefers-color-scheme: dark) {
-  --color-text: #E0E0E0;
-  --color-text-secondary: #B0B0B0;
+  --color-text: #e0e0e0;
+  --color-text-secondary: #b0b0b0;
   --color-background: #121212;
-  --color-surface: #1E1E1E;
-  --color-surface-raised: #2C2C2C;
+  --color-surface: #1e1e1e;
+  --color-surface-raised: #2c2c2c;
   --color-border: #404040;
 
   /* プライマリカラーは明度調整 */
-  --color-primary: #64B5F6;
-  --color-accent: #FFB74D;
+  --color-primary: #64b5f6;
+  --color-accent: #ffb74d;
 }
 ```
 
@@ -147,28 +142,27 @@ last-updated: 2024-11-22
 
 ```css
 /* 日本語 + 欧文 */
---font-family-base: -apple-system, BlinkMacSystemFont,
-  "Segoe UI", "Noto Sans JP", "Hiragino Sans",
-  "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+--font-family-base:
+  -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo,
+  sans-serif;
 
 /* 数値専用（等幅・読みやすさ優先） */
---font-family-numeric: "SF Mono", "Segoe UI Mono",
-  "Roboto Mono", Menlo, Monaco, Consolas, monospace;
+--font-family-numeric: 'SF Mono', 'Segoe UI Mono', 'Roboto Mono', Menlo, Monaco, Consolas, monospace;
 ```
 
 ### 2.2 フォントサイズ
 
 ```css
 /* モバイルファースト */
---font-size-xs: 12px;    /* キャプション */
---font-size-sm: 14px;    /* 小さめテキスト */
---font-size-base: 16px;  /* 基本テキスト */
---font-size-lg: 18px;    /* 大きめテキスト */
---font-size-xl: 20px;    /* サブタイトル */
---font-size-2xl: 24px;   /* タイトル */
---font-size-3xl: 32px;   /* 見出し */
---font-size-4xl: 48px;   /* 日割り金額 */
---font-size-5xl: 64px;   /* 超大見出し */
+--font-size-xs: 12px; /* キャプション */
+--font-size-sm: 14px; /* 小さめテキスト */
+--font-size-base: 16px; /* 基本テキスト */
+--font-size-lg: 18px; /* 大きめテキスト */
+--font-size-xl: 20px; /* サブタイトル */
+--font-size-2xl: 24px; /* タイトル */
+--font-size-3xl: 32px; /* 見出し */
+--font-size-4xl: 48px; /* 日割り金額 */
+--font-size-5xl: 64px; /* 超大見出し */
 
 /* デスクトップ（1024px以上） */
 @media (min-width: 1024px) {
@@ -201,11 +195,11 @@ last-updated: 2024-11-22
 ### 2.4 行間（Line Height）
 
 ```css
---line-height-tight: 1.2;    /* 見出し */
---line-height-snug: 1.4;     /* サブタイトル */
---line-height-normal: 1.6;   /* 本文 */
---line-height-relaxed: 1.8;  /* 読みやすさ重視 */
---line-height-loose: 2.0;    /* 余裕のある行間 */
+--line-height-tight: 1.2; /* 見出し */
+--line-height-snug: 1.4; /* サブタイトル */
+--line-height-normal: 1.6; /* 本文 */
+--line-height-relaxed: 1.8; /* 読みやすさ重視 */
+--line-height-loose: 2; /* 余裕のある行間 */
 ```
 
 ### 2.5 文字間隔（Letter Spacing）
@@ -308,23 +302,45 @@ last-updated: 2024-11-22
 
 ```css
 /* ページ余白 */
-.container-mobile { padding: var(--space-4); }
-.container-tablet { padding: var(--space-6); }
-.container-desktop { padding: var(--space-8); }
+.container-mobile {
+  padding: var(--space-4);
+}
+.container-tablet {
+  padding: var(--space-6);
+}
+.container-desktop {
+  padding: var(--space-8);
+}
 
 /* セクション間 */
-.section-spacing { margin-bottom: var(--space-8); }
+.section-spacing {
+  margin-bottom: var(--space-8);
+}
 
 /* カード内 */
-.card-padding-sm { padding: var(--space-3); }
-.card-padding-md { padding: var(--space-4); }
-.card-padding-lg { padding: var(--space-6); }
+.card-padding-sm {
+  padding: var(--space-3);
+}
+.card-padding-md {
+  padding: var(--space-4);
+}
+.card-padding-lg {
+  padding: var(--space-6);
+}
 
 /* 要素間 */
-.stack-xs { gap: var(--space-2); }
-.stack-sm { gap: var(--space-3); }
-.stack-md { gap: var(--space-4); }
-.stack-lg { gap: var(--space-6); }
+.stack-xs {
+  gap: var(--space-2);
+}
+.stack-sm {
+  gap: var(--space-3);
+}
+.stack-md {
+  gap: var(--space-4);
+}
+.stack-lg {
+  gap: var(--space-6);
+}
 ```
 
 ### 3.3 コンポーネント別余白
@@ -358,11 +374,11 @@ Section:
 
 ```css
 --radius-none: 0;
---radius-sm: 4px;      /* 小さめボタン */
---radius-md: 8px;      /* 入力フィールド */
---radius-lg: 12px;     /* カード */
---radius-xl: 16px;     /* モーダル */
---radius-2xl: 24px;    /* ピル型ボタン */
+--radius-sm: 4px; /* 小さめボタン */
+--radius-md: 8px; /* 入力フィールド */
+--radius-lg: 12px; /* カード */
+--radius-xl: 16px; /* モーダル */
+--radius-2xl: 24px; /* ピル型ボタン */
 --radius-full: 9999px; /* 完全な円 */
 ```
 
@@ -440,6 +456,7 @@ Section:
 ### 6.1 アイコンライブラリ
 
 **使用ライブラリ: Lucide Icons**
+
 - 公式サイト: https://lucide.dev/
 - MIT License
 - Vue/Reactコンポーネント対応
@@ -520,10 +537,18 @@ UI:
 }
 
 /* ステータスアイコン */
-.icon-success { color: var(--color-success); }
-.icon-error { color: var(--color-error); }
-.icon-warning { color: var(--color-warning); }
-.icon-info { color: var(--color-info); }
+.icon-success {
+  color: var(--color-success);
+}
+.icon-error {
+  color: var(--color-error);
+}
+.icon-warning {
+  color: var(--color-warning);
+}
+.icon-info {
+  color: var(--color-info);
+}
 ```
 
 ---
@@ -557,8 +582,9 @@ UI:
 
 /* 色変更 */
 .transition-colors {
-  transition: background-color var(--duration-fast) var(--ease-out),
-              color var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
 }
 
 /* 変形 */
@@ -618,7 +644,8 @@ UI:
 
 /* パルス */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -695,19 +722,27 @@ UI:
 ```scss
 /* モバイルファースト */
 @mixin sm {
-  @media (min-width: 640px) { @content; }
+  @media (min-width: 640px) {
+    @content;
+  }
 }
 
 @mixin md {
-  @media (min-width: 768px) { @content; }
+  @media (min-width: 768px) {
+    @content;
+  }
 }
 
 @mixin lg {
-  @media (min-width: 1024px) { @content; }
+  @media (min-width: 1024px) {
+    @content;
+  }
 }
 
 @mixin xl {
-  @media (min-width: 1280px) { @content; }
+  @media (min-width: 1280px) {
+    @content;
+  }
 }
 
 /* 使用例 */
@@ -798,14 +833,14 @@ UI:
   --color-background: #121212;
 
   /* サーフェスは段階的に明るく */
-  --color-surface: #1E1E1E;
-  --color-surface-raised: #2C2C2C;
+  --color-surface: #1e1e1e;
+  --color-surface-raised: #2c2c2c;
 
   /* テキストは純白ではなく、#E0E0E0 */
-  --color-text: #E0E0E0;
+  --color-text: #e0e0e0;
 
   /* プライマリカラーは明度を上げる */
-  --color-primary: #64B5F6;
+  --color-primary: #64b5f6;
 
   /* シャドウは不透明度を下げる */
   --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.4);
@@ -837,22 +872,22 @@ UI:
 ```css
 :root {
   /* カラー（WCAG 2.2 AA準拠） */
-  --color-primary: #1976D2;
-  --color-primary-dark: #1565C0;
-  --color-primary-light: #42A5F5;
-  --color-accent: #FF9800;
-  --color-success: #2E7D32;
-  --color-warning: #FFA000;
-  --color-error: #D32F2F;
-  --color-info: #00838F;
+  --color-primary: #1976d2;
+  --color-primary-dark: #1565c0;
+  --color-primary-light: #42a5f5;
+  --color-accent: #ff9800;
+  --color-success: #2e7d32;
+  --color-warning: #ffa000;
+  --color-error: #d32f2f;
+  --color-info: #00838f;
 
   /* グレー */
   --color-gray-900: #212121;
   --color-gray-600: #757575;
-  --color-gray-400: #BDBDBD;
-  --color-gray-300: #E0E0E0;
-  --color-gray-50: #FAFAFA;
-  --color-white: #FFFFFF;
+  --color-gray-400: #bdbdbd;
+  --color-gray-300: #e0e0e0;
+  --color-gray-50: #fafafa;
+  --color-white: #ffffff;
 
   /* セマンティック */
   --color-text: var(--color-gray-900);
@@ -951,17 +986,17 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#1976D2',  // WCAG AA準拠
+          DEFAULT: '#1976D2', // WCAG AA準拠
           dark: '#1565C0',
           light: '#42A5F5',
         },
         accent: {
-          DEFAULT: '#FF9800',  // 黒テキスト推奨
+          DEFAULT: '#FF9800', // 黒テキスト推奨
           dark: '#F57C00',
           light: '#FFB74D',
         },
         success: '#2E7D32',
-        warning: '#FFA000',  // 黒テキスト推奨
+        warning: '#FFA000', // 黒テキスト推奨
         error: '#D32F2F',
         info: '#00838F',
       },
@@ -974,27 +1009,27 @@ export default {
         ],
       },
       fontSize: {
-        xs: '12px',
-        sm: '14px',
-        base: '16px',
-        lg: '18px',
-        xl: '20px',
+        'xs': '12px',
+        'sm': '14px',
+        'base': '16px',
+        'lg': '18px',
+        'xl': '20px',
         '2xl': '24px',
         '4xl': '48px',
       },
       spacing: {
-        '1': '4px',
-        '2': '8px',
-        '3': '12px',
-        '4': '16px',
-        '6': '24px',
-        '8': '32px',
+        1: '4px',
+        2: '8px',
+        3: '12px',
+        4: '16px',
+        6: '24px',
+        8: '32px',
       },
       borderRadius: {
-        sm: '4px',
-        md: '8px',    // ボタンデフォルト
-        lg: '12px',
-        xl: '16px',
+        'sm': '4px',
+        'md': '8px', // ボタンデフォルト
+        'lg': '12px',
+        'xl': '16px',
         '2xl': '24px', // 非推奨（ボタンには使用しない）
       },
       boxShadow: {

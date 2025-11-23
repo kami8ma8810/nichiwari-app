@@ -13,6 +13,7 @@ last-updated: 2024-11-22
 ### 1.1 減価償却計算機能
 
 #### 入力項目
+
 ```yaml
 商品名:
   type: string
@@ -24,7 +25,7 @@ last-updated: 2024-11-22
   type: number
   required: true
   min: 1
-  max: 1000000000  # 10億円
+  max: 1000000000 # 10億円
   description: 商品の購入価格（円）
 
 予想使用年数:
@@ -37,24 +38,26 @@ last-updated: 2024-11-22
 ```
 
 #### 処理ロジック
+
 ```typescript
 // 計算式
 interface CalculationResult {
-  dailyCost: number;    // 価格 ÷ (年数 × 365)
-  monthlyCost: number;  // 日割りコスト × 30
-  yearlyCost: number;   // 価格 ÷ 年数
-  totalDays: number;    // 年数 × 365
+  dailyCost: number // 価格 ÷ (年数 × 365)
+  monthlyCost: number // 日割りコスト × 30
+  yearlyCost: number // 価格 ÷ 年数
+  totalDays: number // 年数 × 365
 }
 
 // 比較指標の算出
 interface ComparisonMetrics {
-  coffeeCount: number;     // 日割りコスト ÷ 200円（コーヒー1杯）
-  lunchCount: number;      // 日割りコスト ÷ 500円（ランチ代）
-  subscriptionCount: number; // 月割りコスト ÷ 1000円（サブスク代）
+  coffeeCount: number // 日割りコスト ÷ 200円（コーヒー1杯）
+  lunchCount: number // 日割りコスト ÷ 500円（ランチ代）
+  subscriptionCount: number // 月割りコスト ÷ 1000円（サブスク代）
 }
 ```
 
 #### 出力形式
+
 - 1日あたりのコスト（円）
 - 月額換算（円）
 - 年額換算（円）
@@ -64,32 +67,36 @@ interface ComparisonMetrics {
 ### 1.2 商品サジェスト機能
 
 #### 機能概要
+
 商品名の入力時に、データベースから類似商品を検索して候補として表示する。
 
 #### 実装仕様
+
 ```typescript
 interface ProductSuggestion {
-  name: string;        // 商品名
-  price: number;       // 平均価格
-  years: number;       // 平均耐用年数
-  category: string;    // カテゴリ
-  popularity: number;  // 人気度スコア
+  name: string // 商品名
+  price: number // 平均価格
+  years: number // 平均耐用年数
+  category: string // カテゴリ
+  popularity: number // 人気度スコア
 }
 
 // サジェストロジック
-- 入力文字列での前方一致検索
+-入力文字列での前方一致検索
 - カテゴリによる絞り込み
 - 人気度順でソート
 - 最大10件まで表示
 ```
 
 #### オフライン時の動作
+
 - プリセットデータ（人気商品TOP30）から検索
 - オンライン復帰時に最新データに更新
 
 ### 1.3 参考データベース機能
 
 #### カテゴリ構成
+
 ```yaml
 categories:
   - 家電
@@ -101,36 +108,38 @@ categories:
 ```
 
 #### データ構造
+
 ```typescript
 interface ReferenceProduct {
-  id: string;
-  name: string;           // 商品名
-  price: number;          // 平均価格
-  priceRange: {           // 価格帯
-    min: number;
-    max: number;
-  };
-  years: number;          // 平均耐用年数
-  yearsRange: {           // 耐用年数の幅
-    min: number;
-    max: number;
-  };
-  category: string;       // カテゴリ
-  icon: string;           // 表示用アイコン（絵文字）
-  description?: string;   // 商品説明
-  lastUpdated: Date;      // 最終更新日
+  id: string
+  name: string // 商品名
+  price: number // 平均価格
+  priceRange: { // 価格帯
+    min: number
+    max: number
+  }
+  years: number // 平均耐用年数
+  yearsRange: { // 耐用年数の幅
+    min: number
+    max: number
+  }
+  category: string // カテゴリ
+  icon: string // 表示用アイコン（絵文字）
+  description?: string // 商品説明
+  lastUpdated: Date // 最終更新日
 }
 ```
 
 ### 1.4 幸福度診断機能
 
 #### チェックリスト項目
+
 ```typescript
 interface HappinessChecklistItem {
-  id: string;
-  question: string;
-  weight: number;  // 重要度（1-3）
-  category: 'frequency' | 'value' | 'financial' | 'emotional';
+  id: string
+  question: string
+  weight: number // 重要度（1-3）
+  category: 'frequency' | 'value' | 'financial' | 'emotional'
 }
 
 const checklist: HappinessChecklistItem[] = [
@@ -182,44 +191,48 @@ const checklist: HappinessChecklistItem[] = [
     weight: 3,
     category: 'value'
   }
-];
+]
 ```
 
 #### スコアリング算出
+
 ```typescript
 interface HappinessScore {
-  totalScore: number;      // 0-100%
+  totalScore: number // 0-100%
   categoryScores: {
-    frequency: number;
-    value: number;
-    financial: number;
-    emotional: number;
-  };
-  recommendation: 'highly-recommended' | 'consider-more' | 'reconsider';
-  advice: string;
+    frequency: number
+    value: number
+    financial: number
+    emotional: number
+  }
+  recommendation: 'highly-recommended' | 'consider-more' | 'reconsider'
+  advice: string
 }
 
 // スコア計算ロジック
 function calculateScore(answers: boolean[]): HappinessScore {
   // 重み付きスコアの計算
   const weightedScore = answers.reduce((sum, answer, index) => {
-    return sum + (answer ? checklist[index].weight : 0);
-  }, 0);
+    return sum + (answer ? checklist[index].weight : 0)
+  }, 0)
 
-  const maxScore = checklist.reduce((sum, item) => sum + item.weight, 0);
-  const percentage = (weightedScore / maxScore) * 100;
+  const maxScore = checklist.reduce((sum, item) => sum + item.weight, 0)
+  const percentage = (weightedScore / maxScore) * 100
 
   // 推奨度の判定
-  let recommendation: HappinessScore['recommendation'];
-  if (percentage >= 70) recommendation = 'highly-recommended';
-  else if (percentage >= 40) recommendation = 'consider-more';
-  else recommendation = 'reconsider';
+  let recommendation: HappinessScore['recommendation']
+  if (percentage >= 70)
+    recommendation = 'highly-recommended'
+  else if (percentage >= 40)
+    recommendation = 'consider-more'
+  else recommendation = 'reconsider'
 
-  return { /* ... */ };
+  return { /* ... */ }
 }
 ```
 
 #### アドバイス表示
+
 - **70%以上**: 「購入する価値が高いです！長期的な満足度が期待できます。」
 - **40-69%**: 「もう少し検討が必要かもしれません。特に○○の観点を再考してみてください。」
 - **40%未満**: 「再考をお勧めします。レンタルや代替品も検討してみてください。」
@@ -227,35 +240,38 @@ function calculateScore(answers: boolean[]): HappinessScore {
 ### 1.5 データ収集・トレンド機能
 
 #### 収集データ
+
 ```typescript
 interface SearchData {
-  productName: string;     // 検索された商品名（匿名化）
-  priceRange: string;      // 価格帯（例: "10万-20万"）
-  yearsRange: string;      // 耐用年数帯（例: "3-5年"）
-  category?: string;       // カテゴリ
-  timestamp: Date;         // 検索日時
-  calculated: boolean;     // 計算実行の有無
+  productName: string // 検索された商品名（匿名化）
+  priceRange: string // 価格帯（例: "10万-20万"）
+  yearsRange: string // 耐用年数帯（例: "3-5年"）
+  category?: string // カテゴリ
+  timestamp: Date // 検索日時
+  calculated: boolean // 計算実行の有無
 }
 ```
 
 #### プライバシー保護
+
 - IPアドレスは収集しない
 - ユーザー識別子は使用しない
 - 個人を特定できる情報は保存しない
 - 集計データのみを表示
 
 #### トレンド表示
+
 ```typescript
 interface TrendData {
-  popular: Product[];        // 人気商品TOP10
-  rising: Product[];         // 急上昇商品TOP5
-  categories: {              // カテゴリ別統計
-    name: string;
-    searchCount: number;
-    avgPrice: number;
-    avgYears: number;
-  }[];
-  lastUpdated: Date;
+  popular: Product[] // 人気商品TOP10
+  rising: Product[] // 急上昇商品TOP5
+  categories: { // カテゴリ別統計
+    name: string
+    searchCount: number
+    avgPrice: number
+    avgYears: number
+  }[]
+  lastUpdated: Date
 }
 ```
 
@@ -265,15 +281,15 @@ interface TrendData {
 
 ```typescript
 interface ResearchTip {
-  id: string;
-  title: string;
-  content: string;
+  id: string
+  title: string
+  content: string
   source: {
-    author: string;
-    year: number;
-    publication?: string;
-  };
-  category: 'psychology' | 'economics' | 'behavioral';
+    author: string
+    year: number
+    publication?: string
+  }
+  category: 'psychology' | 'economics' | 'behavioral'
 }
 
 const tips: ResearchTip[] = [
@@ -337,7 +353,7 @@ const tips: ResearchTip[] = [
     },
     category: 'economics'
   }
-];
+]
 ```
 
 ### 2.2 Tips表示ロジック

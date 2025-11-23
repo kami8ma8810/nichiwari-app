@@ -23,12 +23,12 @@ last-updated: 2024-11-22
 
 ### 1.2 アーキテクチャ選定理由
 
-| 要件 | 選定アーキテクチャ | 理由 |
-|------|------------------|------|
-| 保守性 | Clean Architecture | ビジネスロジックとUIの分離 |
-| スケーラビリティ | Feature Slicing | 機能単位での拡張が容易 |
-| テスタビリティ | 依存性注入 | モック化とテストの容易性 |
-| オフライン対応 | レイヤー分離 | データソースの切り替えが容易 |
+| 要件             | 選定アーキテクチャ | 理由                         |
+| ---------------- | ------------------ | ---------------------------- |
+| 保守性           | Clean Architecture | ビジネスロジックとUIの分離   |
+| スケーラビリティ | Feature Slicing    | 機能単位での拡張が容易       |
+| テスタビリティ   | 依存性注入         | モック化とテストの容易性     |
+| オフライン対応   | レイヤー分離       | データソースの切り替えが容易 |
 
 ## 2. レイヤー設計
 
@@ -331,39 +331,39 @@ src/features/
 ```typescript
 // DIコンテナ設定例
 export class DIContainer {
-  private static instance: DIContainer;
-  private services: Map<string, any> = new Map();
+  private static instance: DIContainer
+  private services: Map<string, any> = new Map()
 
   static getInstance(): DIContainer {
     if (!DIContainer.instance) {
-      DIContainer.instance = new DIContainer();
+      DIContainer.instance = new DIContainer()
     }
-    return DIContainer.instance;
+    return DIContainer.instance
   }
 
   register<T>(token: string, factory: () => T): void {
-    this.services.set(token, factory);
+    this.services.set(token, factory)
   }
 
   resolve<T>(token: string): T {
-    const factory = this.services.get(token);
+    const factory = this.services.get(token)
     if (!factory) {
-      throw new Error(`Service ${token} not found`);
+      throw new Error(`Service ${token} not found`)
     }
-    return factory();
+    return factory()
   }
 }
 
 // 登録
-const container = DIContainer.getInstance();
+const container = DIContainer.getInstance()
 container.register('ProductRepository', () => {
   return isOnline()
     ? new SupabaseProductRepository()
-    : new LocalProductRepository();
-});
+    : new LocalProductRepository()
+})
 
 // 使用
-const repository = container.resolve<ProductRepository>('ProductRepository');
+const repository = container.resolve<ProductRepository>('ProductRepository')
 ```
 
 ## 6. エラーハンドリング
@@ -378,26 +378,26 @@ export class AppError extends Error {
     public code: string,
     public statusCode?: number
   ) {
-    super(message);
-    this.name = this.constructor.name;
+    super(message)
+    this.name = this.constructor.name
   }
 }
 
 export class DomainError extends AppError {
   constructor(message: string, code: string) {
-    super(message, `DOMAIN_${code}`, 400);
+    super(message, `DOMAIN_${code}`, 400)
   }
 }
 
 export class ValidationError extends DomainError {
   constructor(message: string, public field?: string) {
-    super(message, 'VALIDATION_ERROR');
+    super(message, 'VALIDATION_ERROR')
   }
 }
 
 export class InfrastructureError extends AppError {
   constructor(message: string, code: string) {
-    super(message, `INFRA_${code}`, 500);
+    super(message, `INFRA_${code}`, 500)
   }
 }
 ```
@@ -406,7 +406,7 @@ export class InfrastructureError extends AppError {
 
 ```typescript
 // グローバルエラーハンドラー
-export const useErrorHandler = () => {
+export function useErrorHandler() {
   const handleError = (error: Error) => {
     if (error instanceof ValidationError) {
       // バリデーションエラー: ユーザーに表示
@@ -414,24 +414,26 @@ export const useErrorHandler = () => {
         type: 'error',
         message: error.message,
         duration: 5000
-      });
-    } else if (error instanceof InfrastructureError) {
+      })
+    }
+    else if (error instanceof InfrastructureError) {
       // インフラエラー: ログ記録 + フォールバック
-      console.error(error);
-      switchToOfflineMode();
-    } else {
+      console.error(error)
+      switchToOfflineMode()
+    }
+    else {
       // 予期しないエラー: Sentryに送信
-      captureException(error);
+      captureException(error)
       showToast({
         type: 'error',
         message: '予期しないエラーが発生しました',
         duration: 5000
-      });
+      })
     }
-  };
+  }
 
-  return { handleError };
-};
+  return { handleError }
+}
 ```
 
 ## 7. パフォーマンス考慮
@@ -461,22 +463,22 @@ export const useErrorHandler = () => {
 // 遅延読み込み
 const HappinessDiagnosis = defineAsyncComponent(
   () => import('@/features/happiness/components/Diagnosis.vue')
-);
+)
 
 // メモ化
 const memoizedCalculate = useMemo(
   (price: number, years: number) => {
-    return price / (years * 365);
+    return price / (years * 365)
   }
-);
+)
 
 // デバウンス
 const debouncedSearch = useDebounceFn(
   async (query: string) => {
-    await searchProducts(query);
+    await searchProducts(query)
   },
   500
-);
+)
 ```
 
 ## 関連ドキュメント

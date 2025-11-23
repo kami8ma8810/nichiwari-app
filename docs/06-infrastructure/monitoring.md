@@ -77,7 +77,7 @@ export default defineNuxtConfig({
 
 ```typescript
 // composables/useSentryMonitoring.ts
-export const useSentryMonitoring = () => {
+export function useSentryMonitoring() {
   const captureError = (error: Error, context?: any) => {
     if (process.env.NODE_ENV === 'development') {
       console.error('Error captured:', error, context)
@@ -104,10 +104,12 @@ export const useSentryMonitoring = () => {
       const result = await fn()
       transaction.setStatus('ok')
       return result
-    } catch (error) {
+    }
+    catch (error) {
       transaction.setStatus('internal_error')
       throw error
-    } finally {
+    }
+    finally {
       transaction.finish()
     }
   }
@@ -135,16 +137,17 @@ export const useSentryMonitoring = () => {
 
 ```typescript
 // composables/useAnalytics.ts
-export const useAnalytics = () => {
+export function useAnalytics() {
   const config = useRuntimeConfig()
 
   const trackEvent = (action: string, category: string, label?: string, value?: number) => {
-    if (typeof gtag === 'undefined') return
+    if (typeof gtag === 'undefined')
+      return
 
     gtag('event', action, {
       event_category: category,
       event_label: label,
-      value: value
+      value
     })
   }
 
@@ -183,18 +186,26 @@ export const useAnalytics = () => {
 }
 
 function getPriceRange(price: number): string {
-  if (price < 10000) return '0-10k'
-  if (price < 50000) return '10k-50k'
-  if (price < 100000) return '50k-100k'
-  if (price < 500000) return '100k-500k'
+  if (price < 10000)
+    return '0-10k'
+  if (price < 50000)
+    return '10k-50k'
+  if (price < 100000)
+    return '50k-100k'
+  if (price < 500000)
+    return '100k-500k'
   return '500k+'
 }
 
 function getYearsRange(years: number): string {
-  if (years <= 1) return '0-1'
-  if (years <= 3) return '1-3'
-  if (years <= 5) return '3-5'
-  if (years <= 10) return '5-10'
+  if (years <= 1)
+    return '0-1'
+  if (years <= 3)
+    return '1-3'
+  if (years <= 5)
+    return '3-5'
+  if (years <= 10)
+    return '5-10'
   return '10+'
 }
 ```
@@ -209,7 +220,8 @@ export default defineNuxtPlugin(() => {
 
   // ページビュー追跡
   watch(() => route.path, (path) => {
-    if (typeof gtag === 'undefined') return
+    if (typeof gtag === 'undefined')
+      return
 
     gtag('config', useRuntimeConfig().public.gaId, {
       page_path: path
@@ -217,7 +229,7 @@ export default defineNuxtPlugin(() => {
   })
 
   // セッション時間追跡
-  let sessionStart = Date.now()
+  const sessionStart = Date.now()
 
   onMounted(() => {
     trackEvent('session_start', 'engagement')
@@ -236,7 +248,7 @@ export default defineNuxtPlugin(() => {
 
 ```typescript
 // plugins/web-vitals.client.ts
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals'
+import { getCLS, getFCP, getFID, getLCP, getTTFB } from 'web-vitals'
 
 export default defineNuxtPlugin(() => {
   const sendMetric = ({ name, delta, id, value }) => {
@@ -298,9 +310,10 @@ function checkThreshold(metric: string, value: number) {
 
 ```typescript
 // composables/useResourceMonitoring.ts
-export const useResourceMonitoring = () => {
+export function useResourceMonitoring() {
   const checkMemoryUsage = () => {
-    if (!performance.memory) return null
+    if (!performance.memory)
+      return null
 
     const used = performance.memory.usedJSHeapSize
     const limit = performance.memory.jsHeapSizeLimit
@@ -319,7 +332,8 @@ export const useResourceMonitoring = () => {
   }
 
   const checkNetworkSpeed = () => {
-    if (!navigator.connection) return null
+    if (!navigator.connection)
+      return null
 
     return {
       effectiveType: navigator.connection.effectiveType,
@@ -330,7 +344,8 @@ export const useResourceMonitoring = () => {
   }
 
   const monitorLongTasks = () => {
-    if (!PerformanceObserver) return
+    if (!PerformanceObserver)
+      return
 
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
@@ -362,6 +377,36 @@ export const useResourceMonitoring = () => {
 
 ```vue
 <!-- pages/admin/dashboard.vue -->
+<script setup lang="ts">
+const metrics = ref({
+  activeUsers: 0,
+  activeUsersChange: 0,
+  errorRate: 0,
+  errorRateChange: 0,
+  avgResponse: 0,
+  avgResponseChange: 0,
+  calculations: 0,
+  calculationsChange: 0
+})
+
+const performanceData = ref([])
+const errorData = ref([])
+const alerts = ref([])
+
+// リアルタイム更新
+const { data } = await useFetch('/api/admin/metrics', {
+  refresh: true,
+  refreshInterval: 5000 // 5秒ごと更新
+})
+
+watch(data, (newData) => {
+  metrics.value = newData.metrics
+  performanceData.value = newData.performance
+  errorData.value = newData.errors
+  alerts.value = newData.alerts
+})
+</script>
+
 <template>
   <div class="dashboard">
     <h1>監視ダッシュボード</h1>
@@ -408,36 +453,6 @@ export const useResourceMonitoring = () => {
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-const metrics = ref({
-  activeUsers: 0,
-  activeUsersChange: 0,
-  errorRate: 0,
-  errorRateChange: 0,
-  avgResponse: 0,
-  avgResponseChange: 0,
-  calculations: 0,
-  calculationsChange: 0
-})
-
-const performanceData = ref([])
-const errorData = ref([])
-const alerts = ref([])
-
-// リアルタイム更新
-const { data } = await useFetch('/api/admin/metrics', {
-  refresh: true,
-  refreshInterval: 5000 // 5秒ごと更新
-})
-
-watch(data, (newData) => {
-  metrics.value = newData.metrics
-  performanceData.value = newData.performance
-  errorData.value = newData.errors
-  alerts.value = newData.alerts
-})
-</script>
 ```
 
 ## 6. アラート設定
