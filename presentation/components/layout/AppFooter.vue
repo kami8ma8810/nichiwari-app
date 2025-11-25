@@ -9,7 +9,7 @@ const currentYear = new Date().getFullYear()
         &copy; {{ currentYear }} にちわり！
       </p>
       <p class="mt-2">
-        買い物の価値を1日あたりで見える化するアプリ
+        日割り計算で買い物の判断をサポートするアプリ
       </p>
     </div>
   </footer>
