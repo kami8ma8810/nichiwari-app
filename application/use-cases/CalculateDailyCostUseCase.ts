@@ -1,5 +1,6 @@
-import { Calculation } from '~/domain/entities/Calculation'
-import { Product } from '~/domain/entities/Product'
+import { Calculation } from '#root/domain/entities/Calculation'
+import { Product } from '#root/domain/entities/Product'
+import { Years } from '#root/domain/value-objects/Years'
 
 /**
  * 日割りコスト計算ユースケースの入力DTO
@@ -8,7 +9,10 @@ export interface CalculateDailyCostInput {
   products: {
     name: string
     price: number
+    /** 使用期間（年の部分） */
     years: number
+    /** 使用期間（月の部分） */
+    months: number
   }[]
 }
 
@@ -24,6 +28,8 @@ export interface CalculateDailyCostOutput {
     name: string
     price: number
     years: number
+    months: number
+    periodFormatted: string
     dailyCost: number
   }[]
 }
@@ -36,7 +42,7 @@ export class CalculateDailyCostUseCase {
   execute(input: CalculateDailyCostInput): CalculateDailyCostOutput {
     // DTOからドメインエンティティへ変換
     const products = input.products.map(p =>
-      new Product({ name: p.name, price: p.price, years: p.years }),
+      new Product({ name: p.name, price: p.price, years: p.years, months: p.months }),
     )
 
     // Calculationエンティティを使って計算
@@ -44,12 +50,19 @@ export class CalculateDailyCostUseCase {
     const totalDailyCost = calculation.calculateTotalDailyCost()
 
     // 商品ごとの日割りコストを計算
-    const productResults = products.map((product, index) => {
+    const productResults = input.products.map((inputProduct, index) => {
+      const product = products[index]
+      if (!product) {
+        throw new Error(`Product at index ${index} not found`)
+      }
       const dailyCost = product.calculateDailyCost()
+      const period = Years.fromYearsAndMonths(inputProduct.years, inputProduct.months)
       return {
-        name: input.products[index].name,
-        price: input.products[index].price,
-        years: input.products[index].years,
+        name: inputProduct.name,
+        price: inputProduct.price,
+        years: inputProduct.years,
+        months: inputProduct.months,
+        periodFormatted: period.format(),
         dailyCost: dailyCost.value,
       }
     })

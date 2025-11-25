@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { Calculation } from '~/domain/entities/Calculation'
-import { Product } from '~/domain/entities/Product'
+import { Calculation } from '#root/domain/entities/Calculation'
+import { Product } from '#root/domain/entities/Product'
 
 describe('calculation', () => {
   describe('constructor', () => {
@@ -11,8 +11,8 @@ describe('calculation', () => {
 
     it('商品リストを指定して計算を作成できる', () => {
       const products = [
-        new Product({ name: '商品A', price: 10000, years: 1 }),
-        new Product({ name: '商品B', price: 20000, years: 2 }),
+        new Product({ name: '商品A', price: 10000, years: 1, months: 0 }),
+        new Product({ name: '商品B', price: 20000, years: 2, months: 0 }),
       ]
       const calculation = new Calculation(products)
       expect(calculation.products).toHaveLength(2)
@@ -24,7 +24,7 @@ describe('calculation', () => {
   describe('addProduct', () => {
     it('商品を追加できる', () => {
       const calculation = new Calculation()
-      const product = new Product({ name: 'テスト商品', price: 10000, years: 1 })
+      const product = new Product({ name: 'テスト商品', price: 10000, years: 1, months: 0 })
 
       calculation.addProduct(product)
 
@@ -34,8 +34,8 @@ describe('calculation', () => {
 
     it('複数の商品を追加できる', () => {
       const calculation = new Calculation()
-      const product1 = new Product({ name: '商品1', price: 10000, years: 1 })
-      const product2 = new Product({ name: '商品2', price: 20000, years: 2 })
+      const product1 = new Product({ name: '商品1', price: 10000, years: 1, months: 0 })
+      const product2 = new Product({ name: '商品2', price: 20000, years: 2, months: 0 })
 
       calculation.addProduct(product1)
       calculation.addProduct(product2)
@@ -46,8 +46,8 @@ describe('calculation', () => {
 
   describe('removeProduct', () => {
     it('商品を削除できる', () => {
-      const product1 = new Product({ name: '商品1', price: 10000, years: 1 })
-      const product2 = new Product({ name: '商品2', price: 20000, years: 2 })
+      const product1 = new Product({ name: '商品1', price: 10000, years: 1, months: 0 })
+      const product2 = new Product({ name: '商品2', price: 20000, years: 2, months: 0 })
       const calculation = new Calculation([product1, product2])
 
       calculation.removeProduct(0)
@@ -62,7 +62,7 @@ describe('calculation', () => {
     })
 
     it('負のインデックスを指定するとエラーになる', () => {
-      const product = new Product({ name: '商品', price: 10000, years: 1 })
+      const product = new Product({ name: '商品', price: 10000, years: 1, months: 0 })
       const calculation = new Calculation([product])
       expect(() => calculation.removeProduct(-1)).toThrow('インデックスは0以上である必要があります')
     })
@@ -70,7 +70,7 @@ describe('calculation', () => {
 
   describe('calculateTotalDailyCost', () => {
     it('商品が1つの場合、その商品の日割りコストを返す', () => {
-      const product = new Product({ name: 'ノートPC', price: 150000, years: 3 })
+      const product = new Product({ name: 'ノートPC', price: 150000, years: 3, months: 0 })
       const calculation = new Calculation([product])
 
       const totalDailyCost = calculation.calculateTotalDailyCost()
@@ -80,8 +80,8 @@ describe('calculation', () => {
     })
 
     it('複数商品の合計日割りコストを計算できる', () => {
-      const product1 = new Product({ name: 'ノートPC', price: 150000, years: 3 })
-      const product2 = new Product({ name: 'マウス', price: 3000, years: 2 })
+      const product1 = new Product({ name: 'ノートPC', price: 150000, years: 3, months: 0 })
+      const product2 = new Product({ name: 'マウス', price: 3000, years: 2, months: 0 })
       const calculation = new Calculation([product1, product2])
 
       const totalDailyCost = calculation.calculateTotalDailyCost()
@@ -102,9 +102,9 @@ describe('calculation', () => {
 
     it('3つ以上の商品の合計日割りコストを計算できる', () => {
       const products = [
-        new Product({ name: 'ノートPC', price: 150000, years: 3 }),
-        new Product({ name: 'マウス', price: 3000, years: 2 }),
-        new Product({ name: 'キーボード', price: 10000, years: 5 }),
+        new Product({ name: 'ノートPC', price: 150000, years: 3, months: 0 }),
+        new Product({ name: 'マウス', price: 3000, years: 2, months: 0 }),
+        new Product({ name: 'キーボード', price: 10000, years: 5, months: 0 }),
       ]
       const calculation = new Calculation(products)
 
@@ -125,7 +125,7 @@ describe('calculation', () => {
     })
 
     it('商品が1個以上の場合、falseを返す', () => {
-      const product = new Product({ name: '商品', price: 10000, years: 1 })
+      const product = new Product({ name: '商品', price: 10000, years: 1, months: 0 })
       const calculation = new Calculation([product])
       expect(calculation.isEmpty()).toBe(false)
     })

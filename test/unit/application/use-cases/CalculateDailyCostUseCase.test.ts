@@ -1,6 +1,6 @@
-import type { CalculateDailyCostInput } from '~/application/use-cases/CalculateDailyCostUseCase'
+import type { CalculateDailyCostInput } from '#root/application/use-cases/CalculateDailyCostUseCase'
 import { describe, expect, it } from 'vitest'
-import { CalculateDailyCostUseCase } from '~/application/use-cases/CalculateDailyCostUseCase'
+import { CalculateDailyCostUseCase } from '#root/application/use-cases/CalculateDailyCostUseCase'
 
 describe('calculateDailyCostUseCase', () => {
   describe('execute', () => {
@@ -23,7 +23,7 @@ describe('calculateDailyCostUseCase', () => {
       const useCase = new CalculateDailyCostUseCase()
       const input: CalculateDailyCostInput = {
         products: [
-          { name: 'ノートPC', price: 150000, years: 3 },
+          { name: 'ノートPC', price: 150000, years: 3, months: 0 },
         ],
       }
 
@@ -39,6 +39,8 @@ describe('calculateDailyCostUseCase', () => {
         name: 'ノートPC',
         price: 150000,
         years: 3,
+        months: 0,
+        periodFormatted: '3年',
         dailyCost: 136,
       })
     })
@@ -47,8 +49,8 @@ describe('calculateDailyCostUseCase', () => {
       const useCase = new CalculateDailyCostUseCase()
       const input: CalculateDailyCostInput = {
         products: [
-          { name: 'ノートPC', price: 150000, years: 3 },
-          { name: 'マウス', price: 3000, years: 2 },
+          { name: 'ノートPC', price: 150000, years: 3, months: 0 },
+          { name: 'マウス', price: 3000, years: 2, months: 0 },
         ],
       }
 
@@ -68,9 +70,9 @@ describe('calculateDailyCostUseCase', () => {
       const useCase = new CalculateDailyCostUseCase()
       const input: CalculateDailyCostInput = {
         products: [
-          { name: 'ノートPC', price: 150000, years: 3 },
-          { name: 'マウス', price: 3000, years: 2 },
-          { name: 'キーボード', price: 10000, years: 5 },
+          { name: 'ノートPC', price: 150000, years: 3, months: 0 },
+          { name: 'マウス', price: 3000, years: 2, months: 0 },
+          { name: 'キーボード', price: 10000, years: 5, months: 0 },
         ],
       }
 
@@ -89,7 +91,7 @@ describe('calculateDailyCostUseCase', () => {
       const useCase = new CalculateDailyCostUseCase()
       const input: CalculateDailyCostInput = {
         products: [
-          { name: 'テスト商品', price: 10000, years: 1 },
+          { name: 'テスト商品', price: 10000, years: 1, months: 0 },
         ],
       }
 
@@ -98,6 +100,8 @@ describe('calculateDailyCostUseCase', () => {
       expect(result.products[0].name).toBe('テスト商品')
       expect(result.products[0].price).toBe(10000)
       expect(result.products[0].years).toBe(1)
+      expect(result.products[0].months).toBe(0)
+      expect(result.products[0].periodFormatted).toBe('1年')
       expect(result.products[0].dailyCost).toBe(27) // 10,000 ÷ 365 = 27.39... → 27円
     })
 
@@ -105,7 +109,7 @@ describe('calculateDailyCostUseCase', () => {
       const useCase = new CalculateDailyCostUseCase()
       const input: CalculateDailyCostInput = {
         products: [
-          { name: 'テスト', price: 100000, years: 1 },
+          { name: 'テスト', price: 100000, years: 1, months: 0 },
         ],
       }
 
@@ -120,7 +124,7 @@ describe('calculateDailyCostUseCase', () => {
       const useCase = new CalculateDailyCostUseCase()
       const input: CalculateDailyCostInput = {
         products: [
-          { name: 'テスト', price: 36500, years: 1 },
+          { name: 'テスト', price: 36500, years: 1, months: 0 },
         ],
       }
 
@@ -130,6 +134,42 @@ describe('calculateDailyCostUseCase', () => {
       expect(result.totalDailyCost).toBe(100)
       expect(result.monthlyCost).toBe(3000) // 100 * 30
       expect(result.yearlyCost).toBe(36500) // 100 * 365
+    })
+
+    it('年と月の組み合わせで計算できる', () => {
+      const useCase = new CalculateDailyCostUseCase()
+      const input: CalculateDailyCostInput = {
+        products: [
+          { name: 'サブスク', price: 12000, years: 1, months: 6 },
+        ],
+      }
+
+      const result = useCase.execute(input)
+
+      // 1年6ヶ月 = 1.5年 = 547.5日 → 547日
+      // 12,000 ÷ 547 = 21.93... → 21円
+      expect(result.products[0].years).toBe(1)
+      expect(result.products[0].months).toBe(6)
+      expect(result.products[0].periodFormatted).toBe('1年6ヶ月')
+      expect(result.products[0].dailyCost).toBe(21)
+    })
+
+    it('0年3ヶ月で計算できる', () => {
+      const useCase = new CalculateDailyCostUseCase()
+      const input: CalculateDailyCostInput = {
+        products: [
+          { name: '短期サブスク', price: 3000, years: 0, months: 3 },
+        ],
+      }
+
+      const result = useCase.execute(input)
+
+      // 0年3ヶ月 = 0.25年 = 91.25日 → 91日
+      // 3,000 ÷ 91 = 32.96... → 32円
+      expect(result.products[0].years).toBe(0)
+      expect(result.products[0].months).toBe(3)
+      expect(result.products[0].periodFormatted).toBe('3ヶ月')
+      expect(result.products[0].dailyCost).toBe(32)
     })
   })
 })
