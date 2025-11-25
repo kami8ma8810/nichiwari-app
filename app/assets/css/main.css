@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+@source '../../../presentation/**/*.vue';
+@source '../../../app/**/*.vue';
+
 @theme {
   --color-primary-50: #fef2f2;
   --color-primary-100: #fee2e2;
