@@ -18,24 +18,12 @@
         </NuxtLink>
 
         <nav aria-label="メインナビゲーション">
-          <ul class="flex gap-4">
-            <li>
-              <NuxtLink
-                to="/history"
-                class="text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                履歴
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink
-                to="/about"
-                class="text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                使い方
-              </NuxtLink>
-            </li>
-          </ul>
+          <NuxtLink
+            to="/history"
+            class="text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            履歴
+          </NuxtLink>
         </nav>
       </div>
     </div>

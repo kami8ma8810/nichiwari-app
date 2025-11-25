@@ -124,14 +124,14 @@ async function share() {
       <div class="flex gap-4 mt-8">
         <button
           type="button"
-          class="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+          class="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-bold cursor-pointer"
           @click="saveToHistory"
         >
           保存する
         </button>
         <button
           type="button"
-          class="flex-1 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
+          class="flex-1 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-bold cursor-pointer"
           @click="share"
         >
           シェアする

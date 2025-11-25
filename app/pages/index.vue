@@ -2,6 +2,7 @@
 // useCalculatorとuseCalculatorStoreはauto-importで利用可能
 const { calculate, calculationResult } = useCalculator()
 const store = useCalculatorStore()
+const toast = useToast()
 
 interface CalculateData {
   name?: string
@@ -17,17 +18,22 @@ async function handleCalculate(data: CalculateData) {
 function saveCalculation() {
   if (calculationResult.value) {
     store.addToHistory(calculationResult.value)
-    // TODO: トースト通知を表示
+    toast.success('履歴に保存しました')
   }
 }
 
-function shareResult() {
-  // Web Share APIが使えない場合のフォールバック
-  if (calculationResult.value) {
-    const text = `「${calculationResult.value.productName || '商品'}」の1日あたりの価値は${calculationResult.value.dailyCostFormatted}でした！ #にちわり`
-    // クリップボードにコピー
-    navigator.clipboard.writeText(text)
-    // TODO: トースト通知を表示
+async function shareResult() {
+  if (!calculationResult.value)
+    return
+
+  const text = `「${calculationResult.value.productName || '商品'}」の1日あたりの価値は${calculationResult.value.dailyCostFormatted}でした！ #にちわり`
+
+  try {
+    await navigator.clipboard.writeText(text)
+    toast.success('クリップボードにコピーしました')
+  }
+  catch {
+    toast.error('コピーに失敗しました')
   }
 }
 </script>
