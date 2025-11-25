@@ -55,20 +55,6 @@ export interface ComparisonItem {
 }
 
 /**
- * プリセット商品
- */
-export interface PresetProduct {
-  /** ID */
-  id: number
-  /** 商品名 */
-  name: string
-  /** 価格（円） */
-  price: number
-  /** 使用年数 */
-  years: number
-}
-
-/**
  * 履歴に保存する計算データ
  */
 export interface SavedCalculation {

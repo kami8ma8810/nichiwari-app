@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CalculatorFormData, PresetProduct } from '#root/types'
+import type { CalculatorFormData } from '#root/types'
 import * as v from 'valibot'
 
 const emit = defineEmits<{
@@ -41,21 +41,6 @@ const formData = reactive<CalculatorFormData>({
 
 const errors = reactive<Record<string, string>>({})
 const isCalculating = ref(false)
-
-// プリセットデータ
-const presets: PresetProduct[] = [
-  { id: 1, name: 'スマホ', price: 150000, years: 2 },
-  { id: 2, name: 'PC', price: 200000, years: 4 },
-  { id: 3, name: '洗濯機', price: 100000, years: 10 },
-  { id: 4, name: 'テレビ', price: 80000, years: 7 },
-]
-
-function applyPreset(preset: PresetProduct) {
-  formData.name = preset.name
-  formData.price = preset.price
-  formData.years = preset.years
-  formData.months = 0
-}
 
 function validate() {
   // 年と月の両方が0の場合をチェック
@@ -241,29 +226,11 @@ function reset() {
         </div>
       </fieldset>
 
-      <!-- プリセット -->
-      <div class="border-t pt-6">
-        <p class="text-sm text-gray-600 mb-3">
-          よく使う商品から選択：
-        </p>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-          <button
-            v-for="preset in presets"
-            :key="preset.id"
-            type="button"
-            class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-orange-50 hover:border-orange-300 transition-colors"
-            @click="applyPreset(preset)"
-          >
-            {{ preset.name }}
-          </button>
-        </div>
-      </div>
-
       <!-- ボタン -->
       <div class="flex gap-4 pt-6">
         <button
           type="button"
-          class="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+          class="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-bold cursor-pointer"
           @click="reset"
         >
           リセット
@@ -271,9 +238,9 @@ function reset() {
         <button
           type="submit"
           :disabled="isCalculating"
-          class="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 transition-all font-medium shadow-lg disabled:opacity-50"
+          class="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 transition-all font-medium shadow-lg disabled:opacity-50 cursor-pointer"
         >
-          <span v-if="!isCalculating">計算する</span>
+          <span v-if="!isCalculating" class="font-bold">計算する</span>
           <span v-else class="flex items-center justify-center gap-2">
             <svg
               class="animate-spin h-5 w-5"
