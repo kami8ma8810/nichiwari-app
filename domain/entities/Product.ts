@@ -8,7 +8,10 @@ import { Years } from '../value-objects/Years'
 export interface ProductProps {
   name: string
   price: number
+  /** 使用期間（年の部分） */
   years: number
+  /** 使用期間（月の部分） */
+  months: number
 }
 
 /**
@@ -39,7 +42,7 @@ export class Product {
 
     this._name = props.name
     this._price = new Money(props.price)
-    this._years = new Years(props.years)
+    this._years = Years.fromYearsAndMonths(props.years, props.months)
   }
 
   /**
