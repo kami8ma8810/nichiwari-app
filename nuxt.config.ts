@@ -1,9 +1,16 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import tailwindcss from '@tailwindcss/vite'
+import { resolve } from 'path'
+
+const rootDir = resolve(__dirname)
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-22',
   devtools: { enabled: true },
+
+  alias: {
+    '#root': rootDir,
+  },
 
   modules: [
     '@pinia/nuxt',
@@ -65,9 +72,18 @@ export default defineNuxtConfig({
 
   imports: {
     dirs: [
-      'stores',
-      'domain/**',
-      'application/**',
+      resolve(rootDir, 'stores'),
+      resolve(rootDir, 'domain/**'),
+      resolve(rootDir, 'application/**'),
+      resolve(rootDir, 'presentation/composables'),
+      resolve(rootDir, 'presentation/stores'),
     ],
   },
+
+  components: [
+    {
+      path: resolve(rootDir, 'presentation/components'),
+      pathPrefix: false,
+    },
+  ],
 })
