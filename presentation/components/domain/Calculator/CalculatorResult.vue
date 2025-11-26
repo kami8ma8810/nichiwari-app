@@ -68,15 +68,25 @@ function shareToX() {
   window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank')
 }
 
-function shareToLine() {
-  const text = encodeURIComponent(`${getShareText()}\n${window.location.href}`)
-  window.open(`https://social-plugins.line.me/lineit/share?text=${text}`, '_blank')
+function getResultText() {
+  if (!props.result)
+    return ''
+
+  const lines = [
+    props.result.productName ? `商品名: ${props.result.productName}` : '',
+    `1日あたり: ${props.result.dailyCost.toLocaleString()}円`,
+    `月あたり: ${props.result.monthlyCost.toLocaleString()}円`,
+    `年あたり: ${props.result.yearlyCost.toLocaleString()}円`,
+    `使用期間: ${props.result.periodFormatted}`,
+  ].filter(Boolean)
+
+  return lines.join('\n')
 }
 
-async function copyLink() {
+async function copyResultText() {
   try {
-    await navigator.clipboard.writeText(window.location.href)
-    copyMessage.value = 'コピーしました！'
+    await navigator.clipboard.writeText(getResultText())
+    copyMessage.value = 'コピーしました'
     setTimeout(() => {
       copyMessage.value = ''
     }, 2000)
@@ -169,31 +179,24 @@ async function copyLink() {
           :disabled="isSaving"
           @click="saveAsImage"
         >
-          {{ isSaving ? '保存中...' : '📷 結果を画像で保存' }}
+          {{ isSaving ? '保存中...' : '結果を画像で保存' }}
         </button>
 
-        <!-- シェアボタン群 -->
+        <!-- シェア・コピーボタン群 -->
         <div class="flex gap-3">
           <button
             type="button"
             class="flex-1 px-4 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors font-bold cursor-pointer"
             @click="shareToX"
           >
-            𝕏 でシェア
-          </button>
-          <button
-            type="button"
-            class="flex-1 px-4 py-3 bg-[#06C755] text-white rounded-lg hover:bg-[#05b04d] transition-colors font-bold cursor-pointer"
-            @click="shareToLine"
-          >
-            LINE
+            Xでシェア
           </button>
           <button
             type="button"
             class="flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-bold cursor-pointer"
-            @click="copyLink"
+            @click="copyResultText"
           >
-            {{ copyMessage || '🔗 コピー' }}
+            {{ copyMessage || '結果をコピー' }}
           </button>
         </div>
       </div>
