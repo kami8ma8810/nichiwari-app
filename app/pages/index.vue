@@ -1,8 +1,9 @@
 <script setup lang="ts">
-// useCalculatorとuseCalculatorStoreはauto-importで利用可能
+import { useCalculationHistory } from '#root/presentation/composables/useCalculationHistory'
+
+// useCalculatorはauto-importで利用可能
 const { calculate, calculationResult } = useCalculator()
-const store = useCalculatorStore()
-const toast = useToast()
+const { addToHistory } = useCalculationHistory()
 
 interface CalculateData {
   name?: string
@@ -13,27 +14,10 @@ interface CalculateData {
 
 async function handleCalculate(data: CalculateData) {
   await calculate(data)
-}
 
-function saveCalculation() {
+  // 計算完了後に自動で履歴に保存
   if (calculationResult.value) {
-    store.addToHistory(calculationResult.value)
-    toast.success('履歴に保存しました')
-  }
-}
-
-async function shareResult() {
-  if (!calculationResult.value)
-    return
-
-  const text = `「${calculationResult.value.productName || '商品'}」の1日あたりの価値は${calculationResult.value.dailyCostFormatted}でした！ #にちわり`
-
-  try {
-    await navigator.clipboard.writeText(text)
-    toast.success('クリップボードにコピーしました')
-  }
-  catch {
-    toast.error('コピーに失敗しました')
+    addToHistory(calculationResult.value)
   }
 }
 </script>
@@ -49,10 +33,6 @@ async function shareResult() {
 
     <!-- 計算機能 -->
     <CalculatorForm @calculate="handleCalculate" />
-    <CalculatorResult
-      :result="calculationResult"
-      @save="saveCalculation"
-      @share="shareResult"
-    />
+    <CalculatorResult :result="calculationResult" />
   </div>
 </template>

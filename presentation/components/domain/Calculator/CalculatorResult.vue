@@ -2,7 +2,7 @@
 import type { ComparisonResult } from '#root/domain/data/comparisonItems'
 import type { CalculationResult } from '#root/types'
 import { selectComparisonItems } from '#root/domain/data/comparisonItems'
-import html2canvas from 'html2canvas'
+import { domToPng } from 'modern-screenshot'
 
 const props = defineProps<{
   result: CalculationResult | null
@@ -33,7 +33,7 @@ async function saveAsImage() {
 
   isSaving.value = true
   try {
-    const canvas = await html2canvas(resultCardRef.value, {
+    const dataUrl = await domToPng(resultCardRef.value, {
       backgroundColor: '#ffffff',
       scale: 2,
     })
@@ -41,7 +41,7 @@ async function saveAsImage() {
     const link = document.createElement('a')
     const productName = props.result?.productName || 'にちわり'
     link.download = `${productName}_日割り計算結果.png`
-    link.href = canvas.toDataURL('image/png')
+    link.href = dataUrl
     link.click()
   }
   catch (error) {
@@ -196,7 +196,7 @@ async function copyResultText() {
             class="flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-bold cursor-pointer"
             @click="copyResultText"
           >
-            {{ copyMessage || '結果をコピー' }}
+            {{ copyMessage || '結果をテキストでコピー' }}
           </button>
         </div>
       </div>
