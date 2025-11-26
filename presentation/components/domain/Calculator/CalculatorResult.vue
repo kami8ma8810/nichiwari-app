@@ -92,9 +92,12 @@ async function share() {
 
       <!-- 比較 -->
       <div class="border-t pt-8">
-        <h3 class="text-lg font-semibold mb-4">
-          身近なものと比較すると...
+        <h3 class="text-lg font-semibold mb-2">
+          もしこれを買わなかったら？
         </h3>
+        <p class="text-sm text-gray-600 mb-4">
+          この金額で他にできること
+        </p>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
           <ComparisonCard
             v-for="item in comparisons"
