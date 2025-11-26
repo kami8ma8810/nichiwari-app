@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest'
 import { Calculation } from '#root/domain/entities/Calculation'
 import { Product } from '#root/domain/entities/Product'
+import { describe, expect, it } from 'vitest'
 
 describe('calculation', () => {
   describe('constructor', () => {

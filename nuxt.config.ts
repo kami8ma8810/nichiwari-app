@@ -1,6 +1,6 @@
+import { resolve } from 'node:path'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import tailwindcss from '@tailwindcss/vite'
-import { resolve } from 'path'
 
 const rootDir = resolve(__dirname)
 

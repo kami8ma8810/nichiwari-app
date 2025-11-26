@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { CalculatorFormData } from '#root/types'
 import type { CalculatorPreset } from '#root/domain/data/calculatorPresets'
+import type { CalculatorFormData } from '#root/types'
 import { calculatorPresets } from '#root/domain/data/calculatorPresets'
 import * as v from 'valibot'
 
@@ -102,14 +102,12 @@ function reset() {
   Object.keys(errors).forEach(key => delete errors[key])
 }
 
-async function applyPreset(preset: CalculatorPreset) {
+function applyPreset(preset: CalculatorPreset) {
   formData.name = preset.name
   formData.price = preset.price
   formData.years = preset.years
   formData.months = preset.months
   Object.keys(errors).forEach(key => delete errors[key])
-  await nextTick()
-  handleSubmit()
 }
 </script>
 

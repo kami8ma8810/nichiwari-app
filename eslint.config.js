@@ -9,6 +9,10 @@ export default antfu({
     html: true,
     markdown: true,
   },
+  ignores: [
+    'docs/**',
+    'depreciation-calculator-requirements.md',
+  ],
   rules: {
     // TypeScript規約
     '@typescript-eslint/no-explicit-any': 'error',
@@ -27,5 +31,12 @@ export default antfu({
   files: ['**/*.test.ts', '**/*.spec.ts'],
   rules: {
     'no-new': 'off', // テストファイルでは new の副作用使用を許可
+  },
+}, {
+  // 設定ファイル専用の設定
+  files: ['*.config.ts', '*.config.js'],
+  rules: {
+    'node/prefer-global/process': 'off', // 設定ファイルではprocess使用OK
+    'ts/no-require-imports': 'off', // Tailwind設定等でrequire使用OK
   },
 })

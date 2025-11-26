@@ -2,8 +2,8 @@
  * 計算機プリセットデータのテスト
  */
 
-import { describe, expect, it } from 'vitest'
 import { calculatorPresets } from '#root/domain/data/calculatorPresets'
+import { describe, expect, it } from 'vitest'
 
 describe('calculatorPresets', () => {
   it('8つのプリセットが存在する', () => {
@@ -27,7 +27,7 @@ describe('calculatorPresets', () => {
     }
   })
 
-  it('Kindleプリセットが正しい値を持つ（最安）', () => {
+  it('kindleプリセットが正しい値を持つ（最安）', () => {
     const kindle = calculatorPresets.find(p => p.id === 'kindle')
     expect(kindle).toBeDefined()
     expect(kindle?.name).toBe('Kindle Paperwhite')
@@ -37,7 +37,7 @@ describe('calculatorPresets', () => {
     expect(kindle?.label).toBe('Kindle')
   })
 
-  it('Switch2プリセットが正しい値を持つ', () => {
+  it('switch2プリセットが正しい値を持つ', () => {
     const switchPreset = calculatorPresets.find(p => p.id === 'switch')
     expect(switchPreset).toBeDefined()
     expect(switchPreset?.name).toBe('Nintendo Switch2')
@@ -57,7 +57,7 @@ describe('calculatorPresets', () => {
     expect(smartphone?.label).toBe('スマホ')
   })
 
-  it('MacBookプリセットが正しい値を持つ', () => {
+  it('macBookプリセットが正しい値を持つ', () => {
     const pc = calculatorPresets.find(p => p.id === 'pc')
     expect(pc).toBeDefined()
     expect(pc?.name).toBe('MacBook Air M3')

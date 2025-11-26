@@ -1,6 +1,6 @@
 import type { CalculateDailyCostInput } from '#root/application/use-cases/CalculateDailyCostUseCase'
-import { describe, expect, it } from 'vitest'
 import { CalculateDailyCostUseCase } from '#root/application/use-cases/CalculateDailyCostUseCase'
+import { describe, expect, it } from 'vitest'
 
 describe('calculateDailyCostUseCase', () => {
   describe('execute', () => {

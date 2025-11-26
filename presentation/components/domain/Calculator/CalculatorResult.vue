@@ -167,7 +167,7 @@ async function copyResultText() {
         <!-- 比較 -->
         <div class="border-t pt-8">
           <h3 class="text-lg font-semibold mb-4">
-            これらより価値がある？
+            これより価値がある？
           </h3>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
             <ComparisonCard
