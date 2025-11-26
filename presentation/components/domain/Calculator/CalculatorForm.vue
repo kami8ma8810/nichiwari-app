@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { CalculatorFormData } from '#root/types'
+import type { CalculatorPreset } from '#root/domain/data/calculatorPresets'
+import { calculatorPresets } from '#root/domain/data/calculatorPresets'
 import * as v from 'valibot'
 
 const emit = defineEmits<{
@@ -80,7 +82,6 @@ async function handleSubmit() {
 
   isCalculating.value = true
 
-  // 計算処理をエミット
   emit('calculate', {
     name: validated.name,
     price: validated.price,
@@ -100,25 +101,52 @@ function reset() {
   formData.months = null
   Object.keys(errors).forEach(key => delete errors[key])
 }
+
+async function applyPreset(preset: CalculatorPreset) {
+  formData.name = preset.name
+  formData.price = preset.price
+  formData.years = preset.years
+  formData.months = preset.months
+  Object.keys(errors).forEach(key => delete errors[key])
+  await nextTick()
+  handleSubmit()
+}
 </script>
 
 <template>
   <div class="bg-white rounded-2xl shadow-xl p-8">
+    <!-- プリセットボタン -->
+    <div class="mb-6">
+      <p class="text-sm text-gray-600 mb-2">
+        プリセットから選ぶ
+      </p>
+      <div class="flex flex-wrap gap-2">
+        <button
+          v-for="preset in calculatorPresets"
+          :key="preset.id"
+          type="button"
+          class="px-3 py-1.5 text-sm bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
+          @click="applyPreset(preset)"
+        >
+          {{ preset.label }}
+        </button>
+      </div>
+    </div>
+
     <form class="space-y-6" @submit.prevent="handleSubmit">
-      <!-- 商品名入力 -->
       <div>
         <label
           for="product-name"
           class="block text-sm font-medium text-gray-700 mb-2"
         >
-          商品名・買う物（任意）
+          支払うもの（任意）
         </label>
         <input
           id="product-name"
           v-model="formData.name"
           type="text"
           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
-          placeholder="例：iPhone 15 Pro"
+          placeholder="例：iPhone"
           :aria-invalid="!!errors.name"
           :aria-describedby="errors.name ? 'name-error' : undefined"
         >

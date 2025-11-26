@@ -119,7 +119,7 @@ function handleClearAll(): void {
         </p>
         <NuxtLink
           to="/"
-          class="inline-block px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 transition-all font-medium shadow-lg"
+          class="inline-block px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 transition-all font-bold shadow-lg cursor-pointer"
         >
           計算をはじめる
         </NuxtLink>

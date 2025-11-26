@@ -8,9 +8,6 @@ const currentYear = new Date().getFullYear()
       <p>
         &copy; {{ currentYear }} にちわり！
       </p>
-      <p class="mt-2">
-        日割り計算で買い物の判断をサポートするアプリ
-      </p>
     </div>
   </footer>
 </template>

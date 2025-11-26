@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { useCalculationHistory } from '#root/presentation/composables/useCalculationHistory'
-
 // useCalculatorはauto-importで利用可能
 const { calculate, calculationResult } = useCalculator()
-const { addToHistory } = useCalculationHistory()
+const store = useCalculatorStore()
 
 interface CalculateData {
   name?: string
@@ -17,7 +15,7 @@ async function handleCalculate(data: CalculateData) {
 
   // 計算完了後に自動で履歴に保存
   if (calculationResult.value) {
-    addToHistory(calculationResult.value)
+    store.addToHistory(calculationResult.value)
   }
 }
 </script>

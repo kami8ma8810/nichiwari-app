@@ -57,9 +57,23 @@ function getShareText() {
     return ''
 
   const productText = props.result.productName
-    ? `「${props.result.productName}」は`
+    ? `「${props.result.productName}」`
     : ''
-  return `${productText}1日あたり${props.result.dailyCost.toLocaleString()}円でした！\n\n#にちわり #日割り計算`
+
+  const lines = [
+    `${productText}の日割り計算結果`,
+    '',
+    `💰 購入価格: ${props.result.price.toLocaleString()}円`,
+    `⏱️ 使用期間: ${props.result.periodFormatted}`,
+    '',
+    `1日あたり: ${props.result.dailyCost.toLocaleString()}円`,
+    `月あたり: ${props.result.monthlyCost.toLocaleString()}円`,
+    `年あたり: ${props.result.yearlyCost.toLocaleString()}円`,
+    '',
+    '#にちわり #日割り計算',
+  ]
+
+  return lines.join('\n')
 }
 
 function shareToX() {
@@ -186,17 +200,17 @@ async function copyResultText() {
         <div class="flex gap-3">
           <button
             type="button"
+            class="flex-1 px-4 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-bold cursor-pointer"
+            @click="copyResultText"
+          >
+            {{ copyMessage || '結果をテキストでコピー' }}
+          </button>
+          <button
+            type="button"
             class="flex-1 px-4 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors font-bold cursor-pointer"
             @click="shareToX"
           >
             Xでシェア
-          </button>
-          <button
-            type="button"
-            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-bold cursor-pointer"
-            @click="copyResultText"
-          >
-            {{ copyMessage || '結果をテキストでコピー' }}
           </button>
         </div>
       </div>
