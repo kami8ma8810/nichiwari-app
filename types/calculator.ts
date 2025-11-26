@@ -41,20 +41,6 @@ export interface CalculationResult {
 }
 
 /**
- * 比較アイテム
- */
-export interface ComparisonItem {
-  /** ID */
-  id: number
-  /** 名前 */
-  name: string
-  /** 単価（円） */
-  price: number
-  /** 数量（文字列形式） */
-  quantity: string
-}
-
-/**
  * 履歴に保存する計算データ
  */
 export interface SavedCalculation {

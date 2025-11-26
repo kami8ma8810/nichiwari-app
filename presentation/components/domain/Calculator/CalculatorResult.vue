@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import type { CalculationResult, ComparisonItem } from '#root/types'
+import type { ComparisonResult } from '#root/domain/data/comparisonItems'
+import type { CalculationResult } from '#root/types'
+import { selectComparisonItems } from '#root/domain/data/comparisonItems'
 
 const props = defineProps<{
   result: CalculationResult | null
@@ -14,32 +16,15 @@ function formatCurrency(value: number) {
   return `${value.toLocaleString()}円`
 }
 
-const comparisons = computed<ComparisonItem[]>(() => {
+const comparisons = computed<ComparisonResult[]>(() => {
   if (!props.result)
     return []
 
-  const dailyCost = props.result.dailyCost
-
-  return [
-    {
-      id: 1,
-      name: 'コンビニコーヒー',
-      price: 150,
-      quantity: (dailyCost / 150).toFixed(1),
-    },
-    {
-      id: 2,
-      name: 'ペットボトル',
-      price: 150,
-      quantity: (dailyCost / 150).toFixed(1),
-    },
-    {
-      id: 3,
-      name: '電車運賃',
-      price: 200,
-      quantity: (dailyCost / 200).toFixed(1),
-    },
-  ]
+  return selectComparisonItems(
+    props.result.dailyCost,
+    props.result.monthlyCost,
+    props.result.yearlyCost,
+  )
 })
 
 function saveToHistory() {
@@ -113,9 +98,8 @@ async function share() {
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
           <ComparisonCard
             v-for="item in comparisons"
-            :key="item.id"
+            :key="item.name"
             :item="item"
-            :daily-cost="result.dailyCost"
           />
         </div>
       </div>
