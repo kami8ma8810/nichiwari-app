@@ -126,20 +126,20 @@ async function copyResultText() {
       <!-- 画像保存対象の結果カード -->
       <div
         ref="resultCardRef"
-        class="bg-white rounded-2xl shadow-xl p-8"
+        class="bg-white rounded-2xl shadow-xl p-4 md:p-8"
       >
         <!-- メイン結果 -->
         <div class="text-center mb-8">
-          <p class="text-gray-600 mb-2">
+          <p class="text-gray-800 mb-2 md:text-lg">
             1日あたり
           </p>
           <p class="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">
             {{ formatCurrency(result.dailyCost) }}
           </p>
-          <p v-if="result.productName" class="mt-4 text-gray-700">
+          <p v-if="result.productName" class="mt-4 text-gray-800 md:text-lg">
             「{{ result.productName }}」の1日あたりの価値
           </p>
-          <p class="mt-2 text-sm text-gray-500">
+          <p class="mt-2 text-sm md:text-base text-gray-800">
             使用期間：{{ result.periodFormatted }}
           </p>
         </div>
@@ -147,7 +147,7 @@ async function copyResultText() {
         <!-- 月額・年額表示 -->
         <div class="grid grid-cols-2 gap-4 mb-8">
           <div class="bg-gray-50 rounded-lg p-4 text-center">
-            <p class="text-sm text-gray-600 mb-1">
+            <p class="text-sm md:text-base text-gray-800 mb-1">
               月あたり
             </p>
             <p class="text-xl font-bold text-gray-800">
@@ -155,7 +155,7 @@ async function copyResultText() {
             </p>
           </div>
           <div class="bg-gray-50 rounded-lg p-4 text-center">
-            <p class="text-sm text-gray-600 mb-1">
+            <p class="text-sm md:text-base text-gray-800 mb-1">
               年あたり
             </p>
             <p class="text-xl font-bold text-gray-800">
@@ -179,7 +179,7 @@ async function copyResultText() {
         </div>
 
         <!-- サイトロゴ（画像保存時用） -->
-        <div class="mt-6 pt-4 border-t text-center text-sm text-gray-400">
+        <div class="mt-6 pt-4 border-t text-center text-sm md:text-base text-gray-600">
           にちわり！ - 日割り計算アプリ
         </div>
       </div>

@@ -16,7 +16,25 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@vueuse/nuxt',
     '@nuxt/test-utils/module',
+    '@primevue/nuxt-module',
   ],
+
+  primevue: {
+    usePrimeVue: true,
+    options: {
+      unstyled: true, // Tailwind CSS でスタイリングするため
+    },
+    components: {
+      include: ['ConfirmDialog', 'Button'],
+    },
+    composables: {
+      include: ['useConfirm'],
+    },
+    directives: {
+      include: [],
+    },
+    autoImport: true,
+  },
 
   css: [
     '@/assets/css/main.css',

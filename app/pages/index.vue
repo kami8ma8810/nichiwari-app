@@ -35,9 +35,9 @@ async function handleCalculate(data: CalculateData) {
 <template>
   <div>
     <!-- ヒーローセクション -->
-    <section class="text-center mb-12">
-      <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-        日割り計算で買い物の判断を<span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">サポート</span>
+    <section class="text-center mb-6 md:mb-12">
+      <h1 class="text-2xl md:text-5xl font-bold text-gray-800 mb-4">
+        <ruby>日割<rt>ひわ</rt></ruby>り計算で買い物の判断を<span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500 block md:inline">サポート</span>
       </h1>
     </section>
 

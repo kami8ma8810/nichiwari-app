@@ -112,18 +112,18 @@ function applyPreset(preset: CalculatorPreset) {
 </script>
 
 <template>
-  <div class="bg-white rounded-2xl shadow-xl p-8">
+  <div class="bg-white rounded-2xl shadow-xl p-4 md:p-8">
     <!-- プリセットボタン -->
     <div class="mb-6">
-      <p class="text-sm text-gray-600 mb-2">
+      <p class="text-sm md:text-base text-gray-800 mb-2">
         プリセットから選ぶ
       </p>
-      <div class="flex flex-wrap gap-2">
+      <div class="flex flex-wrap gap-3 md:gap-2">
         <button
           v-for="preset in calculatorPresets"
           :key="preset.id"
           type="button"
-          class="px-3 py-1.5 text-sm bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
+          class="px-3 py-1.5 text-sm md:text-base bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
           @click="applyPreset(preset)"
         >
           {{ preset.label }}
@@ -135,9 +135,9 @@ function applyPreset(preset: CalculatorPreset) {
       <div>
         <label
           for="product-name"
-          class="block text-sm font-medium text-gray-700 mb-2"
+          class="block text-sm md:text-base font-medium text-gray-800 mb-2"
         >
-          支払うもの（任意）
+          買うもの（任意）
         </label>
         <input
           id="product-name"
@@ -162,12 +162,12 @@ function applyPreset(preset: CalculatorPreset) {
 
       <!-- 価格入力 -->
       <div>
-        <label for="price" class="block text-sm font-medium text-gray-700 mb-2">
+        <label for="price" class="block text-sm md:text-base font-medium text-gray-800 mb-2">
           購入価格 <span class="text-red-500" aria-label="必須">*</span>
         </label>
         <div class="relative">
           <span
-            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"
+            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-800"
             aria-hidden="true"
           >
             ¥
@@ -199,7 +199,7 @@ function applyPreset(preset: CalculatorPreset) {
 
       <!-- 使用期間入力（年と月） -->
       <fieldset>
-        <legend class="block text-sm font-medium text-gray-700 mb-2">
+        <legend class="block text-sm md:text-base font-medium text-gray-800 mb-2">
           使用予定期間 <span class="text-red-500" aria-label="必須">*</span>
         </legend>
         <div class="flex items-center gap-4">
@@ -215,7 +215,7 @@ function applyPreset(preset: CalculatorPreset) {
               :aria-invalid="!!errors.years"
               :aria-describedby="errors.years ? 'years-error' : undefined"
             >
-            <label for="years" class="text-gray-500">年</label>
+            <label for="years" class="text-gray-800">年</label>
           </div>
           <div class="flex items-center gap-2">
             <input
@@ -229,7 +229,7 @@ function applyPreset(preset: CalculatorPreset) {
               :aria-invalid="!!errors.months"
               :aria-describedby="errors.months ? 'months-error' : undefined"
             >
-            <label for="months" class="text-gray-500">ヶ月</label>
+            <label for="months" class="text-gray-800">ヶ月</label>
           </div>
         </div>
         <div aria-live="polite" aria-atomic="true">
