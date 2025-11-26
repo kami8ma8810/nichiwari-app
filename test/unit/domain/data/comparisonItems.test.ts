@@ -109,6 +109,17 @@ describe('comparisonItems', () => {
         }
         expect(result.length).toBeGreaterThan(0)
       })
+
+      // ユーザー例: Kindle（日割り41円、月割り1230円、年割り14965円）
+      it('日割り41円: Kindle（3万円/2年使用）', () => {
+        const result = selectComparisonItems(41, 1230, 14965)
+        console.log('\n=== 日割り41円の場合 (Kindle例) ===')
+        console.log('（約3万円の商品を2年使用）')
+        for (const item of result) {
+          console.log(`  ${item.period}に約${item.quantity}${item.unit}分 - ${item.name}（${item.price}円）`)
+        }
+        expect(result.length).toBeGreaterThan(0)
+      })
     })
 
     describe('分かりやすい数量の選択', () => {
