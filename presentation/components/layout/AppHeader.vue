@@ -7,6 +7,7 @@ const route = useRoute()
     <div class="container mx-auto px-4 py-4">
       <div class="flex items-center justify-between">
         <NuxtLink to="/" class="flex items-center gap-2">
+          <img src="/favicon.webp" alt="" class="w-8 h-8" aria-hidden="true">
           <h1 class="text-2xl font-bold text-gray-800">
             にちわり！
           </h1>

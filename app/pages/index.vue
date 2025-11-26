@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { HeartHandshake } from 'lucide-vue-next'
-
 // useCalculatorはauto-importで利用可能
 const { calculate, calculationResult } = useCalculator()
 const store = useCalculatorStore()
@@ -39,7 +37,7 @@ async function handleCalculate(data: CalculateData) {
     <!-- ヒーローセクション -->
     <section class="text-center mb-6 md:mb-12">
       <h1 class="text-2xl md:text-5xl font-bold text-gray-800 mb-4 leading-normal">
-        <ruby>日割<rt>ひわ</rt></ruby>り計算で買い物の判断を<span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500 inline-flex items-center justify-center">サポート<HeartHandshake class="inline-block w-6 h-6 md:w-12 md:h-12 text-red-500 ml-1" aria-hidden="true" /></span>
+        <ruby>日割<rt>ひわ</rt></ruby>り計算で買い物の判断を<span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">サポート</span>
       </h1>
     </section>
 
