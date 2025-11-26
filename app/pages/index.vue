@@ -2,6 +2,7 @@
 // useCalculatorはauto-importで利用可能
 const { calculate, calculationResult } = useCalculator()
 const store = useCalculatorStore()
+const { saveCalculation } = useDataCollection()
 
 interface CalculateData {
   name?: string
@@ -16,6 +17,17 @@ async function handleCalculate(data: CalculateData) {
   // 計算完了後に自動で履歴に保存
   if (calculationResult.value) {
     store.addToHistory(calculationResult.value)
+
+    // Supabaseにデータを送信（バックグラウンドで実行、失敗してもユーザー体験に影響なし）
+    saveCalculation({
+      productName: calculationResult.value.productName,
+      price: calculationResult.value.price,
+      years: calculationResult.value.years,
+      months: calculationResult.value.months,
+      dailyCost: calculationResult.value.dailyCost,
+      monthlyCost: calculationResult.value.monthlyCost,
+      yearlyCost: calculationResult.value.yearlyCost,
+    })
   }
 }
 </script>
