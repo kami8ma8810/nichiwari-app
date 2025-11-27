@@ -31,6 +31,32 @@ export interface ComparisonResult {
  * - 映画: https://www.nikkei.com/article/DGXZQOUC2284K0S3A620C2000000/
  * - 美容院: https://assist-all.co.jp/salon_reserve/column/20250703-6445/
  * - カラオケ: https://price.w3g.jp/karaoke
+ * - スタバコーヒー: https://menu.starbucks.co.jp/
+ * - 音楽サブスク: https://www.spotify.com/jp/premium/
+ * - ゲームサブスク: https://www.playstation.com/ja-jp/ps-plus/
+ * - クラウドストレージ: https://one.google.com/about/plans?hl=ja
+ * - 日経電子版: https://www.nikkei.com/help/subscribe/price/
+ * - ネイルサロン: https://context-japan.jp/ryoukin/nailsalon.html
+ * - エステ: https://context-japan.jp/ryoukin/estesalon-14889.html
+ * - ヨガ: https://www.yogahazime.com/yoga-ryoukin/
+ * - パーソナルジム: https://chicken-gym.jp/column/personalgym-price/
+ * - サプリメント: https://prtimes.jp/main/html/rd/p/000000766.000044800.html
+ * - ケーキ: https://www.jpmarket-conditions.com/1712/
+ * - ゲームソフト: https://www.jpmarket-conditions.com/9156/
+ * - ゴルフ練習場: https://golf-medley.com/articles/driving-range-price
+ * - ガチャ10連: https://review.ore-shika.com/gacha-about/
+ * - 電子書籍: https://www.nikkei.com/article/DGKKZO83038290X20C24A8EAC000/
+ * - クリーニング: https://www.global-style.jp/enjoy-order/?p=19713
+ * - コインランドリー: https://cojicaji.jp/laundry/laundry-tips/1293
+ * - 宅配便: https://plus-shipping.com/blogs/shipping-fee-60-size
+ * - ATM手数料: https://www.mizuhobank.co.jp/rate_fee/fee_time_conveni_atm.html
+ * - タクシー: https://www.correc.co.jp/taxiappnavi/takusiryokintokyo
+ * - レンタカー: https://rentacar.carlifestadium.com/blog/otoku/132/
+ * - カーシェア: https://carshare.life/carshare-ranking/price-ranking
+ * - 駐車場: https://www.ypark.co.jp/contents/price-system/
+ * - ファミレス: https://gyokai-search.com/3-fami.htm
+ * - 回転寿司: https://www.nikkei.com/article/DGXZQOUC1866Y0Y5A410C2000000/
+ * - 焼肉: https://www.ryutsuu.biz/sales/q053078.html
  */
 export const comparisonItemsData: ComparisonItemData[] = [
   // 〜200円: 毎日の小さな出費
@@ -39,39 +65,65 @@ export const comparisonItemsData: ComparisonItemData[] = [
   { id: 'vending', name: '自販機の飲み物', price: 160, unit: '本' },
   { id: 'onigiri', name: 'おにぎり', price: 160, unit: '個' },
 
-  // 200〜500円: 軽めの食事・交通費
+  // 200〜500円: 軽めの食事・交通費・デジタル
   { id: 'train', name: '電車運賃（初乗り）', price: 180, unit: '回' },
+  { id: 'atm-fee', name: 'ATM手数料', price: 220, unit: '回' },
+  { id: 'cloud-storage', name: 'クラウドストレージ', price: 250, unit: 'ヶ月' },
   { id: 'bread', name: 'パン屋のパン', price: 280, unit: '個' },
+  { id: 'coin-laundry', name: 'コインランドリー', price: 400, unit: '回' },
+  { id: 'parking', name: '駐車場（1時間）', price: 400, unit: '回' },
+  { id: 'starbucks', name: 'スタバのコーヒー', price: 420, unit: '杯' },
+  { id: 'taxi', name: 'タクシー初乗り', price: 500, unit: '回' },
+  { id: 'cake', name: 'ケーキ', price: 500, unit: '個' },
+
+  // 500〜1000円: しっかりした食事・本・サブスク
   { id: 'manga', name: '漫画', price: 550, unit: '冊' },
   { id: 'convenience-bento', name: 'コンビニ弁当', price: 550, unit: '個' },
   { id: 'cafe-latte', name: 'カフェのラテ', price: 550, unit: '杯' },
-
-  // 500〜1000円: しっかりした食事・本
+  { id: 'ebook', name: '電子書籍（漫画）', price: 700, unit: '冊' },
   { id: 'book', name: '文庫本', price: 750, unit: '冊' },
+  { id: 'game-subscription', name: 'ゲームサブスク', price: 850, unit: 'ヶ月' },
+  { id: 'car-share', name: 'カーシェア（1時間）', price: 900, unit: '回' },
   { id: 'super-sento', name: 'スーパー銭湯', price: 900, unit: '回' },
   { id: 'ramen', name: 'ラーメン', price: 950, unit: '杯' },
+  { id: 'delivery', name: '宅配便（60サイズ）', price: 1000, unit: '回' },
 
-  // 1000〜2000円: 普段の外食・娯楽
+  // 1000〜2000円: 普段の外食・娯楽・サブスク
   { id: 'lunch', name: '外食ランチ', price: 1000, unit: '食' },
   { id: 'subscription', name: '動画サブスク', price: 1000, unit: 'ヶ月' },
+  { id: 'music-subscription', name: '音楽サブスク', price: 1080, unit: 'ヶ月' },
+  { id: 'famires', name: 'ファミレス', price: 1200, unit: '食' },
+  { id: 'cleaning', name: 'クリーニング（スーツ）', price: 1500, unit: '回' },
   { id: 'karaoke', name: 'カラオケ（2時間）', price: 1500, unit: '回' },
+  { id: 'golf-practice', name: 'ゴルフ練習場', price: 1500, unit: '回' },
+  { id: 'sushi', name: '回転寿司', price: 1900, unit: '食' },
 
   // 2000〜5000円: ちょっとした贅沢
   { id: 'movie', name: '映画', price: 2000, unit: '回' },
   { id: 'dinner', name: '外食ディナー', price: 2500, unit: '食' },
   { id: 'gym', name: 'ジム（1回）', price: 2500, unit: '回' },
+  { id: 'supplement', name: 'サプリメント', price: 3000, unit: 'ヶ月' },
+  { id: 'gacha', name: 'ガチャ10連', price: 3000, unit: '回' },
+  { id: 'yoga', name: 'ヨガ（1回）', price: 3000, unit: '回' },
+  { id: 'yakiniku', name: '焼肉', price: 4000, unit: '食' },
+  { id: 'nikkei', name: '日経電子版', price: 4300, unit: 'ヶ月' },
 
   // 5000〜10000円: 週末の娯楽
   { id: 'haircut', name: '美容院カット', price: 4500, unit: '回' },
+  { id: 'nail-salon', name: 'ネイルサロン', price: 5000, unit: '回' },
   { id: 'drinking', name: '飲み会', price: 5000, unit: '回' },
+  { id: 'smartphone', name: 'スマホ（分割月額）', price: 5000, unit: 'ヶ月' },
   { id: 'massage', name: 'マッサージ', price: 6000, unit: '回' },
+  { id: 'game-software', name: 'ゲームソフト（新作）', price: 7000, unit: '本' },
+  { id: 'rental-car', name: 'レンタカー（1日）', price: 7000, unit: '回' },
+  { id: 'personal-gym', name: 'パーソナルジム（1回）', price: 8000, unit: '回' },
+  { id: 'esthe', name: 'エステ', price: 8000, unit: '回' },
   { id: 'theme-park', name: 'テーマパーク', price: 9000, unit: '回' },
   { id: 'concert', name: 'ライブ', price: 9000, unit: '回' },
   { id: 'hotel', name: 'ホテル1泊', price: 10000, unit: '泊' },
 
   // 10000円以上: 特別な出費
   { id: 'domestic-trip', name: '国内旅行（1泊2日）', price: 35000, unit: '回' },
-  { id: 'smartphone', name: 'スマホ（分割月額）', price: 5000, unit: 'ヶ月' },
 ]
 
 /**
