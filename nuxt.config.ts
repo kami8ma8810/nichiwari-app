@@ -79,6 +79,19 @@ export default defineNuxtConfig({
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: '購入価格を1日あたりの金額に変換して、買い物の価値を見える化するアプリ' },
+        // Open Graph
+        { property: 'og:title', content: 'にちわり！ - 買い物の価値を見える化' },
+        { property: 'og:description', content: '高い買い物も1日あたりで考えれば意外とお得かも？購入価格を日割り計算して、買い物の価値を見える化するアプリです。' },
+        { property: 'og:image', content: 'https://nichiwari-app.vercel.app/ogp-image.png' },
+        { property: 'og:url', content: 'https://nichiwari-app.vercel.app/' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:locale', content: 'ja_JP' },
+        { property: 'og:site_name', content: 'にちわり！' },
+        // Twitter Card
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: 'にちわり！ - 買い物の価値を見える化' },
+        { name: 'twitter:description', content: '高い買い物も1日あたりで考えれば意外とお得かも？' },
+        { name: 'twitter:image', content: 'https://nichiwari-app.vercel.app/ogp-image.png' },
       ],
       link: [
         { rel: 'icon', type: 'image/png', href: '/favicon.png' },
