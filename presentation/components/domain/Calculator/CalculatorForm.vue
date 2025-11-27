@@ -264,7 +264,7 @@ function applyPreset(preset: CalculatorPreset) {
         <button
           type="submit"
           :disabled="isCalculating"
-          class="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 transition-all font-medium shadow-lg disabled:opacity-50 cursor-pointer"
+          class="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg shadow-lg disabled:opacity-50 cursor-pointer btn-gradient-orange"
         >
           <span v-if="!isCalculating" class="font-bold">計算する</span>
           <span v-else class="flex items-center justify-center gap-2">
@@ -295,3 +295,33 @@ function applyPreset(preset: CalculatorPreset) {
     </form>
   </div>
 </template>
+
+<style scoped>
+.btn-gradient-orange {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gradient-orange::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 200ms ease-out;
+  border-radius: inherit;
+}
+
+.btn-gradient-orange:hover::before {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.btn-gradient-orange:disabled::before {
+  background: rgba(0, 0, 0, 0);
+}
+
+/* ボタン内テキストを疑似要素より上に表示 */
+.btn-gradient-orange > :deep(*) {
+  position: relative;
+  z-index: 10;
+}
+</style>

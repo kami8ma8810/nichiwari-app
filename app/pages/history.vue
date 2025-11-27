@@ -122,7 +122,7 @@ function handleClearAll(): void {
         </p>
         <NuxtLink
           to="/"
-          class="inline-block px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 transition-all font-bold shadow-lg cursor-pointer"
+          class="inline-block px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg shadow-lg cursor-pointer font-bold btn-gradient-orange"
         >
           計算をはじめる
         </NuxtLink>
@@ -130,3 +130,29 @@ function handleClearAll(): void {
     </section>
   </div>
 </template>
+
+<style scoped>
+/* グラデーションボタン ホバーエフェクト */
+.btn-gradient-orange {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gradient-orange::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 200ms ease-out;
+  border-radius: inherit;
+}
+
+.btn-gradient-orange:hover::before {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.btn-gradient-orange > :deep(*) {
+  position: relative;
+  z-index: 10;
+}
+</style>

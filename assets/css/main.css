@@ -41,10 +41,24 @@
   .card {
     @apply bg-white rounded-xl shadow-lg p-6;
   }
+
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* グラデーションボタン（トランジション対応） - brightness filter 方式 */
+.btn-gradient-orange {
+  transition: filter 200ms ease-out;
+}
+
+.btn-gradient-orange:hover {
+  filter: brightness(0.9);
+}
+
+.btn-gradient-orange:disabled {
+  filter: none;
 }
